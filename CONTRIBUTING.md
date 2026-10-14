@@ -8,7 +8,7 @@ Chaque travail se fait sur une branche courte, créée depuis `main` et nommée 
 
 ```
 feat/pose-de-carte
-fix/calcul-somme-quartier
+fix/calcul-somme-section
 docs/adr-choix-stack
 ```
 
@@ -41,7 +41,7 @@ Le scope correspond au dossier concerné : `server`, `web`, `mobile`, `rules`, `
 Exemples :
 
 ```
-feat(rules): ajouter la contrainte de nombre de cartes par quartier
+feat(rules): ajouter la contrainte de nombre de cartes par section
 fix(server): ignorer une commande reçue deux fois
 docs(adr): consigner le choix du monorepo
 ```

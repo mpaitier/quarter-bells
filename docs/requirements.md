@@ -15,7 +15,8 @@ Priorités (méthode MoSCoW) :
 
 | ID | Exigence | Priorité |
 |----|----------|----------|
-| F-PRF-01 | Au premier lancement, le joueur crée un profil avec un nom et une icône. | M |
+| F-PRF-01 | Un joueur peut créer un compte avec une adresse e-mail ou un compte Google, puis un profil avec un nom et une icône. | M |
+| F-PRF-06 | Un joueur peut jouer en invité, sans compte. Une salle qui compte un invité ne sauvegarde aucune progression et commence toujours au chapitre 1. | S |
 | F-PRF-02 | Le joueur choisit son icône parmi une liste fournie. | M |
 | F-PRF-03 | Le joueur peut importer sa propre image comme icône. | C |
 | F-PRF-04 | Le joueur peut modifier son nom et son icône depuis les paramètres. | S |
@@ -33,26 +34,36 @@ Priorités (méthode MoSCoW) :
 | F-LOB-06 | La partie démarre quand au moins 2 joueurs sont présents et tous prêts. | M |
 | F-LOB-07 | Un joueur peut quitter la salle d'attente. | M |
 | F-LOB-08 | Le départ de l'hôte ne ferme pas la salle. | S |
+| F-LOB-09 | Après une période d'inactivité, chaque joueur doit confirmer sa présence. Sans confirmation de tous dans le délai, la session est sauvegardée et fermée. | S |
+| F-LOB-10 | Une salle sans connexion pendant 2 semaines fait l'objet d'un e-mail aux joueurs du groupe, puis est supprimée 1 semaine plus tard. | C |
+| F-LOB-11 | À la création de la salle, l'hôte peut plafonner les yeux de base et réduire le nombre maximum d'yeux bonus (jusqu'à les désactiver). | S |
 
 ### Déroulement d'une épreuve
 
 | ID | Exigence | Priorité |
 |----|----------|----------|
 | F-JEU-01 | Une animation annonce le chapitre et le numéro d'horloge (x / 4) au début de chaque épreuve. | S |
-| F-JEU-02 | Une épreuve enchaîne les phases Discussion, Pose et Résolution. | M |
-| F-JEU-03 | Pendant la Discussion, chaque joueur voit uniquement la couleur du dos de ses cartes. | M |
+| F-JEU-02 | Une épreuve enchaîne les phases Discussion, Distribution, Pose et Résolution. | M |
+| F-JEU-03 | Les cartes sont distribuées après la Discussion. Pendant la Discussion, aucune information sur les cartes n'est disponible. | M |
 | F-JEU-04 | La Discussion se termine quand tous les joueurs ont cliqué sur « Prêt ». | M |
 | F-JEU-05 | Au début de la partie, le groupe fixe l'ordre de passage en désignant les joueurs ou en le tirant au hasard. | M |
-| F-JEU-06 | Les 12 cartes sont distribuées selon le nombre de joueurs : 4 chacun à 3 joueurs, 3 chacun à 4 joueurs, 4 puis 2 chacun à 2 joueurs. | M |
-| F-JEU-07 | Le joueur dont c'est le tour sélectionne une carte puis un quartier pour la poser. Le tour du joueur actif est clairement signalé à tous. | M |
-| F-JEU-08 | Les quartiers où la pose est interdite par une règle sont signalés visuellement pendant la sélection. | S |
+| F-JEU-06 | Les 12 cartes sont distribuées selon le nombre de joueurs : 4 chacun à 3 joueurs, 3 chacun à 4 joueurs, 4 puis 2 chacun à 2 joueurs. Chaque joueur voit la valeur de ses cartes et la famille des cartes des autres. | M |
+| F-JEU-07 | Le joueur dont c'est le tour sélectionne une carte puis une section pour la poser. Le tour du joueur actif est clairement signalé à tous. | M |
+| F-JEU-08 | Les sections où la pose est interdite par une règle sont signalés visuellement pendant la sélection. | S |
 | F-JEU-09 | Le joueur peut dépenser un œil pour poser sa carte face visible. Le nombre d'yeux disponibles dépend du nombre de joueurs et des yeux bonus. | M |
 | F-JEU-10 | Pendant la Pose, aucun moyen de communication n'est disponible entre joueurs. | M |
 | F-JEU-11 | Un joueur peut revoir la valeur des cartes qu'il a lui-même posées face cachée. | S |
-| F-JEU-12 | À la Résolution, les cartes se révèlent quartier par quartier à partir du quartier de départ, dans le sens horaire. La somme de chaque quartier s'affiche en vert si elle respecte l'ordre croissant, en rouge sinon. | M |
-| F-JEU-13 | L'épreuve est réussie si chaque quartier a au moins une carte, si les sommes sont croissantes, si aucune ne dépasse 24 (sauf exception de l'horloge) et si toutes les règles spéciales sont respectées. | M |
+| F-JEU-12 | À la Résolution, les cartes se révèlent section par section à partir de la section de départ, dans le sens horaire. La somme de chaque section s'affiche en vert si elle respecte l'ordre croissant, en rouge sinon. | M |
+| F-JEU-13 | L'épreuve est réussie si chaque section a au moins une carte, si les sommes sont croissantes, si aucune ne dépasse 24 (sauf exception de l'horloge) et si toutes les règles spéciales sont respectées. | M |
 | F-JEU-14 | En cas d'échec, le groupe gagne un œil bonus, signalé par une animation. Les yeux bonus sont remis à zéro après une réussite. | M |
-| F-JEU-15 | En cas d'échec, le groupe peut retenter l'épreuve ou la mettre de côté pour y revenir plus tard. | S |
+| F-JEU-15 | En cas d'échec, l'hôte peut retenter l'épreuve ou la mettre de côté pour y revenir plus tard. | S |
+| F-JEU-16 | Un échec alors que le groupe a déjà 3 yeux bonus met fin à la run. L'hôte choisit entre retenter l'horloge, recommencer le chapitre en cours ou mettre fin à la progression du groupe. | M |
+| F-JEU-17 | À partir du chapitre 3, la section de départ est choisie pendant la Discussion et validée par l'hôte. | S |
+| F-JEU-18 | Si le joueur dont c'est le tour est déconnecté, la partie est mise en pause pour tous, avec le nom du joueur absent. L'hôte peut alors sauvegarder et arrêter. | M |
+| F-JEU-19 | Après la 4e horloge d'un chapitre, un message annonce le chapitre suivant. Chaque joueur se déclare prêt pour continuer. | S |
+| F-JEU-20 | Un joueur dont la pose est refusée est guidé vers la règle concernée et les cartes valides de sa main. Le guidage peut être désactivé dans les paramètres. | S |
+| F-JEU-21 | Quand toutes les cartes d'une section sont face visible, une pose qui ferait dépasser une borne haute de la section est refusée. | S |
+| F-JEU-22 | Après une run perdue, retenter l'horloge ou recommencer le chapitre consomme un jeton de relance. Le groupe gagne des jetons en progressant. Les quantités sont paramétrables. | C |
 
 ### Règles et contenu
 
@@ -66,20 +77,23 @@ Priorités (méthode MoSCoW) :
 
 | ID | Exigence | Priorité |
 |----|----------|----------|
-| F-PRG-01 | La progression d'un groupe (chapitre, horloge, épreuves mises de côté) est sauvegardée entre deux sessions. | S |
+| F-PRG-01 | La progression d'un groupe (chapitre, horloge, épreuves mises de côté, yeux bonus) est liée à la salle et sauvegardée entre deux sessions. Elle ne reprend qu'avec exactement les mêmes joueurs. | S |
+| F-PRG-02 | Chaque joueur conserve le chapitre le plus avancé qu'il a atteint. Au lancement, l'hôte peut choisir le chapitre de départ, jusqu'au plus petit de ces maximums parmi les joueurs présents. | C |
 
 ### Tutoriel
 
 | ID | Exigence | Priorité |
 |----|----------|----------|
-| F-TUT-01 | Un tutoriel fait jouer une épreuve guidée à un joueur seul, avec des coéquipiers simulés. | S |
+| F-TUT-01 | Un tutoriel montre le déroulement d'une épreuve avec une partie scénarisée. Le jeu ne se joue pas seul en dehors du tutoriel. | S |
 
 ### Communication
 
 | ID | Exigence | Priorité |
 |----|----------|----------|
 | F-COM-01 | Un chat écrit est disponible pendant la Discussion et désactivé pendant la Pose. | C |
-| F-COM-02 | Chat vocal intégré. | W |
+| F-COM-02 | Chat vocal intégré en WebRTC. Les micros sont coupés pendant la Pose, comme le veut la règle. Chaque joueur règle le volume des autres pour lui-même. | C |
+| F-COM-04 | Salles publiques, rejoignables sans code par des joueurs qui ne se connaissent pas. | W |
+| F-COM-03 | Vidéo des joueurs à la place de leur icône, remplacée par l'icône pendant la Pose. | C |
 
 ## Exigences non fonctionnelles
 
@@ -121,7 +135,7 @@ Priorités (méthode MoSCoW) :
 
 | ID | Exigence | Priorité |
 |----|----------|----------|
-| NF-ACC-01 | Les deux familles de cartes se distinguent sans la couleur, par une icône ou un motif. | M |
+| NF-ACC-01 | Les deux familles de cartes se distinguent sans la couleur, par leur symbole (éclair pour Instant, infini pour Éternité). | M |
 | NF-ACC-02 | Les animations peuvent être réduites ou désactivées, et respectent la préférence système de réduction des mouvements. | S |
 | NF-ACC-03 | Les contrastes de texte respectent le niveau AA des WCAG. | S |
 
@@ -148,9 +162,10 @@ Priorités (méthode MoSCoW) :
 
 | ID | Exigence | Priorité |
 |----|----------|----------|
-| NF-RGPD-01 | Seules les données nécessaires au jeu sont collectées (nom, icône, progression). | M |
+| NF-RGPD-01 | Seules les données nécessaires au jeu sont collectées (adresse e-mail, nom, icône, progression). | M |
 | NF-RGPD-02 | Un joueur peut supprimer son profil et son icône. | S |
 | NF-RGPD-03 | La durée de conservation des profils inactifs est définie et appliquée. | S |
+| NF-RGPD-04 | Aucun flux audio ou vidéo n'est enregistré, ni par le serveur ni par un service tiers. | M |
 
 ### Exploitation
 
@@ -158,3 +173,4 @@ Priorités (méthode MoSCoW) :
 |----|----------|----------|
 | NF-OPS-01 | Le serveur tourne dans un conteneur et lit sa configuration dans des variables d'environnement. | S |
 | NF-OPS-02 | L'hébergement est gratuit. | M |
+| NF-OPS-03 | Les délais (inactivité, confirmation de présence, suppression des salles) sont des paramètres de configuration, modifiables sans changer le code. | S |

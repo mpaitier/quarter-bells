@@ -42,6 +42,11 @@ flowchart TB
 
 ## À compléter
 
+<<<<<<< Updated upstream
 - Retour d'un joueur de la partie après une déconnexion.
 - Départ de l'hôte de la salle d'attente.
 - Partage du code de salle par l'hôte.
+=======
+- La reprise est proposée automatiquement au lancement si le joueur a une partie en cours. La saisie du code reste possible pour un joueur qui a changé d'appareil.
+- Le transfert d'hôte et la fermeture de salle sont des effets côté serveur. Ils figurent ici pour montrer ce que le joueur qui part ne voit pas : les autres joueurs restent dans la salle avec un nouvel hôte.
+>>>>>>> Stashed changes

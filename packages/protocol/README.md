@@ -6,4 +6,4 @@ Le protocole est versionné. Tout changement incompatible incrémente la version
 
 ## Dépendances autorisées
 
-- `packages/rules`, uniquement pour réutiliser les types du domaine (carte, quartier).
+- `packages/rules`, uniquement pour réutiliser les types du domaine (carte, section).

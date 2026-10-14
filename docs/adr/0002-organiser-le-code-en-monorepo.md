@@ -8,7 +8,7 @@
 Le projet comprend un serveur, un client web et, plus tard, un client mobile. Ces trois applications doivent :
 
 - parler exactement le même protocole de messages ;
-- appliquer les mêmes règles de jeu, le serveur pour valider les actions et les clients pour guider le joueur (signaler un quartier interdit).
+- appliquer les mêmes règles de jeu, le serveur pour valider les actions et les clients pour guider le joueur (signaler une section interdite).
 
 Le projet est développé par une seule personne.
 

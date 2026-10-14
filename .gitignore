@@ -19,7 +19,18 @@ desktop.ini
 *.log
 logs/
 
-# Sorties de build et dépendances (à compléter selon la stack retenue)
+# Node.js
+node_modules/
+.npm/
+*.tsbuildinfo
+
+# Sorties de build et couverture
 build/
 dist/
 coverage/
+
+# Flutter (apps/mobile)
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+
