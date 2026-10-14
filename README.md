@@ -1,38 +1,51 @@
-# Quarter Bells
+# Documentation
 
-Jeu coopératif en ligne pour 2 à 4 joueurs. Autour d'une horloge, l'équipe pose ses cartes face cachée sans pouvoir se parler, en respectant des règles qui changent à chaque épreuve.
+Point d'entrée de la documentation. À ouvrir en premier en revenant sur le projet.
 
-> Projet personnel, non commercial, inspiré d'un jeu de société existant. Il ne reprend ni les visuels, ni les textes, ni le nom du jeu original.
+## Comprendre le jeu
 
-## État du projet
+| Document | Contenu | État |
+|----------|---------|------|
+| [Règles du jeu](game-rules.md) | Règles implémentées, choix de design | brouillon |
+| [Glossaire](glossary.md) | Vocabulaire du domaine et noms dans le code | brouillon |
+| [Catalogue des règles](rule-catalog.md) | Types de règles que le moteur sait évaluer | brouillon |
+| [Format des horloges](clock-format.md) | Données d'une horloge, disposition des sections | brouillon |
 
-Phase de conception. Aucun code applicatif pour l'instant.
+## Exigences et planning
 
-## Organisation du dépôt
+| Document | Contenu | État |
+|----------|---------|------|
+| [Exigences](requirements.md) | Exigences fonctionnelles et non fonctionnelles | à jour |
+| [Feuille de route](roadmap.md) | Jalons et critères de sortie | brouillon |
 
-```
-apps/
-  server/     serveur de jeu faisant autorité
-  web/        client web (prioritaire)
-  mobile/     client mobile (plus tard)
-packages/
-  rules/      moteur de règles, sans dépendance
-  protocol/   messages échangés entre serveur et clients
-docs/
-  adr/        décisions d'architecture
-  diagrams/   diagrammes (Mermaid)
-  requirements.md
-```
+## Conception
 
-Chaque dossier de `apps/` et `packages/` contient un README qui précise son rôle et ses dépendances autorisées.
+| Document | Contenu | État |
+|----------|---------|------|
+| [Modèle du domaine](diagrams/domain-model.md) | Entités et relations | brouillon |
+| [Cycle de vie d'une partie](diagrams/game-state.md) | Machine à états de la partie | brouillon |
+| [Cycle de vie d'une salle](diagrams/lobby-state.md) | Machine à états de la salle | brouillon |
+| [Navigation](diagrams/navigation-flow.md) | Parcours entre les écrans | à jour |
+| [Protocole](protocol.md) | Commandes et événements | brouillon |
+| Architecture C4 | Contexte et conteneurs | à faire, après les ADR 0004 et 0005 |
+| Stratégie de tests | Types de tests et outillage | à faire, au début du J1 |
+| Maquettes | Écrans du jeu | à faire |
 
-## Documentation
+## Décisions
 
-- [Décisions d'architecture](docs/adr/)
-- [Diagrammes](docs/diagrams/)
-- [Exigences](docs/requirements.md)
-- [Contribuer](CONTRIBUTING.md)
+| ADR | Titre | Statut |
+|-----|-------|--------|
+| [0001](adr/0001-enregistrer-les-decisions-d-architecture.md) | Enregistrer les décisions d'architecture | Accepté |
+| [0002](adr/0002-organiser-le-code-en-monorepo.md) | Organiser le code en monorepo | Accepté |
+| [0003](adr/0003-choix-de-la-stack.md) | Choix de la stack | Accepté |
+| [0004](adr/0004-hebergement.md) | Hébergement | Proposé |
+| 0005 | Authentification (e-mail et Google) | à rédiger |
+| 0006 | Vocal et vidéo en WebRTC | à rédiger |
 
-## Lancer le projet
+Nouveau ADR : partir de [template.md](adr/template.md).
 
-À venir.
+## États
+
+- **à faire** : le document n'existe pas encore.
+- **brouillon** : le document existe mais contient des questions ouvertes.
+- **à jour** : le document reflète l'état du projet.
