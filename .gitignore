@@ -1,0 +1,25 @@
+# Systèmes d'exploitation
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Éditeurs et IDE
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+
+# Secrets et configuration locale
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# Sorties de build et dépendances (à compléter selon la stack retenue)
+build/
+dist/
+coverage/
