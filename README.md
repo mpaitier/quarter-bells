@@ -35,4 +35,4 @@ Chaque dossier de `apps/` et `packages/` contient un README qui précise son rô
 
 ## Lancer le projet
 
-À venir. TEST
+À venir.
