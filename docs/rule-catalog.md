@@ -17,7 +17,7 @@ Les règles générales (au moins une carte par section, ordre croissant, plafon
 
 Ces types sont nécessaires pour reproduire les mécaniques décrites dans les règles générales.
 
-Le plafond et la section de départ ne sont pas des règles : ce sont des propriétés de l'horloge (`noMaxSum`, `startSectionMode`, `defaultStartSection`), voir le [modèle du domaine](diagrams/domain-model.md).
+Le plafond et la section de départ ne sont pas des règles : ce sont des propriétés de l'horloge (`noMaxSum`, `startSectionMode`, `defaultStartSection`), voir le [format des horloges](clock-format.md).
 
 | Type | Portée | Nature | Paramètres | Signification |
 |------|--------|--------|------------|---------------|

@@ -9,6 +9,7 @@ Point d'entrée de la documentation. À ouvrir en premier en revenant sur le pro
 | [Règles du jeu](game-rules.md) | Règles implémentées, choix de design | brouillon |
 | [Glossaire](glossary.md) | Vocabulaire du domaine et noms dans le code | brouillon |
 | [Catalogue des règles](rule-catalog.md) | Types de règles que le moteur sait évaluer | brouillon |
+| [Format des horloges](clock-format.md) | Données d'une horloge, disposition des sections | brouillon |
 
 ## Exigences et planning
 
