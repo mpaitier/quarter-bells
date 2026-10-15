@@ -14,4 +14,5 @@ Depuis la racine du dépôt :
 
 ```sh
 pnpm --filter @quarter-bells/rules typecheck
+pnpm test --project @quarter-bells/rules
 ```
