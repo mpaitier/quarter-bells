@@ -166,19 +166,13 @@ importers:
 
   .:
     devDependencies:
-      prettier:
-        specifier: ^3.9.10
-        version: 3.9.10
       typescript:
         specifier: ~6.0.3
         version: 6.0.3
 
-packages:
+  packages/rules: {}
 
-  prettier@3.9.10:
-    resolution: {integrity: sha512-skGHTH1Yb9QvaTC4hWnRTzEYtCpApF0UMBPz+t/0ZPzP8ihefo/btKd+QA7pUE0fEwA1SbS/NmhyEcstdXOIdA==}
-    engines: {node: '>=14'}
-    hasBin: true
+packages:
 
   typescript@6.0.3:
     resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
@@ -186,7 +180,5 @@ packages:
     hasBin: true
 
 snapshots:
-
-  prettier@3.9.10: {}
 
   typescript@6.0.3: {}

@@ -7,3 +7,11 @@ Ce package est pur. Il ne fait aucun accès réseau, disque ou base de données,
 ## Dépendances autorisées
 
 Aucune, hormis la bibliothèque standard du langage.
+
+## Commandes
+
+Depuis la racine du dépôt :
+
+```sh
+pnpm --filter @quarter-bells/rules typecheck
+```

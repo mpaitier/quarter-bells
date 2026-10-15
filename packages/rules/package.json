@@ -1,0 +1,13 @@
+{
+  "name": "@quarter-bells/rules",
+  "private": true,
+  "description": "Moteur de règles du jeu : cartes, horloges, contraintes de pose et conditions de réussite.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p ."
+  }
+}
