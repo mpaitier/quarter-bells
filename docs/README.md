@@ -27,8 +27,8 @@ Point d'entrée de la documentation. À ouvrir en premier en revenant sur le pro
 | [Cycle de vie d'une salle](diagrams/lobby-state.md) | Machine à états de la salle | brouillon |
 | [Navigation](diagrams/navigation-flow.md) | Parcours entre les écrans | à jour |
 | [Protocole](protocol.md) | Commandes et événements | brouillon |
-| Architecture C4 | Contexte et conteneurs | à faire, après les ADR 0004 et 0005 |
-| Stratégie de tests | Types de tests et outillage | à faire, au début du J1 |
+| Architecture C4 | Contexte et conteneurs | à faire, après l'ADR 0006 |
+| [Stratégie de tests](testing.md) | Niveaux de tests, organisation, couverture, CI | à jour |
 | Maquettes | Écrans du jeu | à faire |
 
 ## Décisions
@@ -39,8 +39,9 @@ Point d'entrée de la documentation. À ouvrir en premier en revenant sur le pro
 | [0002](adr/0002-organiser-le-code-en-monorepo.md) | Organiser le code en monorepo | Accepté |
 | [0003](adr/0003-choix-de-la-stack.md) | Choix de la stack | Accepté |
 | [0004](adr/0004-hebergement.md) | Hébergement | Proposé |
-| 0005 | Authentification (e-mail et Google) | à rédiger |
-| 0006 | Vocal et vidéo en WebRTC | à rédiger |
+| [0005](adr/0005-outillage-typescript.md) | Outillage TypeScript | Accepté |
+| 0006 | Authentification (e-mail et Google) | à rédiger avant le J3 |
+| 0007 | Vocal et vidéo en WebRTC | à rédiger avant le J5 |
 
 Nouveau ADR : partir de [template.md](adr/template.md).
 

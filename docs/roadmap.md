@@ -4,12 +4,15 @@ Le projet avance par jalons. Chaque jalon produit quelque chose qui fonctionne e
 
 Les jalons se découpent ensuite en issues GitHub, regroupées par jalon (« Milestones » dans GitHub).
 
-## J0 - Conception
+## J0 - Conception (terminé)
+
+Terminé le 2026-10-15.
 
 Poser les bases avant le code.
 
 - Documents : glossaire, règles, catalogue des règles, modèle du domaine, machines à états, exigences.
-- ADR : usage des ADR, monorepo, choix de la stack.
+- ADR : usage des ADR, monorepo, choix de la stack, hébergement, outillage TypeScript.
+- Stratégie de tests.
 
 **Critères de sortie**
 
