@@ -63,7 +63,7 @@ Chaque joueur se déclare prêt quand il a fini. Un joueur prêt peut annuler ta
 
 ### Distribution
 
-1. Les 24 cartes sont mélangées.
+1. Les 24 cartes sont créées puis sont mélangées.
 2. 12 cartes sont distribuées selon le nombre de joueurs :
 
    | Joueurs | Distribution                                        |
@@ -71,6 +71,8 @@ Chaque joueur se déclare prêt quand il a fini. Un joueur prêt peut annuler ta
    | 2       | 6 cartes chacun : une main de 4 et une réserve de 2 |
    | 3       | 4 cartes chacun                                     |
    | 4       | 3 cartes chacun                                     |
+
+Les cartes sont distribuées une par une dans le sens horaire en démarrant par celui qui a été désigné comme l'initiateur de l'épreuve .
 
 3. Les 12 cartes restantes ne sont pas utilisées.
 
