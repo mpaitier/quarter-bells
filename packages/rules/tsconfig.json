@@ -1,7 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "src"
+    // Paquet interne consommé en TypeScript (voir "exports" dans package.json) :
+    // rien n'est compilé ici, tsc ne fait que vérifier les types.
+    "noEmit": true
   },
-  "include": ["src"]
+  "include": ["src", "test"]
 }
