@@ -113,7 +113,7 @@ apps/web/
   e2e/                      tests Playwright
 ```
 
-Les tests unitaires se placent à côté du fichier qu'ils testent, avec le suffixe `.test.ts`. Les autres tests vont dans un dossier `test/` ou `e2e/` propre à chaque paquet.
+Les tests unitaires se placent dans un folder **test** dédié, répliquant le folder **src** qu'ils testent, avec le suffixe `.test.ts`. Les autres tests vont dans un dossier `test/` ou `e2e/` propre à chaque paquet.
 
 ## Nommage
 
