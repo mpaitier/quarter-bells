@@ -39,6 +39,21 @@ correspond pas. La version de référence reste celle de `.nvmrc`.
    pnpm install
 ```
 
+## Vérifier
+
+```sh
+pnpm check
+```
+
+Lance dans l'ordre les vérifications de la CI. Chacune existe aussi séparément :
+
+| Commande            | Rôle                                                                           |
+| ------------------- | ------------------------------------------------------------------------------ |
+| `pnpm format:check` | Vérifie le formatage (Prettier). `pnpm format` corrige.                        |
+| `pnpm lint`         | Analyse le code (ESLint), dont l'isolation de `packages/rules`.                |
+| `pnpm typecheck`    | Vérifie les types (TypeScript) de tous les paquets.                            |
+| `pnpm test`         | Lance les tests (Vitest). `pnpm test:watch` les relance à chaque modification. |
+
 ## Versions bloquées
 
 - **TypeScript reste en 6.0.** TypeScript 7 n'est pas encore pris en charge par
@@ -47,7 +62,7 @@ correspond pas. La version de référence reste celle de `.nvmrc`.
 
 ## Organisation du dépôt
 
-```
+```text
 apps/      applications exécutables (server, web, mobile)
 packages/  code partagé (rules, protocol)
 docs/      documentation, décisions d'architecture, diagrammes
