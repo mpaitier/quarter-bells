@@ -1,8 +1,9 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     // --- Cible et modules ---
-
+    "include": ["src"],
     // Node 24 prend en charge ES2024 nativement : inutile de transpiler vers plus ancien.
     "target": "ES2024",
 
