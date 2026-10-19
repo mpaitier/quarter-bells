@@ -13,7 +13,7 @@
 ## Vérifications
 
 - [ ] Le titre de la PR respecte Conventional Commits
-- [ ] Les tests passent en local
+- [ ] `pnpm check` passe en local
 - [ ] Les tests couvrent le nouveau comportement
 - [ ] La documentation est à jour (README, diagrammes, exigences)
 - [ ] Une décision structurante a fait l'objet d'un ADR
