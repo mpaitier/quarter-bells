@@ -1,5 +1,5 @@
 /** Les deux familles de cartes du jeu. */
-export const CARD_FAMILIES = ['instant', 'eternity'] as const;
+export const CARD_FAMILIES = ["instant", "eternity"] as const;
 export type CardFamily = (typeof CARD_FAMILIES)[number];
 
 /** Les valeurs possibles d'une carte, de 1 à 12. */
