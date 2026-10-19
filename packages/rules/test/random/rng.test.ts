@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { InvalidSeedError } from "../../src/errors.js";
-import { MAX_SEED, createSeededRng } from "../../src/random/rng.js";
+import { MAX_SEED, createSeededRng, nextInt } from "../../src/random/rng.js";
 
 /** Tire n valeurs d'un générateur, pour comparer des suites entre elles. */
 function draw(seed: number, n: number): number[] {
@@ -74,5 +74,51 @@ describe("createSeededRng", () => {
   // MAX_SEED + 1 ci-dessus : ensemble, ils encadrent chaque frontière.
   it.each([[0], [MAX_SEED]])("accepts boundary seed %o", (seed) => {
     expect(() => createSeededRng(seed)).not.toThrow();
+  });
+});
+
+describe('nextInt', () => {
+  // Contrat de base : un entier, dans [0, maxExclusive).
+  it('returns an integer in [0, maxExclusive)', () => {
+    const rng = createSeededRng(7);
+
+    for (let n = 0; n < 10_000; n++) {
+      const value = nextInt(rng, 6);
+
+      expect(Number.isInteger(value)).toBe(true);
+      expect(value).toBeGreaterThanOrEqual(0);
+      expect(value).toBeLessThan(6);
+    }
+  });
+
+  // Chaque valeur possible doit pouvoir sortir. Une erreur de borne
+  // (oublier le 0 ou le 5) passerait le test précédent, pas celui-ci.
+  it('can return every value in the range', () => {
+    const rng = createSeededRng(7);
+    const seen = new Set<number>();
+
+    for (let i = 0; i < 10_000; i++) {
+      seen.add(nextInt(rng, 6));
+    }
+
+    // Le Set ne garde que les valeurs distinctes, dans leur ordre
+    // d'apparition : on le trie avant de comparer.
+    const sortedSeen = [...seen].sort((a, b) => a - b);
+    expect(sortedSeen).toEqual([0, 1, 2, 3, 4, 5]);
+  });
+
+  // Cas limite : avec une seule valeur possible, le résultat est forcé.
+  it("always returns 0 when maxExclusive is 1", () => {
+    const rng = createSeededRng(7);
+
+    for (let n = 0; n < 100; n++) {
+      expect(nextInt(rng, 1)).toBe(0);
+    }
+  });
+
+  // Bornes invalides : zéro, négatif, décimal, NaN.
+  it.each([[0], [-1], [2.5], [Number.NaN]])('rejects maxExclusive %o', (max) => {
+    const rng = createSeededRng(7);
+    expect(() => nextInt(rng, max)).toThrow(RangeError);
   });
 });

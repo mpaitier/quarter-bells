@@ -68,3 +68,24 @@ export function createSeededRng(seed: number): Rng {
     },
   };
 }
+
+/**
+ * Tire un entier uniformément dans [0, maxExclusive).
+ *
+ * @param rng générateur à utiliser
+ * @param maxExclusive borne supérieure exclue, entier strictement positif
+ * @throws {RangeError} si maxExclusive n'est pas un entier strictement positif
+ */
+export function nextInt(rng: Rng, maxExclusive: number): number {
+  const isValidMax = Number.isInteger(maxExclusive) && maxExclusive > 0;
+
+  if (!isValidMax) {
+    throw new RangeError(
+      `maxExclusive must be a positive integer, received ${String(maxExclusive)}.`,
+    );
+  }
+
+  // next() étant dans [0, 1), le produit est dans [0, maxExclusive),
+  // et l'arrondi inférieur donne un entier de 0 à maxExclusive - 1.
+  return Math.floor(rng.next() * maxExclusive);
+}
