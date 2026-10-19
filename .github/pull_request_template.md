@@ -22,3 +22,7 @@
 ## Captures ou démonstration
 
 <!-- Pour un changement visible, ajouter une capture ou un GIF. -->
+
+## Issue liée
+
+Closes #
