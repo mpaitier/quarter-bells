@@ -14,13 +14,13 @@ Ce document décrit ce qui est testé, comment, et avec quels outils. Il s'appli
 
 La plupart des tests sont des tests unitaires, rapides et nombreux. Plus on monte dans les niveaux, moins il y a de tests, et plus chacun couvre de terrain.
 
-| Niveau | Cible | Outil | Lancé |
-|--------|-------|-------|-------|
-| Unitaire | `packages/rules`, `packages/protocol`, logique pure du serveur et du web | Vitest | à chaque PR |
-| Propriétés | invariants du moteur de règles | Vitest + fast-check | à chaque PR |
-| Intégration | serveur réel, clients WebSocket de test | Vitest | à chaque PR |
-| Composants | composants de l'écran de jeu | Vitest + bibliothèque de test du framework web | à chaque PR |
-| De bout en bout | parcours complets dans de vrais navigateurs | Playwright | à chaque PR vers `main` |
+| Niveau          | Cible                                                                    | Outil                                          | Lancé                   |
+| --------------- | ------------------------------------------------------------------------ | ---------------------------------------------- | ----------------------- |
+| Unitaire        | `packages/rules`, `packages/protocol`, logique pure du serveur et du web | Vitest                                         | à chaque PR             |
+| Propriétés      | invariants du moteur de règles                                           | Vitest + fast-check                            | à chaque PR             |
+| Intégration     | serveur réel, clients WebSocket de test                                  | Vitest                                         | à chaque PR             |
+| Composants      | composants de l'écran de jeu                                             | Vitest + bibliothèque de test du framework web | à chaque PR             |
+| De bout en bout | parcours complets dans de vrais navigateurs                              | Playwright                                     | à chaque PR vers `main` |
 
 ### Tests unitaires du moteur de règles
 
@@ -34,8 +34,16 @@ Les cas sont écrits sous forme de données plutôt que de code. Un fichier JSON
   "rule": { "kind": "sumInRange", "params": { "min": 6, "max": 10 } },
   "section": 1,
   "placements": [
-    { "sectionIndex": 1, "card": { "family": "instant", "value": 7 }, "faceUp": false },
-    { "sectionIndex": 1, "card": { "family": "eternity", "value": 5 }, "faceUp": false }
+    {
+      "sectionIndex": 1,
+      "card": { "family": "instant", "value": 7 },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 1,
+      "card": { "family": "eternity", "value": 5 },
+      "faceUp": false
+    }
   ],
   "expected": { "satisfied": false }
 }
@@ -113,19 +121,23 @@ Le nom d'un test se lit comme une phrase qui décrit le comportement :
 
 ```ts
 describe("sumInRange", () => {
-  it("échoue quand la somme dépasse le maximum", () => { /* ... */ });
-  it("refuse pendant la Pose une carte qui dépasse le maximum si toutes les cartes sont visibles", () => { /* ... */ });
+  it("échoue quand la somme dépasse le maximum", () => {
+    /* ... */
+  });
+  it("refuse pendant la Pose une carte qui dépasse le maximum si toutes les cartes sont visibles", () => {
+    /* ... */
+  });
 });
 ```
 
 ## Couverture
 
-| Paquet | Seuil minimum de couverture des lignes |
-|--------|----------------------------------------|
-| `packages/rules` | 95 % |
-| `packages/protocol` | 90 % |
-| `apps/server` | 80 % |
-| `apps/web` | pas de seuil |
+| Paquet              | Seuil minimum de couverture des lignes |
+| ------------------- | -------------------------------------- |
+| `packages/rules`    | 95 %                                   |
+| `packages/protocol` | 90 %                                   |
+| `apps/server`       | 80 %                                   |
+| `apps/web`          | pas de seuil                           |
 
 La couverture est un indicateur, pas un objectif. Un code couvert à 100 % par des tests sans assertion utile ne prouve rien. Ces seuils servent à repérer le code oublié, et la CI échoue s'ils ne sont pas atteints.
 

@@ -45,7 +45,10 @@ export default defineConfig([
       ],
       "no-restricted-syntax": [
         "error",
-        { selector: "NewExpression[callee.name='Date']", message: DETERMINISM_MESSAGE },
+        {
+          selector: "NewExpression[callee.name='Date']",
+          message: DETERMINISM_MESSAGE,
+        },
       ],
     },
   },
@@ -56,7 +59,11 @@ export default defineConfig([
     rules: {
       "no-restricted-imports": [
         "error",
-        { patterns: [{ regex: "^(?!\\.|vitest$)", message: PURE_RULES_MESSAGE }] },
+        {
+          patterns: [
+            { regex: "^(?!\\.|vitest$)", message: PURE_RULES_MESSAGE },
+          ],
+        },
       ],
     },
   },
