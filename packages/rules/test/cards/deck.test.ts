@@ -72,7 +72,9 @@ describe("createDeck", () => {
   // La graine doit influencer les identifiants.
   it("gives different ids for different seeds", () => {
     const firstIds = createDeck(createSeededRng(SEED)).map((card) => card.id);
-    const secondIds = createDeck(createSeededRng(SEED + 1)).map((card) => card.id);
+    const secondIds = createDeck(createSeededRng(SEED + 1)).map(
+      (card) => card.id,
+    );
 
     expect(firstIds).not.toEqual(secondIds);
   });

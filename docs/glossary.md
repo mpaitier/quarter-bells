@@ -6,21 +6,21 @@ Vocabulaire du domaine. Le même terme est utilisé partout : règles, diagramme
 
 ## Matériel
 
-| Terme                | Code                  | Définition                                                                                                                                                     |
-| -------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Carte                | `Card`                | Carte numérotée de 1 à 12, appartenant à une famille. Le jeu en compte 24.                                                                                     |
-| Famille              | `CardFamily`          | L'une des deux catégories de cartes, identifiable par sa couleur et son icône.                                                                                 |
-| Instant              | `"instant"`           | Famille de 12 cartes. Couleur ambre, symbole éclair.                                                                                                           |
-| Éternité             | `"eternity"`          | Famille de 12 cartes. Couleur violette, symbole infini.                                                                                                        |
-| Valeur               | `value`               | Nombre inscrit sur une carte, de 1 à 12.                                                                                                                       |
-| Dos                  | —                     | Face cachée d'une carte. Il montre la famille mais pas la valeur.                                                                                              |
-| Main                 | `Hand`                | Cartes qu'un joueur détient et n'a pas encore posées.                                                                                                          |
-| Réserve              | `Reserve`             | En partie à 2, lot de 2 cartes mis de côté face cachée et ajouté à la main en cours de pose.                                                                   |
-| Horloge              | `Clock`               | Plateau d'une épreuve, composé de 6 sections et éventuellement d'une règle centrale.                                                                           |
-| Section              | `Section`             | L'une des 6 zones d'une horloge, devant laquelle on pose des cartes. Indexée de 0 à 5.                                                                         |
-| Section de départ    | `startSection`        | Section à partir de laquelle on vérifie l'ordre croissant et on révèle les cartes. Section 0 par défaut.                                                       |
-| Valeur d'une section | `sectionSum`          | Somme des valeurs des cartes posées devant une section.                                                                                                        |
-| Aiguille             | `Pointer`             | Élément visuel qui parcourt les sections pendant la résolution. Ne pas la nommer `Hand` (traduction littérale) : le terme est déjà pris par la main du joueur. |
+| Terme                | Code           | Définition                                                                                                                                                     |
+| -------------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Carte                | `Card`         | Carte numérotée de 1 à 12, appartenant à une famille. Le jeu en compte 24.                                                                                     |
+| Famille              | `CardFamily`   | L'une des deux catégories de cartes, identifiable par sa couleur et son icône.                                                                                 |
+| Instant              | `"instant"`    | Famille de 12 cartes. Couleur ambre, symbole éclair.                                                                                                           |
+| Éternité             | `"eternity"`   | Famille de 12 cartes. Couleur violette, symbole infini.                                                                                                        |
+| Valeur               | `value`        | Nombre inscrit sur une carte, de 1 à 12.                                                                                                                       |
+| Dos                  | —              | Face cachée d'une carte. Il montre la famille mais pas la valeur.                                                                                              |
+| Main                 | `Hand`         | Cartes qu'un joueur détient et n'a pas encore posées.                                                                                                          |
+| Réserve              | `Reserve`      | En partie à 2, lot de 2 cartes mis de côté face cachée et ajouté à la main en cours de pose.                                                                   |
+| Horloge              | `Clock`        | Plateau d'une épreuve, composé de 6 sections et éventuellement d'une règle centrale.                                                                           |
+| Section              | `Section`      | L'une des 6 zones d'une horloge, devant laquelle on pose des cartes. Indexée de 0 à 5.                                                                         |
+| Section de départ    | `startSection` | Section à partir de laquelle on vérifie l'ordre croissant et on révèle les cartes. Section 0 par défaut.                                                       |
+| Valeur d'une section | `sectionSum`   | Somme des valeurs des cartes posées devant une section.                                                                                                        |
+| Aiguille             | `Pointer`      | Élément visuel qui parcourt les sections pendant la résolution. Ne pas la nommer `Hand` (traduction littérale) : le terme est déjà pris par la main du joueur. |
 
 ## Règles
 
