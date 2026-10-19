@@ -1,9 +1,13 @@
+// Configuration TypeScript commune à tous les paquets du monorepo.
+// Chaque paquet l'étend avec son propre tsconfig.json, qui ne déclare que ses fichiers.
+//
+// TypeScript reste en 6.0 tant que typescript-eslint ne prend pas en charge TypeScript 7
+// (il n'accepte que les versions inférieures à 6.1.0).
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     // --- Cible et modules ---
-    "include": ["src"],
+
     // Node 24 prend en charge ES2024 nativement : inutile de transpiler vers plus ancien.
     "target": "ES2024",
 

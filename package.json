@@ -9,11 +9,13 @@
     "node": "^24.0.0"
   },
   "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "typecheck": "tsc -p . && pnpm -r run typecheck",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "eslint .",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test"
   },
   "repository": {
     "type": "git",
