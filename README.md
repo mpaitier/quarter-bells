@@ -1,51 +1,85 @@
-# Documentation
+# Quarter Bells
 
-Point d'entrée de la documentation. À ouvrir en premier en revenant sur le projet.
+Jeu coopératif de cartes en ligne, de 2 à 4 joueurs. Les joueurs posent ensemble
+12 cartes autour d'une horloge en respectant les règles de chaque épreuve, sans
+communiquer pendant la pose.
 
-## Comprendre le jeu
+Le projet comprend un serveur de jeu, un client web et, plus tard, un client mobile.
 
-| Document | Contenu | État |
-|----------|---------|------|
-| [Règles du jeu](game-rules.md) | Règles implémentées, choix de design | brouillon |
-| [Glossaire](glossary.md) | Vocabulaire du domaine et noms dans le code | brouillon |
-| [Catalogue des règles](rule-catalog.md) | Types de règles que le moteur sait évaluer | brouillon |
-| [Format des horloges](clock-format.md) | Données d'une horloge, disposition des sections | brouillon |
+## Prérequis
 
-## Exigences et planning
+- **Node.js** : la version indiquée dans [`.nvmrc`](.nvmrc).
+  Un gestionnaire de versions est recommandé, par exemple [fnm](https://github.com/Schniz/fnm),
+  qui lit `.nvmrc` et change de version automatiquement en entrant dans le dossier.
+- **pnpm** : la version est fixée par le champ `packageManager` du `package.json`
+  et fournie par Corepack, livré avec Node 24.
 
-| Document | Contenu | État |
-|----------|---------|------|
-| [Exigences](requirements.md) | Exigences fonctionnelles et non fonctionnelles | à jour |
-| [Feuille de route](roadmap.md) | Jalons et critères de sortie | brouillon |
+Le champ `engines` du `package.json` indique la plage de versions de Node attendue.
+Il est seulement indicatif : pnpm ne bloque pas l'installation si la version ne
+correspond pas. La version de référence reste celle de `.nvmrc`.
 
-## Conception
+## Installation
 
-| Document | Contenu | État |
-|----------|---------|------|
-| [Modèle du domaine](diagrams/domain-model.md) | Entités et relations | brouillon |
-| [Cycle de vie d'une partie](diagrams/game-state.md) | Machine à états de la partie | brouillon |
-| [Cycle de vie d'une salle](diagrams/lobby-state.md) | Machine à états de la salle | brouillon |
-| [Navigation](diagrams/navigation-flow.md) | Parcours entre les écrans | à jour |
-| [Protocole](protocol.md) | Commandes et événements | brouillon |
-| Architecture C4 | Contexte et conteneurs | à faire, après les ADR 0004 et 0005 |
-| Stratégie de tests | Types de tests et outillage | à faire, au début du J1 |
-| Maquettes | Écrans du jeu | à faire |
+1. Installer et activer la version de Node du projet :
 
-## Décisions
+```sh
+   fnm install
+   fnm use
+```
 
-| ADR | Titre | Statut |
-|-----|-------|--------|
-| [0001](adr/0001-enregistrer-les-decisions-d-architecture.md) | Enregistrer les décisions d'architecture | Accepté |
-| [0002](adr/0002-organiser-le-code-en-monorepo.md) | Organiser le code en monorepo | Accepté |
-| [0003](adr/0003-choix-de-la-stack.md) | Choix de la stack | Accepté |
-| [0004](adr/0004-hebergement.md) | Hébergement | Proposé |
-| 0005 | Authentification (e-mail et Google) | à rédiger |
-| 0006 | Vocal et vidéo en WebRTC | à rédiger |
+2. Activer pnpm via Corepack (une seule fois par machine et par version de Node) :
 
-Nouveau ADR : partir de [template.md](adr/template.md).
+```sh
+   corepack enable pnpm
+```
 
-## États
+3. Installer les dépendances :
 
-- **à faire** : le document n'existe pas encore.
-- **brouillon** : le document existe mais contient des questions ouvertes.
-- **à jour** : le document reflète l'état du projet.
+```sh
+   pnpm install
+```
+
+## Vérifier
+
+```sh
+pnpm check
+```
+
+Lance dans l'ordre les vérifications de la CI. Chacune existe aussi séparément :
+
+| Commande            | Rôle                                                                           |
+| ------------------- | ------------------------------------------------------------------------------ |
+| `pnpm format:check` | Vérifie le formatage (Prettier). `pnpm format` corrige.                        |
+| `pnpm lint`         | Analyse le code (ESLint), dont l'isolation de `packages/rules`.                |
+| `pnpm typecheck`    | Vérifie les types (TypeScript) de tous les paquets.                            |
+| `pnpm test`         | Lance les tests (Vitest). `pnpm test:watch` les relance à chaque modification. |
+
+## Versions bloquées
+
+- **TypeScript reste en 6.0.** TypeScript 7 n'est pas encore pris en charge par
+  typescript-eslint, qui n'accepte que les versions inférieures à 6.1.0. À revoir
+  quand typescript-eslint annoncera la prise en charge de TypeScript 7.
+
+## Organisation du dépôt
+
+```text
+apps/      applications exécutables (server, web, mobile)
+packages/  code partagé (rules, protocol)
+docs/      documentation, décisions d'architecture, diagrammes
+```
+
+Les règles de dépendance entre ces dossiers sont décrites dans
+[l'ADR 0002](docs/adr/0002-organiser-le-code-en-monorepo.md).
+
+## Documentation
+
+Tout part de [`docs/README.md`](docs/README.md) : règles du jeu, exigences,
+conception et décisions d'architecture.
+
+## Contribuer
+
+Branches, format des commits et pull requests : voir [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Licence
+
+Tous droits réservés. Aucune licence n'est accordée pour le moment.

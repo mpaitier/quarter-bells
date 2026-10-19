@@ -1,0 +1,67 @@
+// Configuration TypeScript commune à tous les paquets du monorepo.
+// Chaque paquet l'étend avec son propre tsconfig.json, qui ne déclare que ses fichiers.
+//
+// TypeScript reste en 6.0 tant que typescript-eslint ne prend pas en charge TypeScript 7
+// (il n'accepte que les versions inférieures à 6.1.0).
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    // --- Cible et modules ---
+
+    // Node 24 prend en charge ES2024 nativement : inutile de transpiler vers plus ancien.
+    "target": "ES2024",
+
+    // Uniquement la bibliothèque standard JavaScript, sans le DOM.
+    // apps/web ajoutera "DOM" dans son propre tsconfig.
+    "lib": ["ES2024"],
+
+    // Aucun type global chargé automatiquement (@types/node par exemple).
+    // Dans packages/rules, process, Buffer ou setTimeout n'existent donc pas :
+    // le paquet ne peut pas dépendre de Node, même par accident (NF-QUA-04).
+    // apps/server ajoutera "types": ["node"].
+    "types": [],
+
+    // rules sera importé par le serveur (Node) et par le client web (bundler).
+    // Ce qui compile en NodeNext fonctionne aussi avec un bundler, l'inverse n'est pas garanti.
+    // Contrepartie : les imports relatifs portent l'extension .js.
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    // --- Rigueur du typage ---
+
+    "strict": true,
+
+    // tableau[i] est typé T | undefined : oblige à gérer l'index hors limites.
+    "noUncheckedIndexedAccess": true,
+
+    // Distingue « champ absent » et « champ égal à undefined » (params optionnels des règles).
+    "exactOptionalPropertyTypes": true,
+
+    // Oblige le mot-clé override quand une méthode redéfinit celle d'une classe parente.
+    "noImplicitOverride": true,
+
+    // Interdit qu'un case de switch passe dans le suivant sans break ni return.
+    "noFallthroughCasesInSwitch": true,
+
+    // Les variables et paramètres inutilisés sont laissés à ESLint, pour ne pas avoir deux alertes.
+
+    // --- Interopérabilité avec les outils ---
+
+    // Oblige à écrire « import type » pour les imports de types :
+    // Vitest et les bundlers peuvent traiter chaque fichier seul, sans deviner.
+    "verbatimModuleSyntax": true,
+
+    // Erreur si un import ne respecte pas la casse du nom de fichier
+    // (Windows l'ignore, la CI sous Linux non).
+    "forceConsistentCasingInFileNames": true,
+
+    // Ne vérifie pas les fichiers .d.ts des dépendances : plus rapide, et leurs erreurs ne sont pas les nôtres.
+    "skipLibCheck": true,
+
+    // --- Sortie ---
+
+    // Pour l'instant, TypeScript ne fait que vérifier les types.
+    // La compilation vers dist/ sera décidée au J3, quand apps/server consommera rules.
+    "noEmit": true
+  }
+}

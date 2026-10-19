@@ -24,6 +24,9 @@ node_modules/
 .npm/
 *.tsbuildinfo
 
+# Vitest
+.vitest/
+
 # Sorties de build et couverture
 build/
 dist/
@@ -33,4 +36,3 @@ coverage/
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
-

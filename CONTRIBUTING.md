@@ -24,17 +24,17 @@ Le projet suit la convention [Conventional Commits](https://www.conventionalcomm
 
 Types autorisés :
 
-| Type | Usage |
-|------|-------|
-| `feat` | nouvelle fonctionnalité |
-| `fix` | correction de bug |
-| `docs` | documentation uniquement |
+| Type       | Usage                                             |
+| ---------- | ------------------------------------------------- |
+| `feat`     | nouvelle fonctionnalité                           |
+| `fix`      | correction de bug                                 |
+| `docs`     | documentation uniquement                          |
 | `refactor` | changement de code sans effet sur le comportement |
-| `test` | ajout ou correction de tests |
-| `chore` | maintenance, dépendances, configuration |
-| `ci` | pipeline d'intégration continue |
-| `style` | formatage sans changement de logique |
-| `perf` | amélioration de performance |
+| `test`     | ajout ou correction de tests                      |
+| `chore`    | maintenance, dépendances, configuration           |
+| `ci`       | pipeline d'intégration continue                   |
+| `style`    | formatage sans changement de logique              |
+| `perf`     | amélioration de performance                       |
 
 Le scope correspond au dossier concerné : `server`, `web`, `mobile`, `rules`, `protocol`, `docs`. Il est facultatif quand le changement touche tout le repo.
 

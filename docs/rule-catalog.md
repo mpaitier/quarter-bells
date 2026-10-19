@@ -19,27 +19,27 @@ Ces types sont nécessaires pour reproduire les mécaniques décrites dans les r
 
 Le plafond et la section de départ ne sont pas des règles : ce sont des propriétés de l'horloge (`noMaxSum`, `startSectionMode`, `defaultStartSection`), voir le [format des horloges](clock-format.md).
 
-| Type | Portée | Nature | Paramètres | Signification |
-|------|--------|--------|------------|---------------|
-| `minCardCount` | section | réussite | `min` | Au moins `min` cartes devant la section. Règle générale avec `min = 1` sur chaque section. |
-| `ascendingOrder` | horloge | réussite | — | La valeur de chaque section est supérieure ou égale à la précédente, à partir de la section de départ. Règle générale. |
-| `maxSum` | section ou horloge | réussite | `max` | Valeur de la section inférieure ou égale à `max`. Règle générale avec `max = 24`. |
-| `exactCardCount` | section | réussite | `count`, `family?` | Exactement `count` cartes devant la section, d'une famille donnée ou toutes familles confondues. |
-| `sumInRange` | section | réussite | `min`, `max` | Valeur de la section comprise entre `min` et `max`, bornes incluses. |
-| `firstPlacements` | section | pose | `placementIndexes` | Les poses de rang indiqué (par exemple la 1re et la 2e) doivent se faire devant cette section. D'autres poses y restent possibles ensuite. |
+| Type              | Portée             | Nature   | Paramètres         | Signification                                                                                                                              |
+| ----------------- | ------------------ | -------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `minCardCount`    | section            | réussite | `min`              | Au moins `min` cartes devant la section. Règle générale avec `min = 1` sur chaque section.                                                 |
+| `ascendingOrder`  | horloge            | réussite | —                  | La valeur de chaque section est supérieure ou égale à la précédente, à partir de la section de départ. Règle générale.                     |
+| `maxSum`          | section ou horloge | réussite | `max`              | Valeur de la section inférieure ou égale à `max`. Règle générale avec `max = 24`.                                                          |
+| `exactCardCount`  | section            | réussite | `count`, `family?` | Exactement `count` cartes devant la section, d'une famille donnée ou toutes familles confondues.                                           |
+| `sumInRange`      | section            | réussite | `min`, `max`       | Valeur de la section comprise entre `min` et `max`, bornes incluses.                                                                       |
+| `firstPlacements` | section            | pose     | `placementIndexes` | Les poses de rang indiqué (par exemple la 1re et la 2e) doivent se faire devant cette section. D'autres poses y restent possibles ensuite. |
 
 ## Types candidats
 
 Idées pour concevoir des horloges originales. Chacune doit être validée par une partie de test avant d'entrer dans le catalogue.
 
-| Type | Portée | Nature | Idée |
-|------|--------|--------|------|
-| `familyOnly` | section | pose | Seules les cartes d'une famille peuvent y être posées. |
-| `faceUpForbidden` | section ou horloge | pose | Interdit de poser face visible. |
-| `sumParity` | section | réussite | Valeur paire ou impaire. |
-| `equalTo` | section | réussite | Valeur égale à celle d'une autre section. |
-| `maxCardCount` | section | pose | Pas plus de `max` cartes devant la section. |
-| `noConsecutiveSameFamily` | horloge | pose | Deux poses consécutives ne peuvent pas être de la même famille. |
+| Type                      | Portée             | Nature   | Idée                                                            |
+| ------------------------- | ------------------ | -------- | --------------------------------------------------------------- |
+| `familyOnly`              | section            | pose     | Seules les cartes d'une famille peuvent y être posées.          |
+| `faceUpForbidden`         | section ou horloge | pose     | Interdit de poser face visible.                                 |
+| `sumParity`               | section            | réussite | Valeur paire ou impaire.                                        |
+| `equalTo`                 | section            | réussite | Valeur égale à celle d'une autre section.                       |
+| `maxCardCount`            | section            | pose     | Pas plus de `max` cartes devant la section.                     |
+| `noConsecutiveSameFamily` | horloge            | pose     | Deux poses consécutives ne peuvent pas être de la même famille. |
 
 ## Décisions
 

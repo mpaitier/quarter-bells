@@ -17,25 +17,25 @@ L'exigence NF-QUA-02 impose que le lint, le formatage et les tests bloquent la f
 
 ### Gestionnaire de workspaces
 
-| Option | Avantages | Inconvénients |
-|--------|-----------|---------------|
-| npm workspaces | Fourni avec Node, rien à installer | Plus lent ; un paquet peut importer une dépendance qu'il n'a pas déclarée |
-| pnpm workspaces | Rapide ; dépendances strictes (un paquet n'accède qu'à ce qu'il déclare) ; filtrage par paquet (`--filter`) | Un outil de plus à installer |
-| Yarn | Workspaces matures | Deux versions très différentes coexistent, documentation dispersée |
+| Option          | Avantages                                                                                                   | Inconvénients                                                             |
+| --------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| npm workspaces  | Fourni avec Node, rien à installer                                                                          | Plus lent ; un paquet peut importer une dépendance qu'il n'a pas déclarée |
+| pnpm workspaces | Rapide ; dépendances strictes (un paquet n'accède qu'à ce qu'il déclare) ; filtrage par paquet (`--filter`) | Un outil de plus à installer                                              |
+| Yarn            | Workspaces matures                                                                                          | Deux versions très différentes coexistent, documentation dispersée        |
 
 ### Framework de tests
 
-| Option | Avantages | Inconvénients |
-|--------|-----------|---------------|
-| Jest | Très répandu | Configuration supplémentaire pour TypeScript et les modules ES |
-| Vitest | TypeScript et modules ES sans configuration ; API compatible avec Jest ; rapide | Plus récent |
+| Option | Avantages                                                                       | Inconvénients                                                  |
+| ------ | ------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| Jest   | Très répandu                                                                    | Configuration supplémentaire pour TypeScript et les modules ES |
+| Vitest | TypeScript et modules ES sans configuration ; API compatible avec Jest ; rapide | Plus récent                                                    |
 
 ### Lint et formatage
 
-| Option | Avantages | Inconvénients |
-|--------|-----------|---------------|
-| ESLint + typescript-eslint + Prettier | Standard en entreprise ; règles qui utilisent les types (promesses non attendues, etc.) | Deux outils à configurer |
-| Biome | Un seul outil, très rapide | Moins de règles qui s'appuient sur les types ; moins répandu en entreprise |
+| Option                                | Avantages                                                                               | Inconvénients                                                              |
+| ------------------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| ESLint + typescript-eslint + Prettier | Standard en entreprise ; règles qui utilisent les types (promesses non attendues, etc.) | Deux outils à configurer                                                   |
+| Biome                                 | Un seul outil, très rapide                                                              | Moins de règles qui s'appuient sur les types ; moins répandu en entreprise |
 
 ## Décision
 

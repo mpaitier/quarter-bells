@@ -6,13 +6,13 @@ Format de données qui décrit une horloge. Les 40 horloges du jeu sont des fich
 
 Le format sépare deux niveaux qu'il ne faut jamais mélanger.
 
-| | Définition d'une horloge | État d'une épreuve |
-|---|---|---|
-| Ce que c'est | Le contenu du jeu | Une partie en train de se jouer |
-| Change pendant la partie | jamais | à chaque action |
-| Identique pour tous les groupes | oui | non |
-| Où il vit | fichiers JSON dans `packages/rules` | mémoire du serveur, sauvegardes |
-| Exemples | sections, règles, section de départ par défaut | cartes posées, section de départ choisie, yeux dépensés |
+|                                 | Définition d'une horloge                       | État d'une épreuve                                      |
+| ------------------------------- | ---------------------------------------------- | ------------------------------------------------------- |
+| Ce que c'est                    | Le contenu du jeu                              | Une partie en train de se jouer                         |
+| Change pendant la partie        | jamais                                         | à chaque action                                         |
+| Identique pour tous les groupes | oui                                            | non                                                     |
+| Où il vit                       | fichiers JSON dans `packages/rules`            | mémoire du serveur, sauvegardes                         |
+| Exemples                        | sections, règles, section de départ par défaut | cartes posées, section de départ choisie, yeux dépensés |
 
 L'état d'une épreuve référence l'horloge par son `uid`, et chaque carte posée référence sa section par son `index`. Pour connaître les règles d'une section où une carte a été posée, le moteur charge l'horloge à partir de l'`uid` de l'épreuve, puis lit `sections[sectionIndex]`.
 
@@ -36,11 +36,20 @@ L'aiguille pointe toujours le milieu de la section de départ. L'ordre de révé
   "clockRules": [],
   "sections": [
     { "index": 0, "rules": [] },
-    { "index": 1, "rules": [{ "kind": "sumInRange", "params": { "min": 6, "max": 10 } }] },
+    {
+      "index": 1,
+      "rules": [{ "kind": "sumInRange", "params": { "min": 6, "max": 10 } }]
+    },
     { "index": 2, "rules": [] },
     { "index": 3, "rules": [] },
-    { "index": 4, "rules": [{ "kind": "familyOnly", "params": { "family": "eternity" } }] },
-    { "index": 5, "rules": [{ "kind": "exactCardCount", "params": { "count": 3 } }] }
+    {
+      "index": 4,
+      "rules": [{ "kind": "familyOnly", "params": { "family": "eternity" } }]
+    },
+    {
+      "index": 5,
+      "rules": [{ "kind": "exactCardCount", "params": { "count": 3 } }]
+    }
   ]
 }
 ```
@@ -49,31 +58,31 @@ Cette horloge est un exemple inventé, elle n'est pas destinée au jeu.
 
 ### Champs de l'horloge
 
-| Champ | Type | Contrainte | Rôle |
-|-------|------|------------|------|
-| `formatVersion` | entier | ≥ 1 | Version du format. Permet de le faire évoluer sans casser les horloges existantes. |
-| `uid` | texte | unique dans tout le jeu | Identifiant stable de l'horloge, référencé par l'état des épreuves et par la progression. |
-| `chapter` | entier | 1 à 10 | Chapitre de l'horloge. |
-| `indexInChapter` | entier | 0 à 3 | Position de l'horloge dans son chapitre. Le couple (`chapter`, `indexInChapter`) est unique. |
-| `noMaxSum` | booléen | | `true` supprime le plafond de 24. |
-| `startSectionMode` | texte | `fixed` ou `chosenByPlayers` | `chosenByPlayers` laisse les joueurs choisir la section de départ pendant la Discussion (à partir du chapitre 3). |
-| `defaultStartSection` | entier | 0 à 5 | Section de départ en mode `fixed`, valeur proposée en mode `chosenByPlayers`. |
-| `clockRules` | liste de règles | peut être vide | Règles qui s'appliquent à toute l'horloge. |
-| `sections` | liste de sections | exactement 6 | Les sections, dans l'ordre de leur index. |
+| Champ                 | Type              | Contrainte                   | Rôle                                                                                                              |
+| --------------------- | ----------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `formatVersion`       | entier            | ≥ 1                          | Version du format. Permet de le faire évoluer sans casser les horloges existantes.                                |
+| `uid`                 | texte             | unique dans tout le jeu      | Identifiant stable de l'horloge, référencé par l'état des épreuves et par la progression.                         |
+| `chapter`             | entier            | 1 à 10                       | Chapitre de l'horloge.                                                                                            |
+| `indexInChapter`      | entier            | 0 à 3                        | Position de l'horloge dans son chapitre. Le couple (`chapter`, `indexInChapter`) est unique.                      |
+| `noMaxSum`            | booléen           |                              | `true` supprime le plafond de 24.                                                                                 |
+| `startSectionMode`    | texte             | `fixed` ou `chosenByPlayers` | `chosenByPlayers` laisse les joueurs choisir la section de départ pendant la Discussion (à partir du chapitre 3). |
+| `defaultStartSection` | entier            | 0 à 5                        | Section de départ en mode `fixed`, valeur proposée en mode `chosenByPlayers`.                                     |
+| `clockRules`          | liste de règles   | peut être vide               | Règles qui s'appliquent à toute l'horloge.                                                                        |
+| `sections`            | liste de sections | exactement 6                 | Les sections, dans l'ordre de leur index.                                                                         |
 
 ### Champs d'une section
 
-| Champ | Type | Contrainte | Rôle |
-|-------|------|------------|------|
-| `index` | entier | 0 à 5, égal à sa position dans la liste | Position de la section sur le cadran. |
-| `rules` | liste de règles | peut être vide | Règles propres à cette section. |
+| Champ   | Type            | Contrainte                              | Rôle                                  |
+| ------- | --------------- | --------------------------------------- | ------------------------------------- |
+| `index` | entier          | 0 à 5, égal à sa position dans la liste | Position de la section sur le cadran. |
+| `rules` | liste de règles | peut être vide                          | Règles propres à cette section.       |
 
 ### Champs d'une règle
 
-| Champ | Type | Contrainte | Rôle |
-|-------|------|------------|------|
-| `kind` | texte | un type du catalogue | Type de règle. |
-| `params` | objet | dépend du type | Paramètres de la règle. |
+| Champ    | Type  | Contrainte           | Rôle                    |
+| -------- | ----- | -------------------- | ----------------------- |
+| `kind`   | texte | un type du catalogue | Type de règle.          |
+| `params` | objet | dépend du type       | Paramètres de la règle. |
 
 La nature d'une règle (contrainte de pose ou condition de réussite) n'est pas écrite dans l'horloge : elle découle de son type, défini une fois pour toutes dans le catalogue.
 
@@ -97,7 +106,13 @@ Pour mémoire, la partie de l'état qui fait le lien avec l'horloge. Le détail 
   "clockUid": "ch01-clk2",
   "startSection": 4,
   "placements": [
-    { "placementIndex": 0, "sectionIndex": 5, "player": "p1", "cardId": "a8f3", "faceUp": false }
+    {
+      "placementIndex": 0,
+      "sectionIndex": 5,
+      "player": "p1",
+      "cardId": "a8f3",
+      "faceUp": false
+    }
   ]
 }
 ```

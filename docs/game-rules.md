@@ -15,6 +15,7 @@ Le jeu comporte 10 chapitres de 4 horloges, de difficulté croissante.
 - 24 cartes : 12 de la famille Instant et 12 de la famille Éternité, numérotées de 1 à 12 dans chaque famille.
 
 Les deux familles se distinguent par leur couleur (ambre pour Instant, violet pour Éternité) et par leur symbole (un éclair pour Instant, le signe infini pour Éternité). Le symbole suffit à les distinguer sans la couleur.
+
 - Des horloges de 6 sections, chacune avec ses règles propres.
 
 ## Mise en place d'une épreuve
@@ -29,10 +30,10 @@ Les yeux de base sont proportionnels au nombre de joueurs : `yeux de base = nomb
 
 À la création de la salle, l'hôte peut durcir la partie :
 
-| Option | Effet | Valeur par défaut |
-|--------|-------|-------------------|
-| Plafond d'yeux de base | Les yeux de base ne dépassent pas cette valeur. | aucun plafond |
-| Yeux bonus maximum | Nombre maximum d'yeux bonus, de 0 (désactivés) à 3. | 3 |
+| Option                 | Effet                                               | Valeur par défaut |
+| ---------------------- | --------------------------------------------------- | ----------------- |
+| Plafond d'yeux de base | Les yeux de base ne dépassent pas cette valeur.     | aucun plafond     |
+| Yeux bonus maximum     | Nombre maximum d'yeux bonus, de 0 (désactivés) à 3. | 3                 |
 
 Avec un maximum de yeux bonus réduit, la run est perdue dès qu'un échec survient alors que ce maximum est atteint.
 
@@ -65,11 +66,11 @@ Chaque joueur se déclare prêt quand il a fini. Un joueur prêt peut annuler ta
 1. Les 24 cartes sont mélangées.
 2. 12 cartes sont distribuées selon le nombre de joueurs :
 
-   | Joueurs | Distribution |
-   |---------|--------------|
-   | 2 | 6 cartes chacun : une main de 4 et une réserve de 2 |
-   | 3 | 4 cartes chacun |
-   | 4 | 3 cartes chacun |
+   | Joueurs | Distribution                                        |
+   | ------- | --------------------------------------------------- |
+   | 2       | 6 cartes chacun : une main de 4 et une réserve de 2 |
+   | 3       | 4 cartes chacun                                     |
+   | 4       | 3 cartes chacun                                     |
 
 3. Les 12 cartes restantes ne sont pas utilisées.
 
