@@ -77,9 +77,9 @@ describe("createSeededRng", () => {
   });
 });
 
-describe('nextInt', () => {
+describe("nextInt", () => {
   // Contrat de base : un entier, dans [0, maxExclusive).
-  it('returns an integer in [0, maxExclusive)', () => {
+  it("returns an integer in [0, maxExclusive)", () => {
     const rng = createSeededRng(7);
 
     for (let n = 0; n < 10_000; n++) {
@@ -93,7 +93,7 @@ describe('nextInt', () => {
 
   // Chaque valeur possible doit pouvoir sortir. Une erreur de borne
   // (oublier le 0 ou le 5) passerait le test précédent, pas celui-ci.
-  it('can return every value in the range', () => {
+  it("can return every value in the range", () => {
     const rng = createSeededRng(7);
     const seen = new Set<number>();
 
@@ -117,8 +117,11 @@ describe('nextInt', () => {
   });
 
   // Bornes invalides : zéro, négatif, décimal, NaN.
-  it.each([[0], [-1], [2.5], [Number.NaN]])('rejects maxExclusive %o', (max) => {
-    const rng = createSeededRng(7);
-    expect(() => nextInt(rng, max)).toThrow(RangeError);
-  });
+  it.each([[0], [-1], [2.5], [Number.NaN]])(
+    "rejects maxExclusive %o",
+    (max) => {
+      const rng = createSeededRng(7);
+      expect(() => nextInt(rng, max)).toThrow(RangeError);
+    },
+  );
 });

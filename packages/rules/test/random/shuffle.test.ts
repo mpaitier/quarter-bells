@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { createSeededRng } from '../../src/random/rng.js';
-import { shuffle } from '../../src/random/shuffle.js';
+import { describe, expect, it } from "vitest";
+import { createSeededRng } from "../../src/random/rng.js";
+import { shuffle } from "../../src/random/shuffle.js";
 
 /** Les entiers de 0 à 23 : même taille que le jeu de cartes. */
 const ITEMS = Object.freeze(Array.from({ length: 24 }, (_, index) => index));
@@ -8,7 +8,7 @@ const ITEMS = Object.freeze(Array.from({ length: 24 }, (_, index) => index));
 /** Graine commune : chaque test crée son propre générateur à partir d'elle. */
 const SEED = 42;
 
-describe('shuffle', () => {
+describe("shuffle", () => {
   // Un mélange ne doit ni perdre, ni dupliquer, ni inventer d'élément.
   it("returns a permutation of the input", () => {
     const shuffled = shuffle(ITEMS, createSeededRng(SEED));
@@ -21,38 +21,38 @@ describe('shuffle', () => {
   });
 
   // L'appelant ne doit pas voir son tableau modifié.
-  it('does not modify the input array', () => {
-    const original = [...ITEMS]
-    shuffle(ITEMS, createSeededRng(SEED))
+  it("does not modify the input array", () => {
+    const original = [...ITEMS];
+    shuffle(ITEMS, createSeededRng(SEED));
 
     expect(ITEMS).toEqual(original);
   });
 
   // Le résultat doit être un nouveau tableau, pas l'entrée elle-même.
-  it('returns a new array', () => {
-    const shuffled = shuffle(ITEMS, createSeededRng(SEED))
+  it("returns a new array", () => {
+    const shuffled = shuffle(ITEMS, createSeededRng(SEED));
 
-    expect(shuffled).not.toBe(ITEMS)
+    expect(shuffled).not.toBe(ITEMS);
   });
 
   // Reproductibilité, comme pour le générateur.
-  it('gives the same order for the same seed', () => {
-    const firstOrder = shuffle(ITEMS, createSeededRng(SEED))
-    const secondOrder = shuffle(ITEMS, createSeededRng(SEED))
+  it("gives the same order for the same seed", () => {
+    const firstOrder = shuffle(ITEMS, createSeededRng(SEED));
+    const secondOrder = shuffle(ITEMS, createSeededRng(SEED));
 
-    expect(firstOrder).toEqual(secondOrder)
+    expect(firstOrder).toEqual(secondOrder);
   });
 
   // Le mélange doit réellement changer l'ordre. Un échange qui ne
   // permuterait rien passerait tous les tests précédents.
-  it('actually changes the order', () => {
+  it("actually changes the order", () => {
     expect(shuffle(ITEMS, createSeededRng(SEED))).not.toEqual(ITEMS);
   });
 
   // Cas limites : la boucle ne tourne pas, la copie doit rester correcte.
-  it('handles empty and single-element arrays', () => {
+  it("handles empty and single-element arrays", () => {
     expect(shuffle([], createSeededRng(SEED))).toEqual([]);
-    expect(shuffle(["a"], createSeededRng(SEED))).toEqual(['a']);
+    expect(shuffle(["a"], createSeededRng(SEED))).toEqual(["a"]);
   });
 
   // Uniformité : chaque ordre doit sortir avec la même fréquence.
@@ -90,5 +90,3 @@ describe('shuffle', () => {
     }
   });
 });
-
-
