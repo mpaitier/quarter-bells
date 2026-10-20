@@ -1,0 +1,1151 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "formatVersion",
+    "uid",
+    "chapter",
+    "indexInChapter",
+    "noMaxSum",
+    "startSectionMode",
+    "defaultStartSection",
+    "clockRules",
+    "sections"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "formatVersion": {
+      "type": "number",
+      "const": 1
+    },
+    "uid": {
+      "type": "string",
+      "minLength": 1
+    },
+    "chapter": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "indexInChapter": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3
+    },
+    "noMaxSum": {
+      "type": "boolean"
+    },
+    "startSectionMode": {
+      "anyOf": [
+        {
+          "type": "string",
+          "const": "fixed"
+        },
+        {
+          "type": "string",
+          "const": "chosenByPlayers"
+        }
+      ]
+    },
+    "defaultStartSection": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 5
+    },
+    "clockRules": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "kind",
+              "params"
+            ],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "ascendingOrder"
+              },
+              "params": {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": [
+              "kind",
+              "params"
+            ],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "maxSum"
+              },
+              "params": {
+                "type": "object",
+                "required": [
+                  "max"
+                ],
+                "properties": {
+                  "max": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "sections": {
+      "type": "array",
+      "additionalItems": false,
+      "items": [
+        {
+          "type": "object",
+          "required": [
+            "index",
+            "rules"
+          ],
+          "properties": {
+            "index": {
+              "type": "number",
+              "const": 0
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "minCardCount"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "min"
+                        ],
+                        "properties": {
+                          "min": {
+                            "type": "integer",
+                            "minimum": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "maxSum"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "max"
+                        ],
+                        "properties": {
+                          "max": {
+                            "type": "integer",
+                            "minimum": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "exactCardCount"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "count"
+                        ],
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "family": {
+                            "enum": [
+                              "instant",
+                              "eternity"
+                            ]
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "sumInRange"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "min",
+                          "max"
+                        ],
+                        "properties": {
+                          "min": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "max": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "firstPlacements"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "placementIndexes"
+                        ],
+                        "properties": {
+                          "placementIndexes": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "minItems": 1,
+                            "uniqueItems": true
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "index",
+            "rules"
+          ],
+          "properties": {
+            "index": {
+              "type": "number",
+              "const": 1
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "minCardCount"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "min"
+                        ],
+                        "properties": {
+                          "min": {
+                            "type": "integer",
+                            "minimum": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "maxSum"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "max"
+                        ],
+                        "properties": {
+                          "max": {
+                            "type": "integer",
+                            "minimum": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "exactCardCount"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "count"
+                        ],
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "family": {
+                            "enum": [
+                              "instant",
+                              "eternity"
+                            ]
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "sumInRange"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "min",
+                          "max"
+                        ],
+                        "properties": {
+                          "min": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "max": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "firstPlacements"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "placementIndexes"
+                        ],
+                        "properties": {
+                          "placementIndexes": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "minItems": 1,
+                            "uniqueItems": true
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "index",
+            "rules"
+          ],
+          "properties": {
+            "index": {
+              "type": "number",
+              "const": 2
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "minCardCount"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "min"
+                        ],
+                        "properties": {
+                          "min": {
+                            "type": "integer",
+                            "minimum": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "maxSum"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "max"
+                        ],
+                        "properties": {
+                          "max": {
+                            "type": "integer",
+                            "minimum": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "exactCardCount"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "count"
+                        ],
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "family": {
+                            "enum": [
+                              "instant",
+                              "eternity"
+                            ]
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "sumInRange"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "min",
+                          "max"
+                        ],
+                        "properties": {
+                          "min": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "max": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "firstPlacements"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "placementIndexes"
+                        ],
+                        "properties": {
+                          "placementIndexes": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "minItems": 1,
+                            "uniqueItems": true
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "index",
+            "rules"
+          ],
+          "properties": {
+            "index": {
+              "type": "number",
+              "const": 3
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "minCardCount"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "min"
+                        ],
+                        "properties": {
+                          "min": {
+                            "type": "integer",
+                            "minimum": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "maxSum"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "max"
+                        ],
+                        "properties": {
+                          "max": {
+                            "type": "integer",
+                            "minimum": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "exactCardCount"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "count"
+                        ],
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "family": {
+                            "enum": [
+                              "instant",
+                              "eternity"
+                            ]
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "sumInRange"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "min",
+                          "max"
+                        ],
+                        "properties": {
+                          "min": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "max": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "firstPlacements"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "placementIndexes"
+                        ],
+                        "properties": {
+                          "placementIndexes": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "minItems": 1,
+                            "uniqueItems": true
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "index",
+            "rules"
+          ],
+          "properties": {
+            "index": {
+              "type": "number",
+              "const": 4
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "minCardCount"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "min"
+                        ],
+                        "properties": {
+                          "min": {
+                            "type": "integer",
+                            "minimum": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "maxSum"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "max"
+                        ],
+                        "properties": {
+                          "max": {
+                            "type": "integer",
+                            "minimum": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "exactCardCount"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "count"
+                        ],
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "family": {
+                            "enum": [
+                              "instant",
+                              "eternity"
+                            ]
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "sumInRange"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "min",
+                          "max"
+                        ],
+                        "properties": {
+                          "min": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "max": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "firstPlacements"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "placementIndexes"
+                        ],
+                        "properties": {
+                          "placementIndexes": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "minItems": 1,
+                            "uniqueItems": true
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "index",
+            "rules"
+          ],
+          "properties": {
+            "index": {
+              "type": "number",
+              "const": 5
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "minCardCount"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "min"
+                        ],
+                        "properties": {
+                          "min": {
+                            "type": "integer",
+                            "minimum": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "maxSum"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "max"
+                        ],
+                        "properties": {
+                          "max": {
+                            "type": "integer",
+                            "minimum": 1
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "exactCardCount"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "count"
+                        ],
+                        "properties": {
+                          "count": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "family": {
+                            "enum": [
+                              "instant",
+                              "eternity"
+                            ]
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "sumInRange"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "min",
+                          "max"
+                        ],
+                        "properties": {
+                          "min": {
+                            "type": "integer",
+                            "minimum": 0
+                          },
+                          "max": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "params"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "const": "firstPlacements"
+                      },
+                      "params": {
+                        "type": "object",
+                        "required": [
+                          "placementIndexes"
+                        ],
+                        "properties": {
+                          "placementIndexes": {
+                            "type": "array",
+                            "items": {
+                              "type": "integer",
+                              "minimum": 0
+                            },
+                            "minItems": 1,
+                            "uniqueItems": true
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      ],
+      "minItems": 6
+    }
+  },
+  "additionalProperties": false
+}
