@@ -30,7 +30,7 @@ Le plafond et la section de départ ne sont pas des règles : ce sont des propri
 
 ## Types candidats
 
-Idées pour concevoir des horloges originales. Chacune doit être validée par une partie de test avant d'entrer dans le catalogue.
+Idées pour concevoir des horloges originales. Chacune doit être validée par une partie de test avant d'entrer dans le catalogue. Tant qu'un type reste candidat, le schéma des horloges le refuse : une horloge ne peut pas l'utiliser.
 
 | Type                      | Portée             | Nature   | Idée                                                            |
 | ------------------------- | ------------------ | -------- | --------------------------------------------------------------- |
