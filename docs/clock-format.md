@@ -44,7 +44,7 @@ L'aiguille pointe toujours le milieu de la section de départ. L'ordre de révé
     { "index": 3, "rules": [] },
     {
       "index": 4,
-      "rules": [{ "kind": "familyOnly", "params": { "family": "eternity" } }]
+      "rules": [{ "kind": "minCardCount", "params": { "min": 2 } }]
     },
     {
       "index": 5,
@@ -92,10 +92,10 @@ Le format est conçu pour qu'une horloge invalide ne puisse pas s'écrire, ou so
 
 - **Une seule aiguille.** La section de départ est une valeur unique au niveau de l'horloge. Il est impossible d'en déclarer deux, ou aucune.
 - **Six sections exactement**, avec des index de 0 à 5, chacun à sa place.
-- **Des règles connues.** Un `kind` absent du catalogue, ou des `params` qui ne correspondent pas à son type, rendent l'horloge invalide.
+- **Des règles connues.** Seuls les types connus du catalogue sont acceptés : un type candidat, un `kind` absent du catalogue ou des `params` qui ne correspondent pas à son type rendent l'horloge invalide.
 - **Aucune donnée de partie.** Les cartes posées, les yeux et la section de départ choisie n'ont pas de champ dans ce format.
 
-Ces contraintes seront vérifiées par un JSON Schema, dans `packages/rules`, et par un test qui charge toutes les horloges du jeu.
+Ces contraintes seront vérifiées par un JSON Schema, dans `packages/rules`, et par un test qui charge toutes les horloges du jeu. Le schéma est écrit avec TypeBox, voir l'[ADR 0008](adr/0008-validation-des-horloges.md).
 
 ## État d'une épreuve
 
