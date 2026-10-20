@@ -9,5 +9,8 @@
   },
   "scripts": {
     "typecheck": "tsc -p ."
+  },
+  "dependencies": {
+    "typebox": "1.4.2"
   }
 }

@@ -2,3 +2,8 @@ pnpm-lock.yaml
 .vitest/
 coverage/
 dist/
+
+# Généré par un test (voir packages/rules/test/clocks/clock-schema.test.ts) :
+# le formatage est celui de JSON.stringify, que Prettier ne doit pas réécrire.
+packages/rules/schema/
+
