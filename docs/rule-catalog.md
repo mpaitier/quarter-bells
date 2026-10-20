@@ -28,6 +28,20 @@ Le plafond et la section de départ ne sont pas des règles : ce sont des propri
 | `sumInRange`      | section            | réussite | `min`, `max`       | Valeur de la section comprise entre `min` et `max`, bornes incluses.                                                                       |
 | `firstPlacements` | section            | pose     | `placementIndexes` | Les poses de rang indiqué (par exemple la 1re et la 2e) doivent se faire devant cette section. D'autres poses y restent possibles ensuite. |
 
+### Paramètres
+
+Les bornes sont vérifiées par le schéma des horloges (`packages/rules/src/clocks/rule-schemas.ts`). Un paramètre absent de ce tableau est refusé.
+
+| Type              | Paramètre          | Type                    | Contrainte                      |
+| ----------------- | ------------------ | ----------------------- | ------------------------------- |
+| `minCardCount`    | `min`              | entier                  | ≥ 1                             |
+| `ascendingOrder`  | aucun              |                         | `params` est un objet vide `{}` |
+| `maxSum`          | `max`              | entier                  | ≥ 1                             |
+| `exactCardCount`  | `count`            | entier                  | ≥ 0                             |
+|                   | `family`           | `instant` ou `eternity` | facultatif                      |
+| `sumInRange`      | `min`, `max`       | entiers                 | ≥ 0, `min` ≤ `max`              |
+| `firstPlacements` | `placementIndexes` | liste d'entiers         | ≥ 0, au moins un, sans doublon  |
+
 ## Types candidats
 
 Idées pour concevoir des horloges originales. Chacune doit être validée par une partie de test avant d'entrer dans le catalogue. Tant qu'un type reste candidat, le schéma des horloges le refuse : une horloge ne peut pas l'utiliser.

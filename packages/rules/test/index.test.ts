@@ -24,6 +24,12 @@ describe("public API", () => {
     "generateOpaqueIds",
     "createDeck",
     "dealCards",
+    // Schémas TypeBox : les exporter ferait de TypeBox une partie du
+    // contrat public, alors que l'ADR 0008 le garde interne.
+    "ClockSchema",
+    "ClockEnvelopeSchema",
+    "SECTION_RULE_SCHEMAS",
+    "CLOCK_RULE_SCHEMAS",
   ])("does not expose %s", (name) => {
     expect(rules).not.toHaveProperty(name);
   });

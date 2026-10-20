@@ -36,7 +36,11 @@ export default defineConfig([
     rules: {
       "no-restricted-imports": [
         "error",
-        { patterns: [{ regex: "^[^.]", message: PURE_RULES_MESSAGE }] },
+        {
+          patterns: [
+            { regex: "^(?!typebox(/|$))[^.]", message: PURE_RULES_MESSAGE },
+          ],
+        },
       ],
       "no-restricted-properties": [
         "error",

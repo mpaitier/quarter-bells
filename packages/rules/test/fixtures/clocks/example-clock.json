@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../schema/clock.schema.json",
+  "formatVersion": 1,
+  "uid": "ch01-clk2",
+  "chapter": 1,
+  "indexInChapter": 2,
+  "noMaxSum": false,
+  "startSectionMode": "fixed",
+  "defaultStartSection": 4,
+  "clockRules": [],
+  "sections": [
+    { "index": 0, "rules": [] },
+    {
+      "index": 1,
+      "rules": [{ "kind": "sumInRange", "params": { "min": 6, "max": 10 } }]
+    },
+    { "index": 2, "rules": [] },
+    { "index": 3, "rules": [] },
+    {
+      "index": 4,
+      "rules": [{ "kind": "minCardCount", "params": { "min": 2 } }]
+    },
+    {
+      "index": 5,
+      "rules": [{ "kind": "exactCardCount", "params": { "count": 3 } }]
+    }
+  ]
+}

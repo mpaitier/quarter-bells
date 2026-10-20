@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../schema/clock.schema.json",
+  "formatVersion": 1,
+  "uid": "ch03-clk1",
+  "chapter": 3,
+  "indexInChapter": 1,
+  "noMaxSum": false,
+  "startSectionMode": "chosenByPlayers",
+  "defaultStartSection": 0,
+  "clockRules": [],
+  "sections": [
+    {
+      "index": 0,
+      "rules": [
+        { "kind": "firstPlacements", "params": { "placementIndexes": [0, 1] } }
+      ]
+    },
+    { "index": 1, "rules": [] },
+    {
+      "index": 2,
+      "rules": [
+        {
+          "kind": "exactCardCount",
+          "params": { "count": 2, "family": "instant" }
+        }
+      ]
+    },
+    { "index": 3, "rules": [] },
+    {
+      "index": 4,
+      "rules": [
+        { "kind": "minCardCount", "params": { "min": 2 } },
+        { "kind": "sumInRange", "params": { "min": 8, "max": 14 } }
+      ]
+    },
+    { "index": 5, "rules": [{ "kind": "maxSum", "params": { "max": 6 } }] }
+  ]
+}

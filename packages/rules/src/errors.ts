@@ -23,3 +23,26 @@ export class InvalidPlayerCountError extends Error {
     this.name = "InvalidPlayerCountError";
   }
 }
+
+/** Une anomalie dans une horloge, localisée par un pointeur JSON. */
+export interface ClockIssue {
+  /** Pointeur JSON (RFC 6901) vers le champ, ex. "/sections/4/rules/0/params/min". */
+  readonly path: string;
+  readonly message: string;
+}
+
+/** Levée quand une horloge ne respecte pas son format. */
+export class InvalidClockError extends Error {
+  constructor(
+    readonly source: string,
+    readonly issues: readonly ClockIssue[],
+  ) {
+    // Une ligne par anomalie : on voit tous les problèmes d'un coup
+    // au lieu de les corriger un par un.
+    super(
+      `Invalid clock ${source}:\n` +
+        issues.map((issue) => `  ${issue.path}: ${issue.message}`).join("\n"),
+    );
+    this.name = "InvalidClockError";
+  }
+}
