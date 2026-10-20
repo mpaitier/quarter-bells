@@ -47,3 +47,6 @@ export {
   InvalidSeedError,
   type ClockIssue,
 } from "./errors.js";
+
+// Règles générales : type des violations renvoyées. Les schémas restent internes.
+export type { Violation } from "./general-rules/violation.js";
