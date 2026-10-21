@@ -7,15 +7,12 @@
 // Seul le type Violation est exporté par index.ts.
 
 import Type, { type Static } from "typebox";
-import { SECTION_COUNT } from "../clocks/clock.js";
+import { SectionIndex } from "../clocks/section.js";
 import {
   AscendingOrderSchema,
   MaxSumSchema,
   MinCardCountSchema,
 } from "../clocks/rule-schemas.js";
-
-/** Index d'une section, borné par le format d'horloge. */
-const SectionIndex = Type.Integer({ minimum: 0, maximum: SECTION_COUNT - 1 });
 
 /** Valeur d'une section : somme de ses cartes. Une section vide vaut 0. */
 const SectionValue = Type.Integer({ minimum: 0 });
