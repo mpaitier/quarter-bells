@@ -76,7 +76,7 @@ describe("sectionValue", () => {
   });
 
   it("sums the card values", () => {
-    expect(sectionValue([place(0, 3), place(0, 12), place(0, 5)])).toBe(20);
+    expect(sectionValue([place(0, 3), place(0, 12), place(0, 5)])).toEqual(20);
   });
 
   // Propriété tirée de docs/testing.md : la valeur d'une section ne dépend

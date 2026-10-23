@@ -35,7 +35,7 @@ export function placementsBySection(
 /** Valeur d'une section : somme des valeurs de ses cartes. 0 si elle est vide. */
 export function sectionValue(placements: readonly Placement[]): number {
   return placements.reduce(
-    (total, placement) => total + placement.sectionIndex,
+    (total, placement) => total + placement.card.value,
     0,
   );
 }
