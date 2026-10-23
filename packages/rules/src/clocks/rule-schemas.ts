@@ -1,5 +1,5 @@
 import Type from "typebox";
-import { CARD_FAMILIES } from "../cards/card.js";
+import { CardFamilySchema } from "../cards/card-schema.js";
 
 /** Entier supérieur ou égal à minimum. */
 const Int = (minimum: number) => Type.Integer({ minimum });
@@ -27,10 +27,6 @@ const ruleSchema = <K extends string, P extends Type.TProperties>(
     { additionalProperties: false },
   );
 
-// Reprend la liste du domaine : ajouter une famille dans card.ts
-// la rend automatiquement valide dans les horloges.
-const FamilySchema = Type.Enum(CARD_FAMILIES);
-
 /** Au moins `min` cartes devant la section. */
 export const MinCardCountSchema = ruleSchema("minCardCount", { min: Int(1) });
 
@@ -39,7 +35,7 @@ export const ExactCardCountSchema = ruleSchema("exactCardCount", {
   count: Int(0),
   // Optional : le champ peut être absent (toutes familles confondues).
   // Avec exactOptionalPropertyTypes, « family: undefined » est refusé.
-  family: Type.Optional(FamilySchema),
+  family: Type.Optional(CardFamilySchema),
 });
 
 /**
