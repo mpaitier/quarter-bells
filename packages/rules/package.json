@@ -8,12 +8,13 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "typecheck": "tsc -p ."
+    "typecheck": "tsc -p . && tsc -p test"
   },
   "dependencies": {
     "typebox": "1.4.2"
   },
   "devDependencies": {
+    "@types/node": "^24.19.2",
     "fast-check": "^4.10.2"
   }
 }

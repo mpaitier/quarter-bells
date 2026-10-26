@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    // Les tests tournent sous Node (Vitest) : le lanceur de cas JSON lit des
+    // fichiers avec node:fs. Cette option ne vaut que pour ce dossier, src/
+    // reste vérifié sans Node par ../tsconfig.json.
+    "types": ["node"]
+  },
+  // Chemins relatifs à ce fichier. Les fichiers de src/ importés par les tests
+  // sont vérifiés ici aussi, mais c'est ../tsconfig.json qui fait foi pour eux.
+  "include": ["."]
+}
