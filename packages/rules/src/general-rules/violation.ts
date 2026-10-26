@@ -78,6 +78,13 @@ export const ViolationSchema = Type.Union([
 ]);
 export type Violation = Static<typeof ViolationSchema>;
 
+/** Violation de minCardCount. Type de retour précis de checkMinCardCount. */
 export type MinCardCountViolation = Static<typeof MinCardCountViolationSchema>;
-export type AscendingOrderViolation = Static<typeof AscendingOrderViolationSchema>;
+
+/** Violation d'ascendingOrder. */
+export type AscendingOrderViolation = Static<
+  typeof AscendingOrderViolationSchema
+>;
+
+/** Violation de maxSum. */
 export type MaxSumViolation = Static<typeof MaxSumViolationSchema>;

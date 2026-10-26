@@ -19,13 +19,9 @@ export function checkMinCardCount(
   params: MinCardCountParams,
 ): MinCardCountViolation | undefined {
   const cardCount = placements.length;
+  // Clause de garde : assez de cartes, rien à signaler.
   if (cardCount >= params.min) {
     return undefined;
   }
-  return {
-    kind: "minCardCount",
-    params,
-    section,
-    cardCount,
-  };
+  return { kind: "minCardCount", params, section, cardCount };
 }
