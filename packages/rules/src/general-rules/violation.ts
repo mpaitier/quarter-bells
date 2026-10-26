@@ -77,3 +77,7 @@ export const ViolationSchema = Type.Union([
   MaxSumViolationSchema,
 ]);
 export type Violation = Static<typeof ViolationSchema>;
+
+export type MinCardCountViolation = Static<typeof MinCardCountViolationSchema>;
+export type AscendingOrderViolation = Static<typeof AscendingOrderViolationSchema>;
+export type MaxSumViolation = Static<typeof MaxSumViolationSchema>;
