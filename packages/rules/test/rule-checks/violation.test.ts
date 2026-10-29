@@ -38,6 +38,14 @@ const validMaxSum = {
   value: 26,
 };
 
+// Violation exactCardCount valide, sans famille : 3 cartes demandées, 4 posées.
+const validExactCardCount = {
+  kind: "exactCardCount",
+  params: { count: 3 },
+  section: 1,
+  cardCount: 4,
+};
+
 describe("ViolationSchema", () => {
   describe("minCardCount", () => {
     it("accepts a well-formed violation", () => {
@@ -98,6 +106,39 @@ describe("ViolationSchema", () => {
       // ce schéma : si elle acceptait 0, la réutilisation serait cassée.
       expect(
         Value.Check(ViolationSchema, { ...validMaxSum, params: { max: 0 } }),
+      ).toBe(false);
+    });
+  });
+
+  describe("exactCardCount", () => {
+    it("accepts a well-formed violation without family", () => {
+      expect(Value.Check(ViolationSchema, validExactCardCount)).toBe(true);
+    });
+
+    it("accepts a well-formed violation with a family", () => {
+      // La famille est facultative dans la règle, donc dans la violation.
+      expect(
+        Value.Check(ViolationSchema, {
+          ...validExactCardCount,
+          params: { count: 3, family: "eternity" },
+        }),
+      ).toBe(true);
+    });
+
+    it("rejects an unknown family", () => {
+      expect(
+        Value.Check(ViolationSchema, {
+          ...validExactCardCount,
+          params: { count: 3, family: "moment" },
+        }),
+      ).toBe(false);
+    });
+
+    it("rejects a negative card count", () => {
+      // Un compte de cartes ne peut pas être négatif : une fixture avec -1
+      // trahirait une erreur de saisie.
+      expect(
+        Value.Check(ViolationSchema, { ...validExactCardCount, cardCount: -1 }),
       ).toBe(false);
     });
   });

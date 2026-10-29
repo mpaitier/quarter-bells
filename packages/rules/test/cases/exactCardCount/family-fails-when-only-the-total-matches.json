@@ -1,0 +1,28 @@
+{
+  "description": "exactCardCount avec une famille échoue quand le total de la section est bon mais pas celui de la famille",
+  "rule": {
+    "kind": "exactCardCount",
+    "params": { "count": 2, "family": "instant" }
+  },
+  "section": 1,
+  "placements": [
+    {
+      "sectionIndex": 1,
+      "card": { "family": "instant", "value": 3 },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 1,
+      "card": { "family": "eternity", "value": 10 },
+      "faceUp": false
+    }
+  ],
+  "expected": [
+    {
+      "kind": "exactCardCount",
+      "params": { "count": 2, "family": "instant" },
+      "section": 1,
+      "cardCount": 1
+    }
+  ]
+}

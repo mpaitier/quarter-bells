@@ -42,6 +42,19 @@ Les bornes sont vérifiées par le schéma des horloges (`packages/rules/src/clo
 | `sumInRange`      | `min`, `max`       | entiers                 | ≥ 0, `min` ≤ `max`              |
 | `firstPlacements` | `placementIndexes` | liste d'entiers         | ≥ 0, au moins un, sans doublon  |
 
+### Précisions
+
+`exactCardCount` : sans `family`, toutes les cartes de la section comptent. Avec `family`, seules les cartes de cette famille comptent, et celles des autres familles peuvent être présentes sans faire échouer la règle. `count = 0` n'a de sens qu'avec `family` : il interdit les cartes de cette famille. Sans famille, il interdirait toute carte et contredirait la règle générale d'au moins une carte par section. Pour imposer une composition exacte, une horloge combine deux règles sur la même section :
+
+```json
+"rules": [
+  { "kind": "exactCardCount", "params": { "count": 2, "family": "instant" } },
+  { "kind": "exactCardCount", "params": { "count": 0, "family": "eternity" } }
+]
+```
+
+La violation indique dans `cardCount` le nombre de cartes comptées : le client sait ainsi s'il en manque ou s'il y en a trop.
+
 ## Types candidats
 
 Idées pour concevoir des horloges originales. Chacune doit être validée par une partie de test avant d'entrer dans le catalogue. Tant qu'un type reste candidat, le schéma des horloges le refuse : une horloge ne peut pas l'utiliser.
