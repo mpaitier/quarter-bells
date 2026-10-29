@@ -1,0 +1,20 @@
+{
+  "description": "minCardCount échoue quand la section est vide, même si d'autres sections ont des cartes",
+  "rule": { "kind": "minCardCount", "params": { "min": 1 } },
+  "section": 2,
+  "placements": [
+    {
+      "sectionIndex": 0,
+      "card": { "family": "instant", "value": 4 },
+      "faceUp": false
+    }
+  ],
+  "expected": [
+    {
+      "kind": "minCardCount",
+      "params": { "min": 1 },
+      "section": 2,
+      "cardCount": 0
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 import Type, { type Static } from "typebox";
-import { SectionIndex } from "../clocks/section.js";
+import { SectionIndexSchema } from "../clocks/section.js";
 import { CardFaceSchema } from "../cards/card-schema.js";
 
 /**
@@ -10,7 +10,7 @@ import { CardFaceSchema } from "../cards/card-schema.js";
  */
 export const PlacementSchema = Type.Object(
   {
-    sectionIndex: SectionIndex,
+    sectionIndex: SectionIndexSchema,
     card: CardFaceSchema,
     // Carte visible des autres joueurs. Sans effet sur l'évaluation, où
     // toutes les cartes sont révélées.

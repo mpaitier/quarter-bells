@@ -1,0 +1,13 @@
+{
+  "description": "minCardCount réussit quand la section a le minimum de cartes",
+  "rule": { "kind": "minCardCount", "params": { "min": 1 } },
+  "section": 2,
+  "placements": [
+    {
+      "sectionIndex": 2,
+      "card": { "family": "instant", "value": 4 },
+      "faceUp": false
+    }
+  ],
+  "expected": []
+}

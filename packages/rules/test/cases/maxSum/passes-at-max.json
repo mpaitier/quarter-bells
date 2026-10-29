@@ -1,0 +1,18 @@
+{
+  "description": "maxSum réussit quand la section vaut exactement le plafond",
+  "rule": { "kind": "maxSum", "params": { "max": 24 } },
+  "section": 3,
+  "placements": [
+    {
+      "sectionIndex": 3,
+      "card": { "family": "instant", "value": 12 },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 3,
+      "card": { "family": "eternity", "value": 12 },
+      "faceUp": false
+    }
+  ],
+  "expected": []
+}

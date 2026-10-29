@@ -7,7 +7,7 @@
 // Seul le type Violation est exporté par index.ts.
 
 import Type, { type Static } from "typebox";
-import { SectionIndex } from "../clocks/section.js";
+import { SectionIndexSchema } from "../clocks/section.js";
 import {
   AscendingOrderSchema,
   MaxSumSchema,
@@ -27,7 +27,7 @@ export const MinCardCountViolationSchema = Type.Object(
   {
     // kind et params viennent du schéma de la règle : une seule définition.
     ...MinCardCountSchema.properties,
-    section: SectionIndex,
+    section: SectionIndexSchema,
     // Nombre de cartes réellement posées.
     cardCount: Type.Integer({ minimum: 0 }),
   },
@@ -41,11 +41,11 @@ export const MinCardCountViolationSchema = Type.Object(
 export const AscendingOrderViolationSchema = Type.Object(
   {
     ...AscendingOrderSchema.properties,
-    section: SectionIndex,
+    section: SectionIndexSchema,
     value: SectionValue,
     // Section comparée et sa valeur : l'interface surligne les deux sans
     // refaire le calcul du sens horaire.
-    previousSection: SectionIndex,
+    previousSection: SectionIndexSchema,
     previousValue: SectionValue,
   },
   { additionalProperties: false },
@@ -58,7 +58,7 @@ export const AscendingOrderViolationSchema = Type.Object(
 export const MaxSumViolationSchema = Type.Object(
   {
     ...MaxSumSchema.properties,
-    section: SectionIndex,
+    section: SectionIndexSchema,
     value: SectionValue,
   },
   { additionalProperties: false },
@@ -77,3 +77,14 @@ export const ViolationSchema = Type.Union([
   MaxSumViolationSchema,
 ]);
 export type Violation = Static<typeof ViolationSchema>;
+
+/** Violation de minCardCount. Type de retour précis de checkMinCardCount. */
+export type MinCardCountViolation = Static<typeof MinCardCountViolationSchema>;
+
+/** Violation d'ascendingOrder. */
+export type AscendingOrderViolation = Static<
+  typeof AscendingOrderViolationSchema
+>;
+
+/** Violation de maxSum. */
+export type MaxSumViolation = Static<typeof MaxSumViolationSchema>;

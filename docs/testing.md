@@ -30,32 +30,52 @@ Les cas sont écrits sous forme de données plutôt que de code. Un fichier JSON
 
 ```json
 {
-  "description": "sumInRange échoue quand la somme dépasse le maximum",
-  "rule": { "kind": "sumInRange", "params": { "min": 6, "max": 10 } },
+  "description": "minCardCount échoue quand la section a des cartes mais moins que le minimum",
+  "rule": { "kind": "minCardCount", "params": { "min": 3 } },
   "section": 1,
   "placements": [
     {
       "sectionIndex": 1,
-      "card": { "family": "instant", "value": 7 },
+      "card": { "family": "instant", "value": 2 },
       "faceUp": false
     },
     {
       "sectionIndex": 1,
-      "card": { "family": "eternity", "value": 5 },
+      "card": { "family": "eternity", "value": 9 },
+      "faceUp": true
+    },
+    {
+      "sectionIndex": 3,
+      "card": { "family": "instant", "value": 5 },
       "faceUp": false
     }
   ],
-  "expected": { "satisfied": false }
+  "expected": [
+    {
+      "kind": "minCardCount",
+      "params": { "min": 3 },
+      "section": 1,
+      "cardCount": 2
+    }
+  ]
 }
 ```
 
-Un seul test Vitest parcourt tous les fichiers du dossier et vérifie chaque cas. Ce format a deux avantages : ajouter un cas ne demande pas de code, et le même jeu de cas pourra valider une future version Dart du moteur (voir l'ADR 0003).
+`expected` est la liste des violations attendues, avec la règle, la section et la valeur observée. Une liste vide signifie que la règle est respectée. Les règles de section indiquent la section vérifiée dans `section` ; les règles d'horloge indiquent la section de départ du parcours dans `startSection`, et leurs violations sont attendues dans l'ordre du parcours.
+
+La pose décrit tout le cadran, pas seulement la section vérifiée : un cas peut ainsi vérifier qu'une règle de section ignore les cartes posées ailleurs.
+
+Un seul test Vitest (`test/rule-cases.test.ts`) parcourt tous les fichiers du dossier, valide chacun avec le schéma de `test/support/rule-case.ts`, puis vérifie le résultat. Un fichier mal écrit fait échouer le test au lieu d'être ignoré. Ce format a deux avantages : ajouter un cas ne demande pas de code, et le même jeu de cas pourra valider une future version Dart du moteur (voir l'ADR 0003).
+
+Ce que le format JSON ne peut pas exprimer (une section de départ hors de l'horloge, par exemple, que le schéma de cas refuserait) se teste dans un fichier `.test.ts` classique.
 
 Les épreuves complètes, de la distribution à la résolution, sont testées de la même façon : une horloge, une graine, une suite de poses, un résultat attendu.
 
 ### Tests de propriétés
 
 Certains comportements se vérifient mieux par des invariants que par des exemples. La bibliothèque fast-check génère des centaines d'entrées au hasard et vérifie que la propriété tient toujours. En cas d'échec, elle réduit l'entrée au plus petit contre-exemple.
+
+Un test de propriétés complète les tests d'exemple sans les remplacer : il vérifie que le résultat ne change pas quand on fait varier l'entrée, jamais que le résultat est le bon.
 
 Propriétés à vérifier :
 
@@ -99,12 +119,18 @@ Parcours couverts :
 ```
 packages/rules/
   src/
-    deal.ts
-    deal.test.ts            tests unitaires à côté du code
+    cards/
+      deal.ts
   test/
+    tsconfig.json           types Node, réservés aux tests
+    cards/
+      deal.test.ts          réplique src/cards/deal.ts
     cases/                  cas de règles en JSON
-      sumInRange/
-        fails-above-max.json
+      minCardCount/
+        fails-below-minimum.json
+    support/                schémas et utilitaires des tests
+      rule-case.ts
+    rule-cases.test.ts      lanceur des cas JSON
     properties/             tests de propriétés
 apps/server/
   test/
@@ -113,22 +139,26 @@ apps/web/
   e2e/                      tests Playwright
 ```
 
-Les tests unitaires se placent dans un folder **test** dédié, répliquant le folder **src** qu'ils testent, avec le suffixe `.test.ts`. Les autres tests vont dans un dossier `test/` ou `e2e/` propre à chaque paquet.
+Les tests unitaires se placent dans un dossier `test/` dédié, qui réplique l'arborescence de `src/`, avec le suffixe `.test.ts`. Les autres tests vont dans un dossier `test/` ou `e2e/` propre à chaque paquet.
+
+Dans `packages/rules`, le code de `src/` est vérifié sans aucun type global : il ne peut pas dépendre de Node (NF-QUA-04). Les tests, qui tournent sous Vitest et lisent des fichiers, ont leur propre `test/tsconfig.json` avec les types Node.
 
 ## Nommage
 
-Le nom d'un test se lit comme une phrase qui décrit le comportement :
+Le nom d'un test est écrit en anglais et se lit comme une phrase qui décrit le comportement. Les commentaires restent en français.
 
 ```ts
 describe("sumInRange", () => {
-  it("échoue quand la somme dépasse le maximum", () => {
+  it("fails when the sum exceeds the maximum", () => {
     /* ... */
   });
-  it("refuse pendant la Pose une carte qui dépasse le maximum si toutes les cartes sont visibles", () => {
+  it("rejects during placement a card that exceeds the maximum when all cards are visible", () => {
     /* ... */
   });
 });
 ```
+
+Un fichier de test sépare ce qui se vérifie à la compilation (`expectTypeOf`, `@ts-expect-error`) de ce qui se vérifie à l'exécution, dans deux blocs `describe` distincts. Les tests d'échec partent d'un objet valide qu'ils modifient sur un seul point, pour que l'échec n'ait qu'une cause possible.
 
 ## Couverture
 
@@ -139,7 +169,7 @@ describe("sumInRange", () => {
 | `apps/server`       | 80 %                                   |
 | `apps/web`          | pas de seuil                           |
 
-La couverture est un indicateur, pas un objectif. Un code couvert à 100 % par des tests sans assertion utile ne prouve rien. Ces seuils servent à repérer le code oublié, et la CI échoue s'ils ne sont pas atteints.
+La couverture est un indicateur, pas un objectif. Un code couvert à 100 % par des tests sans assertion utile ne prouve rien. Ces seuils servent à repérer le code oublié, et la CI échoue s'ils ne sont pas atteints. Une branche impossible à atteindre, présente seulement pour satisfaire le compilateur, n'a pas à être couverte : un commentaire explique pourquoi elle ne peut pas se produire.
 
 ## Intégration continue
 

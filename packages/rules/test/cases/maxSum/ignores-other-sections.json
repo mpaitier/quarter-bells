@@ -1,0 +1,28 @@
+{
+  "description": "maxSum ne regarde que la section vérifiée, même si une autre dépasse le plafond",
+  "rule": { "kind": "maxSum", "params": { "max": 24 } },
+  "section": 0,
+  "placements": [
+    {
+      "sectionIndex": 0,
+      "card": { "family": "instant", "value": 5 },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 4,
+      "card": { "family": "instant", "value": 12 },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 4,
+      "card": { "family": "eternity", "value": 12 },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 4,
+      "card": { "family": "eternity", "value": 11 },
+      "faceUp": false
+    }
+  ],
+  "expected": []
+}

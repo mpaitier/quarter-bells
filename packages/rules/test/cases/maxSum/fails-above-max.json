@@ -1,0 +1,25 @@
+{
+  "description": "maxSum échoue quand la section dépasse le plafond d'un point",
+  "rule": { "kind": "maxSum", "params": { "max": 24 } },
+  "section": 3,
+  "placements": [
+    {
+      "sectionIndex": 3,
+      "card": { "family": "instant", "value": 12 },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 3,
+      "card": { "family": "eternity", "value": 12 },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 3,
+      "card": { "family": "instant", "value": 1 },
+      "faceUp": true
+    }
+  ],
+  "expected": [
+    { "kind": "maxSum", "params": { "max": 24 }, "section": 3, "value": 25 }
+  ]
+}

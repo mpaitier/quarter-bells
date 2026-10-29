@@ -5,5 +5,8 @@
     // rien n'est compilé ici, tsc ne fait que vérifier les types.
     "noEmit": true
   },
-  "include": ["src", "test"]
+  // Le code du paquet uniquement. Il hérite de "types": [] : aucune API de Node
+  // n'est disponible dans src/ (NF-QUA-04). Les tests ont leur propre
+  // configuration dans test/tsconfig.json.
+  "include": ["src"]
 }

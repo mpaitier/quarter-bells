@@ -1,0 +1,68 @@
+{
+  "description": "ascendingOrder échoue depuis la section 0 sur une pose qui réussit depuis la section 1",
+  "rule": {
+    "kind": "ascendingOrder",
+    "params": {}
+  },
+  "startSection": 0,
+  "placements": [
+    {
+      "sectionIndex": 0,
+      "card": {
+        "family": "eternity",
+        "value": 8
+      },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 1,
+      "card": {
+        "family": "instant",
+        "value": 1
+      },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 2,
+      "card": {
+        "family": "eternity",
+        "value": 2
+      },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 3,
+      "card": {
+        "family": "instant",
+        "value": 3
+      },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 4,
+      "card": {
+        "family": "eternity",
+        "value": 4
+      },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 5,
+      "card": {
+        "family": "instant",
+        "value": 6
+      },
+      "faceUp": false
+    }
+  ],
+  "expected": [
+    {
+      "kind": "ascendingOrder",
+      "params": {},
+      "section": 1,
+      "value": 1,
+      "previousSection": 0,
+      "previousValue": 8
+    }
+  ]
+}
