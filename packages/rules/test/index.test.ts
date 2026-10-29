@@ -15,6 +15,16 @@ describe("public API", () => {
     }
   });
 
+  // Même principe pour l'évaluation : une pose sans carte échoue sur
+  // minCardCount dans chaque section. Le détail des règles est testé
+  // ailleurs ; ici, on vérifie seulement que l'export fonctionne.
+  it("evaluates the general rules through the package entry point", () => {
+    const violations = rules.evaluateGeneralRules({ noMaxSum: false }, 0, []);
+
+    expect(violations).not.toHaveLength(0);
+    expect(rules.DEFAULT_MAX_SUM).toBe(24);
+  });
+
   // Les détails d'implémentation ne doivent pas fuiter : s'ils étaient
   // exportés, d'autres packages pourraient en dépendre, et on ne pourrait
   // plus les modifier librement.
@@ -24,12 +34,26 @@ describe("public API", () => {
     "generateOpaqueIds",
     "createDeck",
     "dealCards",
+    // Règles unitaires : elles servent aussi aux règles de section des
+    // horloges, mais à l'intérieur du package. Seul evaluateGeneralRules
+    // est public.
+    "checkMinCardCount",
+    "checkMaxSum",
+    "checkAscendingOrder",
+    // Outils de calcul sur la pose et le cadran.
+    "clockwiseOrder",
+    "placementsBySection",
+    "sectionValue",
     // Schémas TypeBox : les exporter ferait de TypeBox une partie du
     // contrat public, alors que l'ADR 0008 le garde interne.
     "ClockSchema",
     "ClockEnvelopeSchema",
     "SECTION_RULE_SCHEMAS",
     "CLOCK_RULE_SCHEMAS",
+    "ViolationSchema",
+    "PlacementSchema",
+    "CardFaceSchema",
+    "SectionIndexSchema",
   ])("does not expose %s", (name) => {
     expect(rules).not.toHaveProperty(name);
   });

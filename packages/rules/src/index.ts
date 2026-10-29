@@ -50,3 +50,9 @@ export {
 
 // Règles générales : type des violations renvoyées. Les schémas restent internes.
 export type { Violation } from "./general-rules/violation.js";
+
+// Règles générales : évaluation d'une pose complète.
+export {
+  DEFAULT_MAX_SUM,
+  evaluateGeneralRules,
+} from "./general-rules/evaluate-general-rules.js";
