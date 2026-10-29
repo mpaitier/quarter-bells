@@ -6,12 +6,17 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { Value } from "typebox/value";
+import { checkAscendingOrder } from "../src/general-rules/ascending-order.js";
 import { checkMaxSum } from "../src/general-rules/max-sum.js";
 import { checkMinCardCount } from "../src/general-rules/min-card-count.js";
 import type { Violation } from "../src/general-rules/violation.js";
 import { placementsBySection } from "../src/placements/by-section.js";
 import type { Placement } from "../src/placements/placement.js";
-import { RuleCaseSchema, type RuleCase } from "./support/rule-case.js";
+import {
+  RuleCaseSchema,
+  type RuleCase,
+  type SectionRuleCase,
+} from "./support/rule-case.js";
 
 // Chemin du dossier des cas, calculé à partir de ce fichier et non du dossier
 // courant : le lanceur marche quel que soit l'endroit d'où on lance Vitest.
@@ -38,7 +43,7 @@ function loadCase(file: string): RuleCase {
 function checkSectionRule(
   section: number,
   placements: readonly Placement[],
-  rule: RuleCase["rule"],
+  rule: SectionRuleCase["rule"],
 ): Violation | undefined {
   // Dans chaque case, TypeScript sait quelle règle on manipule : rule.params
   // a le bon type pour la fonction appelée. Pas de default : si une règle est
@@ -54,7 +59,18 @@ function checkSectionRule(
 
 /** Exécute la règle d'un cas et renvoie les violations obtenues. */
 function evaluate(testCase: RuleCase): Violation[] {
-  // La règle ne reçoit que les cartes de la section vérifiée.
+  // Règle d'horloge : seul ce type de cas a startSection, et `in` suffit à
+  // TypeScript pour savoir de quel cas il s'agit dans chaque branche.
+  // Une seule règle d'horloge pour l'instant, donc un appel direct.
+  if ("startSection" in testCase) {
+    return checkAscendingOrder(
+      testCase.startSection,
+      testCase.placements,
+      testCase.rule.params,
+    );
+  }
+
+  // Règle de section : elle ne reçoit que les cartes de la section vérifiée.
   const placements =
     placementsBySection(testCase.placements)[testCase.section] ?? [];
   const violation = checkSectionRule(

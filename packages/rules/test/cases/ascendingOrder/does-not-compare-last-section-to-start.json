@@ -1,0 +1,59 @@
+{
+  "description": "ascendingOrder ne compare pas la dernière section du parcours à la section de départ",
+  "rule": {
+    "kind": "ascendingOrder",
+    "params": {}
+  },
+  "startSection": 3,
+  "placements": [
+    {
+      "sectionIndex": 0,
+      "card": {
+        "family": "eternity",
+        "value": 12
+      },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 1,
+      "card": {
+        "family": "instant",
+        "value": 12
+      },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 2,
+      "card": {
+        "family": "eternity",
+        "value": 12
+      },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 3,
+      "card": {
+        "family": "instant",
+        "value": 9
+      },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 4,
+      "card": {
+        "family": "eternity",
+        "value": 10
+      },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 5,
+      "card": {
+        "family": "instant",
+        "value": 11
+      },
+      "faceUp": false
+    }
+  ],
+  "expected": []
+}
