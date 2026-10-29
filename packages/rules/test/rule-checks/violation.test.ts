@@ -4,7 +4,7 @@
 
 import { describe, expect, it } from "vitest";
 import { Value } from "typebox/value"; // aligne sur ton import existant
-import { ViolationSchema } from "../../src/general-rules/violation.js";
+import { ViolationSchema } from "../../src/rule-checks/violation.js";
 
 // Violation valide servant de base : chaque test d'échec la modifie sur un
 // seul point, pour que l'échec ait une seule cause possible.

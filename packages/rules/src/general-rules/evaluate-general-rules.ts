@@ -1,13 +1,13 @@
 import type { Clock } from "../clocks/clock.js";
 import { placementsBySection } from "../placements/by-section.js";
 import type { Placement } from "../placements/placement.js";
-import { checkAscendingOrder } from "./ascending-order.js";
-import { checkMaxSum, type MaxSumParams } from "./max-sum.js";
+import { checkAscendingOrder } from "../rule-checks/ascending-order.js";
+import { checkMaxSum, type MaxSumParams } from "../rule-checks/max-sum.js";
 import {
   checkMinCardCount,
   type MinCardCountParams,
-} from "./min-card-count.js";
-import type { Violation } from "./violation.js";
+} from "../rule-checks/min-card-count.js";
+import { compareViolations, type Violation } from "../rule-checks/violation.js";
 
 /** Plafond appliqué à chaque section, sauf si l'horloge a noMaxSum. */
 export const DEFAULT_MAX_SUM = 24;
@@ -17,22 +17,6 @@ const GENERAL_MIN_CARD_COUNT: MinCardCountParams = { min: 1 };
 
 /** Règle générale : aucune section au-dessus du plafond par défaut. */
 const GENERAL_MAX_SUM: MaxSumParams = { max: DEFAULT_MAX_SUM };
-
-/**
- * Rang de chaque règle dans le résultat trié. Un Record sur le type des kind
- * oblige à classer toute nouvelle violation : un kind oublié ici fait
- * échouer typecheck.
- */
-const KIND_RANK: Record<Violation["kind"], number> = {
-  minCardCount: 0,
-  ascendingOrder: 1,
-  maxSum: 2,
-};
-
-/** Compare deux violations : par règle, puis par section. */
-function byKindThenSection(a: Violation, b: Violation): number {
-  return KIND_RANK[a.kind] - KIND_RANK[b.kind] || a.section - b.section;
-}
 
 /**
  * Évalue les trois règles communes à toutes les épreuves sur une pose
@@ -94,5 +78,5 @@ export function evaluateGeneralRules(
   // toSorted renvoie une copie triée : l'ordre de calcul ci-dessus n'a pas
   // à être celui du résultat, qui doit rester stable pour l'interface et
   // les tests.
-  return violations.toSorted(byKindThenSection);
+  return violations.toSorted(compareViolations);
 }

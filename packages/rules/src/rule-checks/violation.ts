@@ -1,6 +1,5 @@
-// packages/rules/src/general-rules/violation.ts
-//
-// Violations renvoyées par les règles générales (issue #7).
+// Violations renvoyées par les vérifications de règles (un fichier par kind
+// dans ce dossier).
 // Une violation reprend la règle telle qu'elle est écrite dans l'horloge
 // (kind + params, issus des schémas de rule-schemas.ts), la section où elle
 // a échoué, et ce qui a été observé.
@@ -88,3 +87,22 @@ export type AscendingOrderViolation = Static<
 
 /** Violation de maxSum. */
 export type MaxSumViolation = Static<typeof MaxSumViolationSchema>;
+
+/**
+ * Rang de chaque règle dans un résultat trié, dans l'ordre du catalogue
+ * (docs/rule-catalog.md). Un Record sur le type des kind oblige à classer
+ * toute nouvelle violation : un kind oublié ici fait échouer typecheck.
+ */
+const KIND_RANK: Record<Violation["kind"], number> = {
+  minCardCount: 0,
+  ascendingOrder: 1,
+  maxSum: 2,
+};
+
+/**
+ * Compare deux violations : par règle, puis par section. À passer à sort ou
+ * toSorted pour obtenir l'ordre stable attendu par l'interface et les tests.
+ */
+export function compareViolations(a: Violation, b: Violation): number {
+  return KIND_RANK[a.kind] - KIND_RANK[b.kind] || a.section - b.section;
+}

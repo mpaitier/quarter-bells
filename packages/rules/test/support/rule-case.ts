@@ -14,7 +14,7 @@ import {
   MinCardCountSchema,
 } from "../../src/clocks/rule-schemas.js";
 import { SectionIndexSchema } from "../../src/clocks/section.js";
-import { ViolationSchema } from "../../src/general-rules/violation.js";
+import { ViolationSchema } from "../../src/rule-checks/violation.js";
 import { PlacementSchema } from "../../src/placements/placement.js";
 
 /** Cas d'une règle qui s'applique à une seule section. */
