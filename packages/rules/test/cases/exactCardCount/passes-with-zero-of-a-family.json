@@ -1,0 +1,21 @@
+{
+  "description": "exactCardCount avec un nombre de 0 et une famille réussit quand la section n'a aucune carte de cette famille",
+  "rule": {
+    "kind": "exactCardCount",
+    "params": { "count": 0, "family": "eternity" }
+  },
+  "section": 4,
+  "placements": [
+    {
+      "sectionIndex": 4,
+      "card": { "family": "instant", "value": 6 },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 4,
+      "card": { "family": "instant", "value": 9 },
+      "faceUp": true
+    }
+  ],
+  "expected": []
+}

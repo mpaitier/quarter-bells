@@ -1,0 +1,25 @@
+{
+  "description": "exactCardCount échoue avec une carte de moins que le nombre demandé",
+  "rule": { "kind": "exactCardCount", "params": { "count": 3 } },
+  "section": 2,
+  "placements": [
+    {
+      "sectionIndex": 2,
+      "card": { "family": "instant", "value": 4 },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 2,
+      "card": { "family": "eternity", "value": 7 },
+      "faceUp": true
+    }
+  ],
+  "expected": [
+    {
+      "kind": "exactCardCount",
+      "params": { "count": 3 },
+      "section": 2,
+      "cardCount": 2
+    }
+  ]
+}

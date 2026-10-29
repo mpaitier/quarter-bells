@@ -48,8 +48,8 @@ export {
   type ClockIssue,
 } from "./errors.js";
 
-// Règles générales : type des violations renvoyées. Les schémas restent internes.
-export type { Violation } from "./general-rules/violation.js";
+// Violations renvoyées par le moteur. Les schémas restent internes.
+export type { Violation } from "./rule-checks/violation.js";
 
 // Règles générales : évaluation d'une pose complète.
 export {

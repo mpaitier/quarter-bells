@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { SECTION_COUNT } from "../../src/clocks/clock.js";
-import { checkAscendingOrder } from "../../src/general-rules/ascending-order.js";
+import { checkAscendingOrder } from "../../src/rule-checks/ascending-order.js";
 
 // Le comportement de la règle est couvert par test/cases/ascendingOrder/.
 // Ce fichier ne teste que ce que le format JSON ne peut pas exprimer : un cas

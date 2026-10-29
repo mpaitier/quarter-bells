@@ -1,0 +1,28 @@
+{
+  "description": "exactCardCount réussit avec exactement le nombre de cartes demandé, toutes familles confondues",
+  "rule": { "kind": "exactCardCount", "params": { "count": 3 } },
+  "section": 2,
+  "placements": [
+    {
+      "sectionIndex": 2,
+      "card": { "family": "instant", "value": 4 },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 2,
+      "card": { "family": "eternity", "value": 7 },
+      "faceUp": true
+    },
+    {
+      "sectionIndex": 2,
+      "card": { "family": "instant", "value": 1 },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 5,
+      "card": { "family": "eternity", "value": 9 },
+      "faceUp": false
+    }
+  ],
+  "expected": []
+}

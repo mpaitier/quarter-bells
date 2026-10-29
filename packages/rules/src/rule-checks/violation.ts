@@ -1,6 +1,5 @@
-// packages/rules/src/general-rules/violation.ts
-//
-// Violations renvoyées par les règles générales (issue #7).
+// Violations renvoyées par les vérifications de règles (un fichier par kind
+// dans ce dossier).
 // Une violation reprend la règle telle qu'elle est écrite dans l'horloge
 // (kind + params, issus des schémas de rule-schemas.ts), la section où elle
 // a échoué, et ce qui a été observé.
@@ -10,6 +9,7 @@ import Type, { type Static } from "typebox";
 import { SectionIndexSchema } from "../clocks/section.js";
 import {
   AscendingOrderSchema,
+  ExactCardCountSchema,
   MaxSumSchema,
   MinCardCountSchema,
 } from "../clocks/rule-schemas.js";
@@ -65,6 +65,22 @@ export const MaxSumViolationSchema = Type.Object(
 );
 
 /**
+ * Une section n'a pas exactement le nombre de cartes demandé, trop ou trop
+ * peu. Avec params.family, seules les cartes de cette famille sont comptées.
+ */
+export const ExactCardCountViolationSchema = Type.Object(
+  {
+    ...ExactCardCountSchema.properties,
+    section: SectionIndexSchema,
+    // Nombre de cartes comptées : celles de params.family si elle est
+    // précisée, toutes sinon. Comparé à params.count, il dit à l'interface
+    // s'il manque des cartes ou s'il y en a trop.
+    cardCount: Type.Integer({ minimum: 0 }),
+  },
+  { additionalProperties: false },
+);
+
+/**
  * Une violation, quelle que soit la règle. Union discriminée sur kind.
  *
  * Décision : le moteur renvoie TOUTES les violations, triées par kind puis
@@ -75,6 +91,7 @@ export const ViolationSchema = Type.Union([
   MinCardCountViolationSchema,
   AscendingOrderViolationSchema,
   MaxSumViolationSchema,
+  ExactCardCountViolationSchema,
 ]);
 export type Violation = Static<typeof ViolationSchema>;
 
@@ -88,3 +105,28 @@ export type AscendingOrderViolation = Static<
 
 /** Violation de maxSum. */
 export type MaxSumViolation = Static<typeof MaxSumViolationSchema>;
+
+/** Violation d'exactCardCount. */
+export type ExactCardCountViolation = Static<
+  typeof ExactCardCountViolationSchema
+>;
+
+/**
+ * Rang de chaque règle dans un résultat trié, dans l'ordre du catalogue
+ * (docs/rule-catalog.md). Un Record sur le type des kind oblige à classer
+ * toute nouvelle violation : un kind oublié ici fait échouer typecheck.
+ */
+const KIND_RANK: Record<Violation["kind"], number> = {
+  minCardCount: 0,
+  ascendingOrder: 1,
+  maxSum: 2,
+  exactCardCount: 3,
+};
+
+/**
+ * Compare deux violations : par règle, puis par section. À passer à sort ou
+ * toSorted pour obtenir l'ordre stable attendu par l'interface et les tests.
+ */
+export function compareViolations(a: Violation, b: Violation): number {
+  return KIND_RANK[a.kind] - KIND_RANK[b.kind] || a.section - b.section;
+}

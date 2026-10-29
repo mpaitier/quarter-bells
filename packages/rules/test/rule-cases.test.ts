@@ -6,10 +6,11 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { Value } from "typebox/value";
-import { checkAscendingOrder } from "../src/general-rules/ascending-order.js";
-import { checkMaxSum } from "../src/general-rules/max-sum.js";
-import { checkMinCardCount } from "../src/general-rules/min-card-count.js";
-import type { Violation } from "../src/general-rules/violation.js";
+import { checkAscendingOrder } from "../src/rule-checks/ascending-order.js";
+import { checkExactCardCount } from "../src/rule-checks/exact-card-count.js";
+import { checkMaxSum } from "../src/rule-checks/max-sum.js";
+import { checkMinCardCount } from "../src/rule-checks/min-card-count.js";
+import type { Violation } from "../src/rule-checks/violation.js";
 import { placementsBySection } from "../src/placements/by-section.js";
 import type { Placement } from "../src/placements/placement.js";
 import {
@@ -54,6 +55,8 @@ function checkSectionRule(
       return checkMinCardCount(section, placements, rule.params);
     case "maxSum":
       return checkMaxSum(section, placements, rule.params);
+    case "exactCardCount":
+      return checkExactCardCount(section, placements, rule.params);
   }
 }
 

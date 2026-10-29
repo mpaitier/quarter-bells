@@ -10,11 +10,12 @@
 import Type, { type Static } from "typebox";
 import {
   AscendingOrderSchema,
+  ExactCardCountSchema,
   MaxSumSchema,
   MinCardCountSchema,
 } from "../../src/clocks/rule-schemas.js";
 import { SectionIndexSchema } from "../../src/clocks/section.js";
-import { ViolationSchema } from "../../src/general-rules/violation.js";
+import { ViolationSchema } from "../../src/rule-checks/violation.js";
 import { PlacementSchema } from "../../src/placements/placement.js";
 
 /** Cas d'une règle qui s'applique à une seule section. */
@@ -24,7 +25,7 @@ const SectionRuleCaseSchema = Type.Object(
     // Les règles de section que le lanceur sait exécuter. Ajouter une règle
     // ici sans l'ajouter dans checkSectionRule (rule-cases.test.ts) fait
     // échouer typecheck.
-    rule: Type.Union([MinCardCountSchema, MaxSumSchema]),
+    rule: Type.Union([MinCardCountSchema, MaxSumSchema, ExactCardCountSchema]),
     // La section sur laquelle la règle est vérifiée.
     section: SectionIndexSchema,
     // La pose complète, pas seulement la section vérifiée : les cas peuvent
