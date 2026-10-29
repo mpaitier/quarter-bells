@@ -3,8 +3,11 @@
 // mal écrit fait échouer le lanceur au lieu de passer en silence.
 
 import Type, { type Static } from "typebox";
-import { MinCardCountSchema } from "../../src/clocks/rule-schemas.js";
-import { SectionIndex } from "../../src/clocks/section.js";
+import {
+  MaxSumSchema,
+  MinCardCountSchema,
+} from "../../src/clocks/rule-schemas.js";
+import { SectionIndexSchema } from "../../src/clocks/section.js";
 import { ViolationSchema } from "../../src/general-rules/violation.js";
 import { PlacementSchema } from "../../src/placements/placement.js";
 
@@ -13,10 +16,11 @@ const SectionRuleCaseSchema = Type.Object(
   {
     description: Type.String({ minLength: 1 }),
     // Les règles de section que le lanceur sait exécuter. Ajouter une règle
-    // ici sans l'ajouter dans evaluate (rule-cases.test.ts) fait échouer typecheck.
-    rule: Type.Union([MinCardCountSchema]),
+    // ici sans l'ajouter dans checkSectionRule (rule-cases.test.ts) fait
+    // échouer typecheck.
+    rule: Type.Union([MinCardCountSchema, MaxSumSchema]),
     // La section sur laquelle la règle est vérifiée.
-    section: SectionIndex,
+    section: SectionIndexSchema,
     // La pose complète, pas seulement la section vérifiée : les cas peuvent
     // ainsi vérifier que la règle ignore les autres sections.
     placements: Type.Array(PlacementSchema),

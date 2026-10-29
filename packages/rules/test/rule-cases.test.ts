@@ -5,10 +5,12 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { Value } from "typebox/value"; // aligne sur l'import de tes autres tests
+import { Value } from "typebox/value";
+import { checkMaxSum } from "../src/general-rules/max-sum.js";
 import { checkMinCardCount } from "../src/general-rules/min-card-count.js";
 import type { Violation } from "../src/general-rules/violation.js";
 import { placementsBySection } from "../src/placements/by-section.js";
+import type { Placement } from "../src/placements/placement.js";
 import { RuleCaseSchema, type RuleCase } from "./support/rule-case.js";
 
 // Chemin du dossier des cas, calculé à partir de ce fichier et non du dossier
@@ -32,19 +34,33 @@ function loadCase(file: string): RuleCase {
   return data;
 }
 
+/** Appelle la fonction de vérification qui correspond au kind de la règle. */
+function checkSectionRule(
+  section: number,
+  placements: readonly Placement[],
+  rule: RuleCase["rule"],
+): Violation | undefined {
+  // Dans chaque case, TypeScript sait quelle règle on manipule : rule.params
+  // a le bon type pour la fonction appelée. Pas de default : si une règle est
+  // ajoutée au schéma de cas sans être traitée ici, la fonction peut finir
+  // sans return et typecheck échoue.
+  switch (rule.kind) {
+    case "minCardCount":
+      return checkMinCardCount(section, placements, rule.params);
+    case "maxSum":
+      return checkMaxSum(section, placements, rule.params);
+  }
+}
+
 /** Exécute la règle d'un cas et renvoie les violations obtenues. */
 function evaluate(testCase: RuleCase): Violation[] {
   // La règle ne reçoit que les cartes de la section vérifiée.
   const placements =
     placementsBySection(testCase.placements)[testCase.section] ?? [];
-
-  // Une seule règle connue pour l'instant, donc un appel direct. Ajouter une
-  // règle au schéma de cas change le type de rule.params : cet appel ne
-  // compile plus, ce qui oblige à introduire un switch sur rule.kind.
-  const violation = checkMinCardCount(
+  const violation = checkSectionRule(
     testCase.section,
     placements,
-    testCase.rule.params,
+    testCase.rule,
   );
   // Une règle de section renvoie une violation ou rien ; le cas attend une liste.
   return violation === undefined ? [] : [violation];
