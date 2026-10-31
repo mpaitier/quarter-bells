@@ -68,14 +68,24 @@ export interface ResolvedTrial extends TrialCommon {
 export type Trial = PlacingTrial | ResolvedTrial;
 
 /**
- * Le joueur dont c'est le tour : les joueurs posent chacun leur tour, dans
- * l'ordre de passage, donc le rang de la prochaine pose suffit.
+ * Le siège du joueur dont c'est le tour. Les joueurs posent chacun leur tour,
+ * dans l'ordre de passage : le rang de la prochaine pose suffit à le trouver.
+ */
+export function currentSeat(trial: PlacingTrial): Seat {
+  const seat = trial.seats[trial.placements.length % trial.seats.length];
+  // createTrial garantit au moins 2 joueurs : l'index est toujours valide,
+  // mais un index de tableau est typé « peut-être undefined ».
+  if (seat === undefined) {
+    throw new Error("Trial has no seat");
+  }
+  return seat;
+}
+
+/**
+ * Le joueur dont c'est le tour.
  *
  * @returns undefined si l'épreuve est terminée
  */
 export function currentPlayer(trial: Trial): PlayerId | undefined {
-  if (trial.phase !== "placement") {
-    return undefined;
-  }
-  return trial.seats[trial.placements.length % trial.seats.length]?.player;
+  return trial.phase === "placement" ? currentSeat(trial).player : undefined;
 }
