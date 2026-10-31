@@ -1,0 +1,13 @@
+{
+  "description": "sumInRange avec un minimum égal au maximum réussit quand la section vaut cette valeur",
+  "rule": { "kind": "sumInRange", "params": { "min": 7, "max": 7 } },
+  "section": 0,
+  "placements": [
+    {
+      "sectionIndex": 0,
+      "card": { "family": "eternity", "value": 7 },
+      "faceUp": false
+    }
+  ],
+  "expected": []
+}

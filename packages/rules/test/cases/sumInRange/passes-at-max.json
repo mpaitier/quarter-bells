@@ -1,0 +1,23 @@
+{
+  "description": "sumInRange réussit quand la section vaut exactement le maximum",
+  "rule": { "kind": "sumInRange", "params": { "min": 6, "max": 10 } },
+  "section": 2,
+  "placements": [
+    {
+      "sectionIndex": 2,
+      "card": { "family": "instant", "value": 3 },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 2,
+      "card": { "family": "eternity", "value": 7 },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 5,
+      "card": { "family": "instant", "value": 12 },
+      "faceUp": false
+    }
+  ],
+  "expected": []
+}

@@ -13,6 +13,7 @@ import {
   ExactCardCountSchema,
   MaxSumSchema,
   MinCardCountSchema,
+  SumInRangeSchema,
 } from "../../src/clocks/rule-schemas.js";
 import { SectionIndexSchema } from "../../src/clocks/section.js";
 import { ViolationSchema } from "../../src/rule-checks/violation.js";
@@ -25,7 +26,12 @@ const SectionRuleCaseSchema = Type.Object(
     // Les règles de section que le lanceur sait exécuter. Ajouter une règle
     // ici sans l'ajouter dans checkSectionRule (rule-cases.test.ts) fait
     // échouer typecheck.
-    rule: Type.Union([MinCardCountSchema, MaxSumSchema, ExactCardCountSchema]),
+    rule: Type.Union([
+      MinCardCountSchema,
+      MaxSumSchema,
+      ExactCardCountSchema,
+      SumInRangeSchema,
+    ]),
     // La section sur laquelle la règle est vérifiée.
     section: SectionIndexSchema,
     // La pose complète, pas seulement la section vérifiée : les cas peuvent
