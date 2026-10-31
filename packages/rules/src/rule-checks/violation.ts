@@ -12,6 +12,7 @@ import {
   ExactCardCountSchema,
   MaxSumSchema,
   MinCardCountSchema,
+  SumInRangeSchema,
 } from "../clocks/rule-schemas.js";
 
 /** Valeur d'une section : somme de ses cartes. Une section vide vaut 0. */
@@ -81,6 +82,20 @@ export const ExactCardCountViolationSchema = Type.Object(
 );
 
 /**
+ * La valeur d'une section sort de l'intervalle [min, max], par le bas ou par
+ * le haut. Même forme que maxSum : la valeur observée suffit, la borne
+ * franchie se déduit de params.
+ */
+export const SumInRangeViolationSchema = Type.Object(
+  {
+    ...SumInRangeSchema.properties,
+    section: SectionIndexSchema,
+    value: SectionValue,
+  },
+  { additionalProperties: false },
+);
+
+/**
  * Une violation, quelle que soit la règle. Union discriminée sur kind.
  *
  * Décision : le moteur renvoie TOUTES les violations, triées par kind puis
@@ -92,6 +107,7 @@ export const ViolationSchema = Type.Union([
   AscendingOrderViolationSchema,
   MaxSumViolationSchema,
   ExactCardCountViolationSchema,
+  SumInRangeViolationSchema,
 ]);
 export type Violation = Static<typeof ViolationSchema>;
 
@@ -111,6 +127,9 @@ export type ExactCardCountViolation = Static<
   typeof ExactCardCountViolationSchema
 >;
 
+/** Violation de sumInRange. */
+export type SumInRangeViolation = Static<typeof SumInRangeViolationSchema>;
+
 /**
  * Rang de chaque règle dans un résultat trié, dans l'ordre du catalogue
  * (docs/rule-catalog.md). Un Record sur le type des kind oblige à classer
@@ -121,6 +140,7 @@ const KIND_RANK: Record<Violation["kind"], number> = {
   ascendingOrder: 1,
   maxSum: 2,
   exactCardCount: 3,
+  sumInRange: 4,
 };
 
 /**

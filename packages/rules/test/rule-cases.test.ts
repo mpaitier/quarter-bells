@@ -10,6 +10,7 @@ import { checkAscendingOrder } from "../src/rule-checks/ascending-order.js";
 import { checkExactCardCount } from "../src/rule-checks/exact-card-count.js";
 import { checkMaxSum } from "../src/rule-checks/max-sum.js";
 import { checkMinCardCount } from "../src/rule-checks/min-card-count.js";
+import { checkSumInRange } from "../src/rule-checks/sum-in-range.js";
 import type { Violation } from "../src/rule-checks/violation.js";
 import { placementsBySection } from "../src/placements/by-section.js";
 import type { Placement } from "../src/placements/placement.js";
@@ -57,6 +58,8 @@ function checkSectionRule(
       return checkMaxSum(section, placements, rule.params);
     case "exactCardCount":
       return checkExactCardCount(section, placements, rule.params);
+    case "sumInRange":
+      return checkSumInRange(section, placements, rule.params);
   }
 }
 

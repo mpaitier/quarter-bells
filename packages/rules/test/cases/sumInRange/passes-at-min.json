@@ -1,0 +1,18 @@
+{
+  "description": "sumInRange réussit quand la section vaut exactement le minimum",
+  "rule": { "kind": "sumInRange", "params": { "min": 6, "max": 10 } },
+  "section": 2,
+  "placements": [
+    {
+      "sectionIndex": 2,
+      "card": { "family": "instant", "value": 4 },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 2,
+      "card": { "family": "eternity", "value": 2 },
+      "faceUp": true
+    }
+  ],
+  "expected": []
+}

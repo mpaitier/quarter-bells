@@ -55,6 +55,8 @@ Les bornes sont vérifiées par le schéma des horloges (`packages/rules/src/clo
 
 La violation indique dans `cardCount` le nombre de cartes comptées : le client sait ainsi s'il en manque ou s'il y en a trop.
 
+`sumInRange` : les deux bornes sont incluses. Avec `min = max`, la section doit valoir exactement cette valeur. Une section vide vaut 0, elle échoue donc dès que `min` est positif. Un `min` supérieur à `max` rend la règle impossible à réussir : `parseClock` refuse l'horloge au chargement. La violation indique dans `value` la valeur de la section, et le client la compare aux bornes pour savoir laquelle est franchie. Cette évaluation a lieu à la Résolution ; le refus d'une pose qui dépasserait un `max` connu (voir « Bornes hautes connues » plus bas) est traité à part.
+
 ## Types candidats
 
 Idées pour concevoir des horloges originales. Chacune doit être validée par une partie de test avant d'entrer dans le catalogue. Tant qu'un type reste candidat, le schéma des horloges le refuse : une horloge ne peut pas l'utiliser.

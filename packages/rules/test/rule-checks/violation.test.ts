@@ -46,6 +46,15 @@ const validExactCardCount = {
   cardCount: 4,
 };
 
+// Violation sumInRange valide : la section 2 vaut 11 pour un intervalle de 6
+// à 10.
+const validSumInRange = {
+  kind: "sumInRange",
+  params: { min: 6, max: 10 },
+  section: 2,
+  value: 11,
+};
+
 describe("ViolationSchema", () => {
   describe("minCardCount", () => {
     it("accepts a well-formed violation", () => {
@@ -140,6 +149,32 @@ describe("ViolationSchema", () => {
       expect(
         Value.Check(ViolationSchema, { ...validExactCardCount, cardCount: -1 }),
       ).toBe(false);
+    });
+  });
+
+  describe("sumInRange", () => {
+    it("accepts a well-formed violation", () => {
+      expect(Value.Check(ViolationSchema, validSumInRange)).toBe(true);
+    });
+
+    it("rejects a violation without min", () => {
+      // sumInRange et maxSum ont la même forme (params + value). Sans min, les
+      // params ressemblent à ceux de maxSum : le kind doit empêcher l'union
+      // d'accepter ce mélange.
+      expect(
+        Value.Check(ViolationSchema, {
+          ...validSumInRange,
+          params: { max: 10 },
+        }),
+      ).toBe(false);
+    });
+
+    it("rejects a violation without value", () => {
+      // Sans la valeur observée, l'interface ne sait pas quelle borne a été
+      // franchie.
+      const withoutValue: Record<string, unknown> = { ...validSumInRange };
+      delete withoutValue.value;
+      expect(Value.Check(ViolationSchema, withoutValue)).toBe(false);
     });
   });
 });
