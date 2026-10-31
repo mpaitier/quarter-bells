@@ -1,0 +1,14 @@
+{
+  "description": "maxSum refuse pendant la Pose une carte qui dépasse à elle seule le plafond d'une section vide, dont la valeur 0 est connue",
+  "rule": { "kind": "maxSum", "params": { "max": 6 } },
+  "section": 5,
+  "placements": [],
+  "candidate": {
+    "sectionIndex": 5,
+    "card": { "family": "instant", "value": 7 },
+    "faceUp": false
+  },
+  "expected": [
+    { "kind": "maxSum", "params": { "max": 6 }, "section": 5, "value": 7 }
+  ]
+}

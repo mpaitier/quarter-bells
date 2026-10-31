@@ -65,7 +65,7 @@ Les cas sont écrits sous forme de données plutôt que de code. Un fichier JSON
 
 La pose décrit tout le cadran, pas seulement la section vérifiée : un cas peut ainsi vérifier qu'une règle de section ignore les cartes posées ailleurs.
 
-Les contraintes de pose ont une troisième forme de cas. `placements` y décrit la pose déjà faite, dans l'ordre des poses, et `candidate` la pose proposée, dont le rang est la longueur de `placements`. `section` est la section qui porte la règle, et `expected` liste les violations qui accompagneraient le refus : une liste vide signifie que la pose est acceptée.
+Les évaluations pendant la Pose (contraintes de pose et bornes hautes connues) ont une troisième forme de cas. `placements` y décrit la pose déjà faite, dans l'ordre des poses, et `candidate` la pose proposée, dont le rang est la longueur de `placements`. `section` est la section qui porte la règle, et `expected` liste les violations qui accompagneraient le refus : une liste vide signifie que la pose est acceptée. Pour une règle qui s'évalue aux deux moments, comme `maxSum`, la présence de `candidate` désigne l'évaluation pendant la Pose, et le nom du fichier commence par `at-placement-`.
 
 Un seul test Vitest (`test/rule-cases.test.ts`) parcourt tous les fichiers du dossier, valide chacun avec le schéma de `test/support/rule-case.ts`, puis vérifie le résultat. Un fichier mal écrit fait échouer le test au lieu d'être ignoré. Ce format a deux avantages : ajouter un cas ne demande pas de code, et le même jeu de cas pourra valider une future version Dart du moteur (voir l'ADR 0003).
 

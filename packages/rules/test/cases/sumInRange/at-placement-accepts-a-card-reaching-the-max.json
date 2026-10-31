@@ -1,0 +1,18 @@
+{
+  "description": "sumInRange accepte pendant la Pose une carte qui amène la section exactement au maximum",
+  "rule": { "kind": "sumInRange", "params": { "min": 12, "max": 18 } },
+  "section": 1,
+  "placements": [
+    {
+      "sectionIndex": 1,
+      "card": { "family": "instant", "value": 10 },
+      "faceUp": true
+    }
+  ],
+  "candidate": {
+    "sectionIndex": 1,
+    "card": { "family": "instant", "value": 8 },
+    "faceUp": false
+  },
+  "expected": []
+}

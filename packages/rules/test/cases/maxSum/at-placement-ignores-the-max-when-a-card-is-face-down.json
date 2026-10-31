@@ -1,0 +1,23 @@
+{
+  "description": "maxSum n'applique aucune limite pendant la Pose dès qu'une carte de la section est face cachée",
+  "rule": { "kind": "maxSum", "params": { "max": 24 } },
+  "section": 4,
+  "placements": [
+    {
+      "sectionIndex": 4,
+      "card": { "family": "instant", "value": 12 },
+      "faceUp": true
+    },
+    {
+      "sectionIndex": 4,
+      "card": { "family": "eternity", "value": 10 },
+      "faceUp": false
+    }
+  ],
+  "candidate": {
+    "sectionIndex": 4,
+    "card": { "family": "instant", "value": 3 },
+    "faceUp": true
+  },
+  "expected": []
+}

@@ -6,8 +6,8 @@
 // - règle de section, évaluée à la Résolution : la section vérifiée (section) ;
 // - règle d'horloge, évaluée à la Résolution : la section de départ du
 //   parcours (startSection) ;
-// - contrainte de pose, évaluée pendant la Pose : la section qui porte la
-//   règle (section) et la pose proposée (candidate).
+// - évaluation pendant la Pose (contrainte de pose ou borne haute connue) :
+//   la section qui porte la règle (section) et la pose proposée (candidate).
 // additionalProperties: false rend les formes exclusives : un cas qui
 // porterait à la fois startSection et candidate est refusé.
 
@@ -66,13 +66,14 @@ const ClockRuleCaseSchema = Type.Object(
   { additionalProperties: false },
 );
 
-/** Cas d'une contrainte de pose : la pose proposée est-elle refusée ? */
-const PlacementConstraintCaseSchema = Type.Object(
+/** Cas d'une évaluation pendant la Pose : la pose proposée est-elle refusée ? */
+const PlacementCaseSchema = Type.Object(
   {
     description: Type.String({ minLength: 1 }),
-    // Une seule contrainte de pose exécutable pour l'instant, comme pour les
-    // règles d'horloge : en ajouter une imposera un switch dans le lanceur.
-    rule: FirstPlacementsSchema,
+    // Les règles qui ont une évaluation pendant la Pose. Ajouter une règle
+    // ici sans l'ajouter dans checkAtPlacement (rule-cases.test.ts) fait
+    // échouer le lint.
+    rule: Type.Union([FirstPlacementsSchema, MaxSumSchema, SumInRangeSchema]),
     // La section qui porte la règle.
     section: SectionIndexSchema,
     // La pose déjà faite, dans l'ordre des poses. Sa longueur donne le rang
@@ -89,9 +90,12 @@ const PlacementConstraintCaseSchema = Type.Object(
 export const RuleCaseSchema = Type.Union([
   SectionRuleCaseSchema,
   ClockRuleCaseSchema,
-  PlacementConstraintCaseSchema,
+  PlacementCaseSchema,
 ]);
 export type RuleCase = Static<typeof RuleCaseSchema>;
 
 /** Cas d'une règle de section, utile pour typer les fonctions du lanceur. */
 export type SectionRuleCase = Static<typeof SectionRuleCaseSchema>;
+
+/** Cas d'une évaluation pendant la Pose, pour typer le lanceur. */
+export type PlacementCase = Static<typeof PlacementCaseSchema>;

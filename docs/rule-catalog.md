@@ -19,14 +19,14 @@ Ces types sont nécessaires pour reproduire les mécaniques décrites dans les r
 
 Le plafond et la section de départ ne sont pas des règles : ce sont des propriétés de l'horloge (`noMaxSum`, `startSectionMode`, `defaultStartSection`), voir le [format des horloges](clock-format.md).
 
-| Type              | Portée             | Nature   | Paramètres         | Signification                                                                                                                              |
-| ----------------- | ------------------ | -------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `minCardCount`    | section            | réussite | `min`              | Au moins `min` cartes devant la section. Règle générale avec `min = 1` sur chaque section.                                                 |
-| `ascendingOrder`  | horloge            | réussite | —                  | La valeur de chaque section est supérieure ou égale à la précédente, à partir de la section de départ. Règle générale.                     |
-| `maxSum`          | section ou horloge | réussite | `max`              | Valeur de la section inférieure ou égale à `max`. Règle générale avec `max = 24`.                                                          |
-| `exactCardCount`  | section            | réussite | `count`, `family?` | Exactement `count` cartes devant la section, d'une famille donnée ou toutes familles confondues.                                           |
-| `sumInRange`      | section            | réussite | `min`, `max`       | Valeur de la section comprise entre `min` et `max`, bornes incluses.                                                                       |
-| `firstPlacements` | section            | pose     | `placementIndexes` | Les poses de rang indiqué (par exemple la 1re et la 2e) doivent se faire devant cette section. D'autres poses y restent possibles ensuite. |
+| Type              | Portée             | Nature                       | Paramètres         | Signification                                                                                                                              |
+| ----------------- | ------------------ | ---------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `minCardCount`    | section            | réussite                     | `min`              | Au moins `min` cartes devant la section. Règle générale avec `min = 1` sur chaque section.                                                 |
+| `ascendingOrder`  | horloge            | réussite                     | —                  | La valeur de chaque section est supérieure ou égale à la précédente, à partir de la section de départ. Règle générale.                     |
+| `maxSum`          | section ou horloge | réussite, pose (borne haute) | `max`              | Valeur de la section inférieure ou égale à `max`. Règle générale avec `max = 24`.                                                          |
+| `exactCardCount`  | section            | réussite                     | `count`, `family?` | Exactement `count` cartes devant la section, d'une famille donnée ou toutes familles confondues.                                           |
+| `sumInRange`      | section            | réussite, pose (borne haute) | `min`, `max`       | Valeur de la section comprise entre `min` et `max`, bornes incluses.                                                                       |
+| `firstPlacements` | section            | pose                         | `placementIndexes` | Les poses de rang indiqué (par exemple la 1re et la 2e) doivent se faire devant cette section. D'autres poses y restent possibles ensuite. |
 
 ### Paramètres
 
@@ -55,7 +55,7 @@ Les bornes sont vérifiées par le schéma des horloges (`packages/rules/src/clo
 
 La violation indique dans `cardCount` le nombre de cartes comptées : le client sait ainsi s'il en manque ou s'il y en a trop.
 
-`sumInRange` : les deux bornes sont incluses. Avec `min = max`, la section doit valoir exactement cette valeur. Une section vide vaut 0, elle échoue donc dès que `min` est positif. Un `min` supérieur à `max` rend la règle impossible à réussir : `parseClock` refuse l'horloge au chargement. La violation indique dans `value` la valeur de la section, et le client la compare aux bornes pour savoir laquelle est franchie. Cette évaluation a lieu à la Résolution ; le refus d'une pose qui dépasserait un `max` connu (voir « Bornes hautes connues » plus bas) est traité à part.
+`sumInRange` : les deux bornes sont incluses. Avec `min = max`, la section doit valoir exactement cette valeur. Une section vide vaut 0, elle échoue donc dès que `min` est positif. Un `min` supérieur à `max` rend la règle impossible à réussir : `parseClock` refuse l'horloge au chargement. La violation indique dans `value` la valeur de la section, et le client la compare aux bornes pour savoir laquelle est franchie. Pendant la Pose, seul `max` est vérifié, et seulement quand la valeur de la section est connue (voir « Bornes hautes connues » plus bas).
 
 `firstPlacements` : le rang d'une pose est sa position dans l'ordre de toutes les poses de l'épreuve, tous joueurs confondus, à partir de 0. Une pose dont le rang figure dans `placementIndexes` est refusée si elle vise une autre section que celle qui porte la règle. Les autres rangs sont libres, sur n'importe quelle section, y compris celle-ci. Les rangs n'ont pas à se suivre : avec `[0, 3]`, les poses de rang 1 et 2 sont libres. La règle ne lit que le rang et la section visée, deux informations publiques : le client peut signaler les sections interdites avant que le joueur choisisse sa carte (F-JEU-08). Elle n'est évaluée que pendant la Pose : une pose refusée n'entre jamais dans la pose, la règle est donc forcément respectée à la Résolution. La violation indique la section qui porte la règle (`section`), le rang de la pose refusée (`placementIndex`) et la section choisie par le joueur (`attemptedSection`).
 
@@ -81,3 +81,10 @@ Idées pour concevoir des horloges originales. Chacune doit être validée par u
 - **Bornes hautes connues.** Exception à la règle précédente : quand toutes les cartes d'une section sont face visible, leur somme est publique. Le moteur refuse alors une pose qui ferait dépasser une borne haute de la section (`maxSum`, et le maximum de `sumInRange`). Le joueur connaît la valeur de sa propre carte, donc le refus ne lui apprend rien et n'est montré qu'à lui. Une seule carte face cachée dans la section, même posée par le joueur lui-même, désactive cette vérification. Les bornes basses ne sont jamais vérifiées pendant la Pose.
 
   Conséquence pour le modèle : chaque règle de valeur expose deux évaluations, une à la Pose sur les informations publiques plus la carte du joueur, une à la Résolution sur toutes les cartes.
+
+  Précisions de mise en œuvre :
+  - La vérification porte sur le plafond général de 24 (sauf `noMaxSum`), sur les règles `maxSum` de la section ou de l'horloge, et sur le maximum de `sumInRange`.
+  - La face de la carte proposée ne compte pas : posée face cachée, sa valeur reste connue de son auteur. C'est la pose suivante sur cette section qui ne sera plus vérifiée.
+  - Une section vide n'a aucune carte cachée : sa valeur publique est 0. Une carte qui dépasse à elle seule une borne haute y est donc refusée.
+  - Le moteur ne sait pas qui a posé une carte : une carte cachée désactive la vérification quel que soit son auteur.
+  - La violation est la même qu'à la Résolution (`maxSum` ou `sumInRange`). Sa `value` est la valeur qu'aurait la section avec la carte proposée.

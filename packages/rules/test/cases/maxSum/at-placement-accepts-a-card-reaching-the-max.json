@@ -1,0 +1,23 @@
+{
+  "description": "maxSum accepte pendant la Pose une carte qui amène la section exactement au plafond",
+  "rule": { "kind": "maxSum", "params": { "max": 24 } },
+  "section": 4,
+  "placements": [
+    {
+      "sectionIndex": 4,
+      "card": { "family": "instant", "value": 12 },
+      "faceUp": true
+    },
+    {
+      "sectionIndex": 4,
+      "card": { "family": "eternity", "value": 10 },
+      "faceUp": true
+    }
+  ],
+  "candidate": {
+    "sectionIndex": 4,
+    "card": { "family": "instant", "value": 2 },
+    "faceUp": false
+  },
+  "expected": []
+}
