@@ -10,6 +10,7 @@ import { SectionIndexSchema } from "../clocks/section.js";
 import {
   AscendingOrderSchema,
   ExactCardCountSchema,
+  FirstPlacementsSchema,
   MaxSumSchema,
   MinCardCountSchema,
   SumInRangeSchema,
@@ -96,6 +97,25 @@ export const SumInRangeViolationSchema = Type.Object(
 );
 
 /**
+ * Une pose de rang listé vise une autre section que celle qui porte la règle.
+ * Seule violation produite pendant la Pose pour l'instant : elle accompagne
+ * le refus de la pose, et le client s'en sert pour guider le joueur.
+ */
+export const FirstPlacementsViolationSchema = Type.Object(
+  {
+    ...FirstPlacementsSchema.properties,
+    // Section qui porte la règle : celle où la carte aurait dû aller.
+    section: SectionIndexSchema,
+    // Rang de la pose refusée, 0 pour la première de l'épreuve.
+    placementIndex: Type.Integer({ minimum: 0 }),
+    // Section que le joueur avait choisie. Le client la connaît déjà, mais
+    // la violation reste lisible seule (journaux, tests, relecture).
+    attemptedSection: SectionIndexSchema,
+  },
+  { additionalProperties: false },
+);
+
+/**
  * Une violation, quelle que soit la règle. Union discriminée sur kind.
  *
  * Décision : le moteur renvoie TOUTES les violations, triées par kind puis
@@ -108,6 +128,7 @@ export const ViolationSchema = Type.Union([
   MaxSumViolationSchema,
   ExactCardCountViolationSchema,
   SumInRangeViolationSchema,
+  FirstPlacementsViolationSchema,
 ]);
 export type Violation = Static<typeof ViolationSchema>;
 
@@ -130,6 +151,11 @@ export type ExactCardCountViolation = Static<
 /** Violation de sumInRange. */
 export type SumInRangeViolation = Static<typeof SumInRangeViolationSchema>;
 
+/** Violation de firstPlacements. */
+export type FirstPlacementsViolation = Static<
+  typeof FirstPlacementsViolationSchema
+>;
+
 /**
  * Rang de chaque règle dans un résultat trié, dans l'ordre du catalogue
  * (docs/rule-catalog.md). Un Record sur le type des kind oblige à classer
@@ -141,6 +167,7 @@ const KIND_RANK: Record<Violation["kind"], number> = {
   maxSum: 2,
   exactCardCount: 3,
   sumInRange: 4,
+  firstPlacements: 5,
 };
 
 /**

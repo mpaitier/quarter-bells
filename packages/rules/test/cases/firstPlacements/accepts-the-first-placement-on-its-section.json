@@ -1,0 +1,12 @@
+{
+  "description": "firstPlacements accepte la première pose devant la section qui porte la règle, quelle que soit la carte",
+  "rule": { "kind": "firstPlacements", "params": { "placementIndexes": [0] } },
+  "section": 2,
+  "placements": [],
+  "candidate": {
+    "sectionIndex": 2,
+    "card": { "family": "eternity", "value": 12 },
+    "faceUp": true
+  },
+  "expected": []
+}

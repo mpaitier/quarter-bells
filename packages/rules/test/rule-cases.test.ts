@@ -8,6 +8,7 @@ import { describe, expect, it } from "vitest";
 import { Value } from "typebox/value";
 import { checkAscendingOrder } from "../src/rule-checks/ascending-order.js";
 import { checkExactCardCount } from "../src/rule-checks/exact-card-count.js";
+import { checkFirstPlacements } from "../src/rule-checks/first-placements.js";
 import { checkMaxSum } from "../src/rule-checks/max-sum.js";
 import { checkMinCardCount } from "../src/rule-checks/min-card-count.js";
 import { checkSumInRange } from "../src/rule-checks/sum-in-range.js";
@@ -66,6 +67,18 @@ function checkSectionRule(
 
 /** Exécute la règle d'un cas et renvoie les violations obtenues. */
 function evaluate(testCase: RuleCase): Violation[] {
+  // Contrainte de pose : seul ce type de cas a candidate. Une seule
+  // contrainte pour l'instant, donc un appel direct.
+  if ("candidate" in testCase) {
+    const violation = checkFirstPlacements(
+      testCase.section,
+      testCase.placements,
+      testCase.candidate,
+      testCase.rule.params,
+    );
+    return violation === undefined ? [] : [violation];
+  }
+
   // Règle d'horloge : seul ce type de cas a startSection, et `in` suffit à
   // TypeScript pour savoir de quel cas il s'agit dans chaque branche.
   // Une seule règle d'horloge pour l'instant, donc un appel direct.

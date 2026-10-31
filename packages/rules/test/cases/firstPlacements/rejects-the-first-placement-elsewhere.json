@@ -1,0 +1,20 @@
+{
+  "description": "firstPlacements refuse la première pose de l'épreuve devant une autre section",
+  "rule": { "kind": "firstPlacements", "params": { "placementIndexes": [0] } },
+  "section": 2,
+  "placements": [],
+  "candidate": {
+    "sectionIndex": 4,
+    "card": { "family": "eternity", "value": 3 },
+    "faceUp": false
+  },
+  "expected": [
+    {
+      "kind": "firstPlacements",
+      "params": { "placementIndexes": [0] },
+      "section": 2,
+      "placementIndex": 0,
+      "attemptedSection": 4
+    }
+  ]
+}
