@@ -1,0 +1,18 @@
+{
+  "description": "sumInRange ne regarde pas une pose faite sur une autre section, même trop forte pour la sienne",
+  "rule": { "kind": "sumInRange", "params": { "min": 12, "max": 18 } },
+  "section": 1,
+  "placements": [
+    {
+      "sectionIndex": 1,
+      "card": { "family": "instant", "value": 10 },
+      "faceUp": true
+    }
+  ],
+  "candidate": {
+    "sectionIndex": 3,
+    "card": { "family": "instant", "value": 12 },
+    "faceUp": false
+  },
+  "expected": []
+}

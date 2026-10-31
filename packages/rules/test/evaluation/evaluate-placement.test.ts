@@ -6,15 +6,20 @@ import { evaluatePlacement } from "../../src/evaluation/evaluate-placement.js";
 import type { Placement } from "../../src/placements/placement.js";
 import playersChoiceClock from "../fixtures/clocks/players-choice-clock.json" with { type: "json" };
 
-// Le détail de firstPlacements est couvert par test/cases/firstPlacements/.
-// Ce fichier teste ce que fait le point d'entrée en plus : parcourir toutes
-// les sections et l'horloge, ignorer les conditions de réussite, trier le
-// résultat et refuser une pose hors du cadran.
+// Le détail de chaque règle est couvert par test/cases/ (fichiers de
+// firstPlacements et at-placement-*). Ce fichier teste ce que fait le point
+// d'entrée en plus : parcourir toutes les sections et l'horloge, appliquer le
+// plafond général selon noMaxSum, ignorer les conditions qui ne se jugent
+// qu'à la Résolution, trier le résultat et refuser une pose hors du cadran.
 
-// Fabrique un placement en ne précisant que la section (et la valeur si
-// elle compte pour le test).
-function place(sectionIndex: number, value: CardValue = 5): Placement {
-  return { sectionIndex, card: { family: "instant", value }, faceUp: false };
+// Fabrique un placement en ne précisant que la section, et la valeur et la
+// face quand elles comptent pour le test.
+function place(
+  sectionIndex: number,
+  value: CardValue = 5,
+  faceUp = false,
+): Placement {
+  return { sectionIndex, card: { family: "instant", value }, faceUp };
 }
 
 // Horloge réduite à ce que lit evaluatePlacement. Chaque section reçoit les
@@ -22,7 +27,8 @@ function place(sectionIndex: number, value: CardValue = 5): Placement {
 function clockWith(
   rulesBySection: Partial<Record<number, SectionRule[]>>,
   clockRules: ClockRule[] = [],
-): Pick<Clock, "sections" | "clockRules"> {
+  noMaxSum = false,
+): Pick<Clock, "sections" | "clockRules" | "noMaxSum"> {
   // Clock.sections est un tuple de 6 sections dont l'index est littéral
   // (0, puis 1...). Un map produirait un simple tableau de number, refusé :
   // on écrit les six sections, et `const I` garde chaque index littéral.
@@ -40,6 +46,7 @@ function clockWith(
       section(5),
     ],
     clockRules,
+    noMaxSum,
   };
 }
 
@@ -50,32 +57,92 @@ const firstPlacementHere: SectionRule = {
 };
 
 describe("evaluatePlacement", () => {
-  // Horloge chargée de toutes les conditions de réussite connues, en section
-  // comme au niveau de l'horloge, mais sans contrainte de pose.
+  // Horloge chargée des conditions qui ne se jugent qu'à la Résolution :
+  // nombres de cartes, ordre croissant, et le minimum de sumInRange.
   const resolutionOnly = clockWith(
     {
       0: [{ kind: "minCardCount", params: { min: 3 } }],
       1: [{ kind: "exactCardCount", params: { count: 0 } }],
       2: [{ kind: "sumInRange", params: { min: 20, max: 22 } }],
-      3: [{ kind: "maxSum", params: { max: 1 } }],
     },
-    [
-      { kind: "ascendingOrder", params: {} },
-      { kind: "maxSum", params: { max: 1 } },
-    ],
+    [{ kind: "ascendingOrder", params: {} }],
   );
 
-  // Chaque section est essayée : la pose est acceptée partout, même là où
-  // une condition de réussite serait déjà enfreinte (un 12 sur une section
-  // plafonnée à 1, une carte sur une section qui doit rester vide).
+  // Chaque section est essayée sur une horloge vide : la pose est acceptée
+  // partout, même là où une condition serait déjà enfreinte (une carte sur
+  // une section qui doit rester vide, une section à 1 alors que l'ordre
+  // croissant et le minimum de 20 ne sont pas encore atteints).
   it.each([0, 1, 2, 3, 4, 5])(
-    "ignores resolution conditions when placing on section %i",
+    "ignores resolution-only conditions when placing on section %i",
     (section) => {
-      expect(evaluatePlacement(resolutionOnly, [], place(section, 12))).toEqual(
+      expect(evaluatePlacement(resolutionOnly, [], place(section, 1))).toEqual(
         [],
       );
     },
   );
+
+  describe("known upper bounds", () => {
+    // Section 3 déjà à 22, toutes cartes visibles : un 3 la porterait à 25.
+    const visible22 = [place(3, 12, true), place(3, 10, true)];
+
+    it("applies the general maximum of 24", () => {
+      expect(evaluatePlacement(clockWith({}), visible22, place(3, 3))).toEqual([
+        { kind: "maxSum", params: { max: 24 }, section: 3, value: 25 },
+      ]);
+    });
+
+    it("skips the general maximum when the clock has noMaxSum", () => {
+      const clock = clockWith({}, [], true);
+      expect(evaluatePlacement(clock, visible22, place(3, 3))).toEqual([]);
+    });
+
+    it("applies a clock maxSum to the target section", () => {
+      // Règle d'horloge à 20 : elle vaut pour chaque section, ici la 3.
+      // noMaxSum isole la règle d'horloge du plafond général.
+      const clock = clockWith(
+        {},
+        [{ kind: "maxSum", params: { max: 20 } }],
+        true,
+      );
+      expect(evaluatePlacement(clock, visible22, place(3, 1))).toEqual([
+        { kind: "maxSum", params: { max: 20 }, section: 3, value: 23 },
+      ]);
+    });
+
+    it("applies the section rules of the target section only", () => {
+      // La règle à 6 est en section 0 : une pose en section 3 ne la regarde
+      // pas, même si la valeur obtenue la dépasserait.
+      const clock = clockWith({ 0: [{ kind: "maxSum", params: { max: 6 } }] });
+      expect(evaluatePlacement(clock, [], place(3, 9))).toEqual([]);
+    });
+
+    it("reports a section maximum and the general maximum together", () => {
+      // Section plafonnée à 20 par sa règle, et à 24 par le plafond général :
+      // 25 dépasse les deux. Même kind, même section : l'ordre de calcul est
+      // conservé, règle de section d'abord.
+      const clock = clockWith({ 3: [{ kind: "maxSum", params: { max: 20 } }] });
+      expect(evaluatePlacement(clock, visible22, place(3, 3))).toEqual([
+        { kind: "maxSum", params: { max: 20 }, section: 3, value: 25 },
+        { kind: "maxSum", params: { max: 24 }, section: 3, value: 25 },
+      ]);
+    });
+  });
+
+  it("sorts violations by rule, then by section", () => {
+    // Deux règles refusent la même pose : firstPlacements (section 0) et
+    // sumInRange (section 4, vide, dont un 9 dépasse le maximum de 8).
+    // Ordre du catalogue : sumInRange avant firstPlacements, même si sa
+    // section vient après.
+    const clock = clockWith({
+      0: [firstPlacementHere],
+      4: [{ kind: "sumInRange", params: { min: 2, max: 8 } }],
+    });
+    const violations = evaluatePlacement(clock, [], place(4, 9));
+    expect(violations.map((violation) => violation.kind)).toEqual([
+      "sumInRange",
+      "firstPlacements",
+    ]);
+  });
 
   it("applies the constraint of a section other than the target", () => {
     // La règle est en section 2, la carte va en section 4 : c'est justement

@@ -4,22 +4,27 @@ import {
   type ClockRule,
   type SectionRule,
 } from "../clocks/clock.js";
+import { GENERAL_MAX_SUM } from "../general-rules/evaluate-general-rules.js";
 import type { Placement } from "../placements/placement.js";
 import { checkFirstPlacements } from "../rule-checks/first-placements.js";
+import { checkMaxSumAtPlacement } from "../rule-checks/max-sum.js";
+import { checkSumInRangeAtPlacement } from "../rule-checks/sum-in-range.js";
 import { compareViolations, type Violation } from "../rule-checks/violation.js";
 
 /**
  * Évalue une pose proposée pendant la Pose, avant de l'accepter (ADR 0009).
  *
- * Applique les contraintes de pose de toutes les sections et de l'horloge.
- * Les conditions de réussite ne sont pas regardées : elles se jugent à la
- * Résolution, une fois toutes les cartes posées.
+ * Applique les contraintes de pose de toutes les sections et de l'horloge,
+ * et les bornes hautes connues (F-JEU-21) : plafond général de 24 (sauf
+ * noMaxSum), règles maxSum et maximum de sumInRange, quand toutes les cartes
+ * de la section visée sont face visible. Le reste des conditions de réussite
+ * se juge à la Résolution, une fois toutes les cartes posées.
  *
  * Ne vérifie ni que c'est le tour du joueur, ni qu'il possède la carte, ni
  * qu'il reste des poses à faire : c'est le rôle de l'épreuve, qui appelle
  * cette fonction.
  *
- * Seule la structure de l'horloge (sections et clockRules) est lue : un test
+ * Seuls sections, clockRules et noMaxSum sont lus dans l'horloge : un test
  * n'a pas à construire une horloge entière.
  *
  * @param placements pose déjà faite, dans l'ordre des poses
@@ -29,7 +34,7 @@ import { compareViolations, type Violation } from "../rule-checks/violation.js";
  * @throws {RangeError} si candidate vise une section hors de l'horloge
  */
 export function evaluatePlacement(
-  clock: Pick<Clock, "sections" | "clockRules">,
+  clock: Pick<Clock, "sections" | "clockRules" | "noMaxSum">,
   placements: readonly Placement[],
   candidate: Placement,
 ): Violation[] {
@@ -59,13 +64,27 @@ export function evaluatePlacement(
   }
 
   for (const rule of clock.clockRules) {
-    violations.push(...clockRuleAtPlacement(rule));
+    violations.push(...clockRuleAtPlacement(rule, placements, candidate));
   }
 
-  // Seul firstPlacements refuse pour l'instant, et les sections sont
-  // parcourues dans l'ordre : le tri ne change encore rien. Il garantit
-  // l'ordre attendu (règle, puis section) dès qu'une seconde règle refusera
-  // pendant la Pose, comme les bornes hautes connues (F-JEU-21).
+  // Plafond général : propriété de l'horloge, pas une règle (voir
+  // evaluateGeneralRules). Seule la section visée peut changer de valeur.
+  if (!clock.noMaxSum) {
+    violations.push(
+      ...listOf(
+        checkMaxSumAtPlacement(
+          candidate.sectionIndex,
+          placements,
+          candidate,
+          GENERAL_MAX_SUM,
+        ),
+      ),
+    );
+  }
+
+  // Ordre stable pour le client et les tests : par règle, puis par section.
+  // À égalité (deux maxSum sur la même section), l'ordre de calcul est
+  // conservé : règles de section, puis d'horloge, puis plafond général.
   return violations.toSorted(compareViolations);
 }
 
@@ -86,22 +105,21 @@ function sectionRuleAtPlacement(
   candidate: Placement,
 ): Violation[] {
   switch (rule.kind) {
-    case "firstPlacements": {
-      const violation = checkFirstPlacements(
-        section,
-        placements,
-        candidate,
-        rule.params,
+    case "firstPlacements":
+      return listOf(
+        checkFirstPlacements(section, placements, candidate, rule.params),
       );
-      return violation === undefined ? [] : [violation];
-    }
 
-    // Bornes hautes connues (F-JEU-21) : une évaluation pendant la Pose est
-    // prévue quand toutes les cartes de la section sont visibles. Elle fait
-    // l'objet d'une issue séparée ; d'ici là, rien n'est refusé.
+    // Bornes hautes connues (F-JEU-21) : seul le maximum, et seulement si
+    // toutes les cartes de la section sont visibles.
     case "maxSum":
+      return listOf(
+        checkMaxSumAtPlacement(section, placements, candidate, rule.params),
+      );
     case "sumInRange":
-      return [];
+      return listOf(
+        checkSumInRangeAtPlacement(section, placements, candidate, rule.params),
+      );
 
     // Conditions de réussite seulement : un nombre de cartes ne se juge
     // qu'une fois toutes les cartes posées.
@@ -112,19 +130,34 @@ function sectionRuleAtPlacement(
 }
 
 /**
- * Évaluation d'une règle d'horloge pendant la Pose. Aucune n'en a pour
- * l'instant, mais le switch oblige chaque nouveau kind à se déclarer, comme
- * pour les règles de section. Quand une règle d'horloge aura une évaluation
- * pendant la Pose, cette fonction recevra aussi la pose et la candidate.
+ * Évaluation d'une règle d'horloge pendant la Pose. Même principe que pour
+ * les règles de section : un case par kind, sans default.
  */
-function clockRuleAtPlacement(rule: ClockRule): Violation[] {
+function clockRuleAtPlacement(
+  rule: ClockRule,
+  placements: readonly Placement[],
+  candidate: Placement,
+): Violation[] {
   switch (rule.kind) {
     // Ordre des valeurs : jugé à la Résolution, sur toutes les cartes.
     case "ascendingOrder":
       return [];
 
-    // Borne haute connue (F-JEU-21), comme maxSum en section.
+    // Borne haute connue (F-JEU-21). Une règle d'horloge vaut pour chaque
+    // section, mais seule la section visée change de valeur.
     case "maxSum":
-      return [];
+      return listOf(
+        checkMaxSumAtPlacement(
+          candidate.sectionIndex,
+          placements,
+          candidate,
+          rule.params,
+        ),
+      );
   }
+}
+
+/** Une violation éventuelle, sous forme de liste : vide si aucune. */
+function listOf(violation: Violation | undefined): Violation[] {
+  return violation === undefined ? [] : [violation];
 }

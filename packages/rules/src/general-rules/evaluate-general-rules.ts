@@ -15,8 +15,12 @@ export const DEFAULT_MAX_SUM = 24;
 /** Règle générale : au moins une carte devant chaque section. */
 const GENERAL_MIN_CARD_COUNT: MinCardCountParams = { min: 1 };
 
-/** Règle générale : aucune section au-dessus du plafond par défaut. */
-const GENERAL_MAX_SUM: MaxSumParams = { max: DEFAULT_MAX_SUM };
+/**
+ * Règle générale : aucune section au-dessus du plafond par défaut.
+ * Exportée pour evaluatePlacement, qui applique le même plafond pendant la
+ * Pose quand la valeur d'une section est connue. index.ts ne l'expose pas.
+ */
+export const GENERAL_MAX_SUM: MaxSumParams = { max: DEFAULT_MAX_SUM };
 
 /**
  * Évalue les trois règles communes à toutes les épreuves sur une pose

@@ -9,14 +9,21 @@ import { Value } from "typebox/value";
 import { checkAscendingOrder } from "../src/rule-checks/ascending-order.js";
 import { checkExactCardCount } from "../src/rule-checks/exact-card-count.js";
 import { checkFirstPlacements } from "../src/rule-checks/first-placements.js";
-import { checkMaxSum } from "../src/rule-checks/max-sum.js";
+import {
+  checkMaxSum,
+  checkMaxSumAtPlacement,
+} from "../src/rule-checks/max-sum.js";
 import { checkMinCardCount } from "../src/rule-checks/min-card-count.js";
-import { checkSumInRange } from "../src/rule-checks/sum-in-range.js";
+import {
+  checkSumInRange,
+  checkSumInRangeAtPlacement,
+} from "../src/rule-checks/sum-in-range.js";
 import type { Violation } from "../src/rule-checks/violation.js";
 import { placementsBySection } from "../src/placements/by-section.js";
 import type { Placement } from "../src/placements/placement.js";
 import {
   RuleCaseSchema,
+  type PlacementCase,
   type RuleCase,
   type SectionRuleCase,
 } from "./support/rule-case.js";
@@ -65,17 +72,36 @@ function checkSectionRule(
   }
 }
 
+/** Appelle l'évaluation pendant la Pose qui correspond au kind de la règle. */
+function checkAtPlacement(testCase: PlacementCase): Violation | undefined {
+  const { section, placements, candidate, rule } = testCase;
+  // Même principe que checkSectionRule : pas de default, le lint refuse un
+  // kind oublié.
+  switch (rule.kind) {
+    case "firstPlacements":
+      return checkFirstPlacements(section, placements, candidate, rule.params);
+    case "maxSum":
+      return checkMaxSumAtPlacement(
+        section,
+        placements,
+        candidate,
+        rule.params,
+      );
+    case "sumInRange":
+      return checkSumInRangeAtPlacement(
+        section,
+        placements,
+        candidate,
+        rule.params,
+      );
+  }
+}
+
 /** Exécute la règle d'un cas et renvoie les violations obtenues. */
 function evaluate(testCase: RuleCase): Violation[] {
-  // Contrainte de pose : seul ce type de cas a candidate. Une seule
-  // contrainte pour l'instant, donc un appel direct.
+  // Évaluation pendant la Pose : seul ce type de cas a candidate.
   if ("candidate" in testCase) {
-    const violation = checkFirstPlacements(
-      testCase.section,
-      testCase.placements,
-      testCase.candidate,
-      testCase.rule.params,
-    );
+    const violation = checkAtPlacement(testCase);
     return violation === undefined ? [] : [violation];
   }
 

@@ -1,0 +1,25 @@
+{
+  "description": "sumInRange refuse pendant la Pose une carte face cachée qui ferait dépasser le maximum d'une section toute visible",
+  "rule": { "kind": "sumInRange", "params": { "min": 12, "max": 18 } },
+  "section": 1,
+  "placements": [
+    {
+      "sectionIndex": 1,
+      "card": { "family": "instant", "value": 10 },
+      "faceUp": true
+    }
+  ],
+  "candidate": {
+    "sectionIndex": 1,
+    "card": { "family": "instant", "value": 9 },
+    "faceUp": false
+  },
+  "expected": [
+    {
+      "kind": "sumInRange",
+      "params": { "min": 12, "max": 18 },
+      "section": 1,
+      "value": 19
+    }
+  ]
+}
