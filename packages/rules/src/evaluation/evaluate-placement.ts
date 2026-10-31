@@ -9,7 +9,11 @@ import type { Placement } from "../placements/placement.js";
 import { checkFirstPlacements } from "../rule-checks/first-placements.js";
 import { checkMaxSumAtPlacement } from "../rule-checks/max-sum.js";
 import { checkSumInRangeAtPlacement } from "../rule-checks/sum-in-range.js";
-import { compareViolations, type Violation } from "../rule-checks/violation.js";
+import {
+  compareViolations,
+  listOf,
+  type Violation,
+} from "../rule-checks/violation.js";
 
 /**
  * Évalue une pose proposée pendant la Pose, avant de l'accepter (ADR 0009).
@@ -155,9 +159,4 @@ function clockRuleAtPlacement(
         ),
       );
   }
-}
-
-/** Une violation éventuelle, sous forme de liste : vide si aucune. */
-function listOf(violation: Violation | undefined): Violation[] {
-  return violation === undefined ? [] : [violation];
 }
