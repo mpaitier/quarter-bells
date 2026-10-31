@@ -41,6 +41,7 @@ describe("public API", () => {
         { index: 5, rules: [] },
       ],
       clockRules: [],
+      noMaxSum: false,
     };
     const candidate = {
       sectionIndex: 0,
