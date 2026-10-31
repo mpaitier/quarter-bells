@@ -25,6 +25,32 @@ describe("public API", () => {
     expect(rules.DEFAULT_MAX_SUM).toBe(24);
   });
 
+  // Sur une horloge sans règle, toute pose est acceptée : on vérifie
+  // seulement que l'export fonctionne.
+  it("evaluates a placement through the package entry point", () => {
+    // Écrite en entier : sections est un tuple de 6, chaque index littéral.
+    // Le type du paramètre suffit à TypeScript pour le vérifier, sans
+    // exporter les types internes des sections.
+    const clock: Parameters<typeof rules.evaluatePlacement>[0] = {
+      sections: [
+        { index: 0, rules: [] },
+        { index: 1, rules: [] },
+        { index: 2, rules: [] },
+        { index: 3, rules: [] },
+        { index: 4, rules: [] },
+        { index: 5, rules: [] },
+      ],
+      clockRules: [],
+    };
+    const candidate = {
+      sectionIndex: 0,
+      card: { family: "instant", value: 3 },
+      faceUp: false,
+    } as const;
+
+    expect(rules.evaluatePlacement(clock, [], candidate)).toEqual([]);
+  });
+
   // Les détails d'implémentation ne doivent pas fuiter : s'ils étaient
   // exportés, d'autres packages pourraient en dépendre, et on ne pourrait
   // plus les modifier librement.
@@ -34,12 +60,15 @@ describe("public API", () => {
     "generateOpaqueIds",
     "createDeck",
     "dealCards",
-    // Règles unitaires : elles servent aussi aux règles de section des
-    // horloges, mais à l'intérieur du package. Seul evaluateGeneralRules
-    // est public.
+    // Règles unitaires : elles servent aux points d'entrée, à l'intérieur du
+    // package. Seuls evaluateGeneralRules et evaluatePlacement sont publics.
     "checkMinCardCount",
     "checkMaxSum",
     "checkAscendingOrder",
+    "checkExactCardCount",
+    "checkSumInRange",
+    "checkFirstPlacements",
+    "compareViolations",
     // Outils de calcul sur la pose et le cadran.
     "clockwiseOrder",
     "placementsBySection",

@@ -56,3 +56,9 @@ export {
   DEFAULT_MAX_SUM,
   evaluateGeneralRules,
 } from "./general-rules/evaluate-general-rules.js";
+
+// Pose : une carte posée, et l'évaluation d'une pose proposée avant de
+// l'accepter (ADR 0009). Le serveur s'en sert pour refuser, le client pour
+// signaler les sections interdites (F-JEU-08).
+export type { Placement } from "./placements/placement.js";
+export { evaluatePlacement } from "./evaluation/evaluate-placement.js";
