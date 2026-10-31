@@ -49,8 +49,9 @@ function checkSectionRule(
 ): Violation | undefined {
   // Dans chaque case, TypeScript sait quelle règle on manipule : rule.params
   // a le bon type pour la fonction appelée. Pas de default : si une règle est
-  // ajoutée au schéma de cas sans être traitée ici, la fonction peut finir
-  // sans return et typecheck échoue.
+  // ajoutée au schéma de cas sans être traitée ici, le lint échoue
+  // (switch-exhaustiveness-check). TypeScript seul ne dirait rien, car la
+  // fonction a le droit de renvoyer undefined.
   switch (rule.kind) {
     case "minCardCount":
       return checkMinCardCount(section, placements, rule.params);

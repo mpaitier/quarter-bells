@@ -25,7 +25,7 @@ const SectionRuleCaseSchema = Type.Object(
     description: Type.String({ minLength: 1 }),
     // Les règles de section que le lanceur sait exécuter. Ajouter une règle
     // ici sans l'ajouter dans checkSectionRule (rule-cases.test.ts) fait
-    // échouer typecheck.
+    // échouer le lint.
     rule: Type.Union([
       MinCardCountSchema,
       MaxSumSchema,
