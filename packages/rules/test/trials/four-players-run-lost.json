@@ -1,0 +1,103 @@
+{
+  "description": "À 4 joueurs, un seul défaut (2 cartes au lieu de 3 en section 5) alors que le groupe a déjà 3 yeux bonus : la run est perdue",
+  "clock": "example-clock.json",
+  "turnOrder": ["ana", "ben", "cleo", "dan"],
+  "startSection": 4,
+  "seed": 31,
+  "bonusEyes": 3,
+  "eyeSettings": { "maxBonusEyes": 3 },
+  "steps": [
+    {
+      "player": "ana",
+      "card": { "family": "instant", "value": 12 },
+      "section": 3,
+      "faceUp": false
+    },
+    {
+      "player": "ben",
+      "card": { "family": "instant", "value": 3 },
+      "section": 0,
+      "faceUp": false
+    },
+    {
+      "player": "cleo",
+      "card": { "family": "eternity", "value": 1 },
+      "section": 5,
+      "faceUp": false
+    },
+    {
+      "player": "dan",
+      "card": { "family": "instant", "value": 5 },
+      "section": 2,
+      "faceUp": false
+    },
+    {
+      "player": "ana",
+      "card": { "family": "instant", "value": 9 },
+      "section": 1,
+      "faceUp": false
+    },
+    {
+      "player": "ben",
+      "card": { "family": "instant", "value": 6 },
+      "section": 2,
+      "faceUp": false
+    },
+    {
+      "player": "cleo",
+      "card": { "family": "instant", "value": 4 },
+      "section": 3,
+      "faceUp": false
+    },
+    {
+      "player": "dan",
+      "card": { "family": "eternity", "value": 4 },
+      "section": 4,
+      "faceUp": false
+    },
+    {
+      "player": "ana",
+      "card": { "family": "eternity", "value": 3 },
+      "section": 4,
+      "faceUp": false
+    },
+    {
+      "player": "ben",
+      "card": { "family": "eternity", "value": 6 },
+      "section": 0,
+      "faceUp": false
+    },
+    {
+      "player": "cleo",
+      "card": { "family": "instant", "value": 8 },
+      "section": 5,
+      "faceUp": false
+    },
+    {
+      "player": "dan",
+      "card": { "family": "eternity", "value": 7 },
+      "section": 3,
+      "faceUp": false
+    }
+  ],
+  "expected": {
+    "phase": "runLost",
+    "bonusEyesAfter": 3,
+    "sections": [
+      { "section": 4, "value": 7, "ascending": true },
+      { "section": 5, "value": 9, "ascending": true },
+      { "section": 0, "value": 9, "ascending": true },
+      { "section": 1, "value": 9, "ascending": true },
+      { "section": 2, "value": 11, "ascending": true },
+      { "section": 3, "value": 23, "ascending": true }
+    ],
+    "violations": [
+      {
+        "kind": "exactCardCount",
+        "params": { "count": 3 },
+        "section": 5,
+        "cardCount": 2
+      }
+    ]
+  }
+}

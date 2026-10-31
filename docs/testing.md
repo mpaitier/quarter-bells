@@ -71,7 +71,9 @@ Un seul test Vitest (`test/rule-cases.test.ts`) parcourt tous les fichiers du do
 
 Ce que le format JSON ne peut pas exprimer (une section de départ hors de l'horloge, par exemple, que le schéma de cas refuserait) se teste dans un fichier `.test.ts` classique.
 
-Les épreuves complètes, de la distribution à la résolution, sont testées de la même façon : une horloge, une graine, une suite de poses, un résultat attendu.
+Les épreuves complètes, de la distribution à la résolution, sont testées de la même façon : une horloge, une graine, une suite de poses, un résultat attendu. Chaque fichier de `test/trials/` nomme une horloge de `test/fixtures/clocks/`, la configuration de l'épreuve (ordre de passage, section de départ, graine, yeux) et les poses tentées. Une carte y est désignée par sa famille et sa valeur, puisque son identifiant est tiré au hasard à la distribution. Une pose qui porte `rejected` doit être refusée pour cette raison ; les autres doivent être acceptées. `expected` décrit l'épreuve résolue : phase, yeux bonus après l'épreuve, sections dans l'ordre de révélation et violations. Le lanceur (`test/trial-cases.test.ts`) valide chaque fichier avec le schéma de `test/support/trial-case.ts`.
+
+Les résultats attendus ne sont pas recopiés du moteur, ce qui ne prouverait rien : ils sont calculés à part (à la main, ou par un script indépendant), puis comparés à ce que produit le moteur.
 
 ### Tests de propriétés
 
@@ -130,9 +132,13 @@ packages/rules/
     cases/                  cas de règles en JSON
       minCardCount/
         fails-below-minimum.json
+    trials/                 épreuves complètes en JSON
+      two-players-success.json
     support/                schémas et utilitaires des tests
       rule-case.ts
+      trial-case.ts
     rule-cases.test.ts      lanceur des cas JSON
+    trial-cases.test.ts     lanceur des épreuves complètes
     properties/             tests de propriétés
 apps/server/
   test/

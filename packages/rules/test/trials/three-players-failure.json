@@ -1,0 +1,119 @@
+{
+  "description": "À 3 joueurs, l'épreuve échoue sur un seul défaut d'ordre croissant : un œil bonus est gagné ; la première pose ailleurs qu'en section 0 et une pose face visible sans œil sont refusées",
+  "clock": "players-choice-clock.json",
+  "turnOrder": ["ana", "ben", "cleo"],
+  "startSection": 3,
+  "seed": 2026,
+  "bonusEyes": 1,
+  "eyeSettings": { "maxBonusEyes": 3, "baseEyesCap": 0 },
+  "steps": [
+    {
+      "player": "ana",
+      "card": { "family": "instant", "value": 8 },
+      "section": 3,
+      "faceUp": false,
+      "rejected": "ruleViolation"
+    },
+    {
+      "player": "ana",
+      "card": { "family": "instant", "value": 8 },
+      "section": 0,
+      "faceUp": false
+    },
+    {
+      "player": "ben",
+      "card": { "family": "instant", "value": 2 },
+      "section": 0,
+      "faceUp": false
+    },
+    {
+      "player": "cleo",
+      "card": { "family": "eternity", "value": 10 },
+      "section": 0,
+      "faceUp": false
+    },
+    {
+      "player": "ana",
+      "card": { "family": "eternity", "value": 5 },
+      "section": 2,
+      "faceUp": false
+    },
+    {
+      "player": "ben",
+      "card": { "family": "eternity", "value": 12 },
+      "section": 1,
+      "faceUp": false
+    },
+    {
+      "player": "cleo",
+      "card": { "family": "instant", "value": 5 },
+      "section": 5,
+      "faceUp": false
+    },
+    {
+      "player": "ana",
+      "card": { "family": "eternity", "value": 8 },
+      "section": 4,
+      "faceUp": false
+    },
+    {
+      "player": "ben",
+      "card": { "family": "instant", "value": 9 },
+      "section": 1,
+      "faceUp": false
+    },
+    {
+      "player": "cleo",
+      "card": { "family": "instant", "value": 7 },
+      "section": 2,
+      "faceUp": false
+    },
+    {
+      "player": "ana",
+      "card": { "family": "eternity", "value": 7 },
+      "section": 3,
+      "faceUp": true
+    },
+    {
+      "player": "ben",
+      "card": { "family": "instant", "value": 3 },
+      "section": 4,
+      "faceUp": true,
+      "rejected": "noEyeLeft"
+    },
+    {
+      "player": "ben",
+      "card": { "family": "instant", "value": 3 },
+      "section": 4,
+      "faceUp": false
+    },
+    {
+      "player": "cleo",
+      "card": { "family": "instant", "value": 12 },
+      "section": 2,
+      "faceUp": false
+    }
+  ],
+  "expected": {
+    "phase": "failed",
+    "bonusEyesAfter": 2,
+    "sections": [
+      { "section": 3, "value": 7, "ascending": true },
+      { "section": 4, "value": 11, "ascending": true },
+      { "section": 5, "value": 5, "ascending": false },
+      { "section": 0, "value": 20, "ascending": true },
+      { "section": 1, "value": 21, "ascending": true },
+      { "section": 2, "value": 24, "ascending": true }
+    ],
+    "violations": [
+      {
+        "kind": "ascendingOrder",
+        "params": {},
+        "section": 5,
+        "value": 5,
+        "previousSection": 4,
+        "previousValue": 11
+      }
+    ]
+  }
+}
