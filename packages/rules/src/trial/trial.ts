@@ -7,6 +7,7 @@
 // tour vient du nombre de poses, les yeux disponibles des yeux dépensés.
 // Une seule source de vérité, donc pas d'incohérence possible.
 
+import { requireAt } from "../arrays/require-at.js";
 import type { Card } from "../cards/card.js";
 import type { Clock } from "../clocks/clock.js";
 import type { ResolutionReport } from "../evaluation/evaluate-resolution.js";
@@ -72,13 +73,9 @@ export type Trial = PlacingTrial | ResolvedTrial;
  * dans l'ordre de passage : le rang de la prochaine pose suffit à le trouver.
  */
 export function currentSeat(trial: PlacingTrial): Seat {
-  const seat = trial.seats[trial.placements.length % trial.seats.length];
-  // createTrial garantit au moins 2 joueurs : l'index est toujours valide,
-  // mais un index de tableau est typé « peut-être undefined ».
-  if (seat === undefined) {
-    throw new Error("Trial has no seat");
-  }
-  return seat;
+  // createTrial garantit au moins 2 joueurs : le modulo donne toujours un
+  // index valide.
+  return requireAt(trial.seats, trial.placements.length % trial.seats.length);
 }
 
 /**

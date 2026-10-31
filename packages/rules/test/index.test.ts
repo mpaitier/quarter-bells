@@ -112,6 +112,7 @@ describe("public API", () => {
     "currentSeat",
     "computeBaseEyes",
     "isSectionIndex",
+    "requireAt",
     // Outils de calcul sur la pose et le cadran.
     "clockwiseOrder",
     "placementsBySection",

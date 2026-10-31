@@ -1,4 +1,5 @@
 import type { Static } from "typebox";
+import { requireAt } from "../arrays/require-at.js";
 import { clockwiseOrder } from "../clocks/clockwise-order.js";
 import type { AscendingOrderSchema } from "../clocks/rule-schemas.js";
 import { placementsBySection, sectionValue } from "../placements/by-section.js";
@@ -40,9 +41,8 @@ export function checkAscendingOrder(
 
   for (const section of clockwiseOrder(startSection)) {
     // clockwiseOrder ne renvoie que des index valides et placementsBySection
-    // a toujours SECTION_COUNT cases : le ?? [] ne sert qu'à satisfaire
-    // noUncheckedIndexedAccess, il ne peut pas se produire.
-    const value = sectionValue(bySection[section] ?? []);
+    // a toujours SECTION_COUNT cases : requireAt ne peut pas lever ici.
+    const value = sectionValue(requireAt(bySection, section));
 
     // Comparaison au voisin immédiat, pas au maximum vu jusque-là : avec
     // 5, 3, 4, seule la section à 3 est fautive.

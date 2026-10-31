@@ -1,3 +1,4 @@
+import { requireAt } from "../arrays/require-at.js";
 import { dealTrialCards } from "../cards/deal.js";
 import type { Clock } from "../clocks/clock.js";
 import { isSectionIndex } from "../clocks/section.js";
@@ -45,15 +46,9 @@ export function createTrial(setup: TrialSetup): PlacingTrial {
   // dealTrialCards vérifie le nombre de joueurs, createSeededRng la graine.
   const lots = dealTrialCards(turnOrder.length, createSeededRng(seed));
   const seats: Seat[] = turnOrder.map((player, position) => {
-    const lot = lots[position];
-    // dealTrialCards renvoie exactement un lot par joueur : impossible, mais
-    // l'index d'un tableau est typé « peut-être undefined ».
-    if (lot === undefined) {
-      throw new Error(
-        `No dealt cards for player at position ${String(position)}`,
-      );
-    }
-    return { player, hand: lot.hand, reserve: lot.reserve };
+    // dealTrialCards renvoie exactement un lot par joueur.
+    const { hand, reserve } = requireAt(lots, position);
+    return { player, hand, reserve };
   });
 
   return {

@@ -177,7 +177,7 @@ Un fichier de test sépare ce qui se vérifie à la compilation (`expectTypeOf`,
 | `apps/server`       | 80 %                                   |
 | `apps/web`          | pas de seuil                           |
 
-La couverture est un indicateur, pas un objectif. Un code couvert à 100 % par des tests sans assertion utile ne prouve rien. Ces seuils servent à repérer le code oublié, et la CI échoue s'ils ne sont pas atteints. Une branche impossible à atteindre, présente seulement pour satisfaire le compilateur, n'a pas à être couverte : un commentaire explique pourquoi elle ne peut pas se produire.
+La couverture est un indicateur, pas un objectif. Un code couvert à 100 % par des tests sans assertion utile ne prouve rien. Ces seuils servent à repérer le code oublié, et la CI échoue s'ils ne sont pas atteints. Une branche impossible à atteindre, présente seulement pour satisfaire le compilateur, ne doit pas exister. Le cas le plus courant est un index de tableau que le code sait valide, mais que `noUncheckedIndexedAccess` type « peut-être `undefined` » : dans `packages/rules`, il passe par `requireAt` (`src/arrays/require-at.ts`), qui lève une `RangeError` et qui est testé une fois pour toutes. Si une branche impossible reste inévitable, un commentaire explique pourquoi elle ne peut pas se produire.
 
 ## Intégration continue
 
