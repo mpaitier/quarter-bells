@@ -1,9 +1,5 @@
-import {
-  SECTION_COUNT,
-  type Clock,
-  type ClockRule,
-  type SectionRule,
-} from "../clocks/clock.js";
+import type { Clock, ClockRule, SectionRule } from "../clocks/clock.js";
+import { isSectionIndex } from "../clocks/section.js";
 import { GENERAL_MAX_SUM } from "../general-rules/evaluate-general-rules.js";
 import type { Placement } from "../placements/placement.js";
 import { checkFirstPlacements } from "../rule-checks/first-placements.js";
@@ -45,11 +41,7 @@ export function evaluatePlacement(
   // Le type promet un index valide, mais seulement si la commande a été
   // validée. Une section inexistante produirait une violation fausse
   // (attemptedSection hors du cadran) : mieux vaut échouer ici.
-  const isValidSection =
-    Number.isInteger(candidate.sectionIndex) &&
-    candidate.sectionIndex >= 0 &&
-    candidate.sectionIndex < SECTION_COUNT;
-  if (!isValidSection) {
+  if (!isSectionIndex(candidate.sectionIndex)) {
     throw new RangeError(
       `Candidate targets an unknown section: ${String(candidate.sectionIndex)}`,
     );
