@@ -23,6 +23,17 @@ export default defineConfig([
     },
   },
 
+  // Un switch sur une union (le kind d'une règle, par exemple) doit traiter
+  // chaque cas. Sans cette règle, TypeScript accepte qu'un case manque dès que
+  // la fonction peut renvoyer undefined : le kind oublié passerait en silence.
+  // Réservée aux fichiers TypeScript : elle a besoin des types.
+  {
+    files: ["**/*.ts"],
+    rules: {
+      "@typescript-eslint/switch-exhaustiveness-check": "error",
+    },
+  },
+
   // Les fichiers JavaScript (cette config) n'appartiennent à aucun projet TypeScript.
   {
     files: ["**/*.js"],

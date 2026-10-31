@@ -1,0 +1,29 @@
+{
+  "description": "firstPlacements refuse la deuxième pose devant une autre section quand le rang 1 est listé",
+  "rule": {
+    "kind": "firstPlacements",
+    "params": { "placementIndexes": [0, 1] }
+  },
+  "section": 0,
+  "placements": [
+    {
+      "sectionIndex": 0,
+      "card": { "family": "instant", "value": 4 },
+      "faceUp": false
+    }
+  ],
+  "candidate": {
+    "sectionIndex": 3,
+    "card": { "family": "instant", "value": 9 },
+    "faceUp": false
+  },
+  "expected": [
+    {
+      "kind": "firstPlacements",
+      "params": { "placementIndexes": [0, 1] },
+      "section": 0,
+      "placementIndex": 1,
+      "attemptedSection": 3
+    }
+  ]
+}

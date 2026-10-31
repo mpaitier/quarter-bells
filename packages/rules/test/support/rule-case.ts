@@ -2,15 +2,20 @@
 // Chaque fichier est validé avec ce schéma avant d'être exécuté : un cas
 // mal écrit fait échouer le lanceur au lieu de passer en silence.
 //
-// Deux formes de cas : les règles de section indiquent la section vérifiée
-// (section), les règles d'horloge indiquent la section de départ du parcours
-// (startSection). additionalProperties: false rend les deux exclusives : un
-// cas qui porterait les deux champs est refusé.
+// Trois formes de cas :
+// - règle de section, évaluée à la Résolution : la section vérifiée (section) ;
+// - règle d'horloge, évaluée à la Résolution : la section de départ du
+//   parcours (startSection) ;
+// - contrainte de pose, évaluée pendant la Pose : la section qui porte la
+//   règle (section) et la pose proposée (candidate).
+// additionalProperties: false rend les formes exclusives : un cas qui
+// porterait à la fois startSection et candidate est refusé.
 
 import Type, { type Static } from "typebox";
 import {
   AscendingOrderSchema,
   ExactCardCountSchema,
+  FirstPlacementsSchema,
   MaxSumSchema,
   MinCardCountSchema,
   SumInRangeSchema,
@@ -25,7 +30,7 @@ const SectionRuleCaseSchema = Type.Object(
     description: Type.String({ minLength: 1 }),
     // Les règles de section que le lanceur sait exécuter. Ajouter une règle
     // ici sans l'ajouter dans checkSectionRule (rule-cases.test.ts) fait
-    // échouer typecheck.
+    // échouer le lint.
     rule: Type.Union([
       MinCardCountSchema,
       MaxSumSchema,
@@ -61,9 +66,30 @@ const ClockRuleCaseSchema = Type.Object(
   { additionalProperties: false },
 );
 
+/** Cas d'une contrainte de pose : la pose proposée est-elle refusée ? */
+const PlacementConstraintCaseSchema = Type.Object(
+  {
+    description: Type.String({ minLength: 1 }),
+    // Une seule contrainte de pose exécutable pour l'instant, comme pour les
+    // règles d'horloge : en ajouter une imposera un switch dans le lanceur.
+    rule: FirstPlacementsSchema,
+    // La section qui porte la règle.
+    section: SectionIndexSchema,
+    // La pose déjà faite, dans l'ordre des poses. Sa longueur donne le rang
+    // de la pose proposée.
+    placements: Type.Array(PlacementSchema),
+    // La pose proposée, pas encore acceptée.
+    candidate: PlacementSchema,
+    // Violations attendues. Liste vide : la pose est acceptée.
+    expected: Type.Array(ViolationSchema),
+  },
+  { additionalProperties: false },
+);
+
 export const RuleCaseSchema = Type.Union([
   SectionRuleCaseSchema,
   ClockRuleCaseSchema,
+  PlacementConstraintCaseSchema,
 ]);
 export type RuleCase = Static<typeof RuleCaseSchema>;
 

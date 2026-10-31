@@ -55,6 +55,16 @@ const validSumInRange = {
   value: 11,
 };
 
+// Violation firstPlacements valide : la première pose de l'épreuve devait
+// aller en section 0, le joueur a choisi la section 3.
+const validFirstPlacements = {
+  kind: "firstPlacements",
+  params: { placementIndexes: [0, 1] },
+  section: 0,
+  placementIndex: 0,
+  attemptedSection: 3,
+};
+
 describe("ViolationSchema", () => {
   describe("minCardCount", () => {
     it("accepts a well-formed violation", () => {
@@ -175,6 +185,29 @@ describe("ViolationSchema", () => {
       const withoutValue: Record<string, unknown> = { ...validSumInRange };
       delete withoutValue.value;
       expect(Value.Check(ViolationSchema, withoutValue)).toBe(false);
+    });
+  });
+
+  describe("firstPlacements", () => {
+    it("accepts a well-formed violation", () => {
+      expect(Value.Check(ViolationSchema, validFirstPlacements)).toBe(true);
+    });
+
+    it("rejects an attempted section outside the clock", () => {
+      // La section choisie par le joueur est une vraie section : 0 à 5.
+      expect(
+        Value.Check(ViolationSchema, {
+          ...validFirstPlacements,
+          attemptedSection: 6,
+        }),
+      ).toBe(false);
+    });
+
+    it("rejects a violation without placementIndex", () => {
+      // Sans le rang, le client ne peut pas dire quelle pose était imposée.
+      const withoutRank: Record<string, unknown> = { ...validFirstPlacements };
+      delete withoutRank.placementIndex;
+      expect(Value.Check(ViolationSchema, withoutRank)).toBe(false);
     });
   });
 });
