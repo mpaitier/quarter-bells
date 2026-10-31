@@ -179,4 +179,35 @@ describe("parseClock", () => {
     };
     expect(issuesOf(input)).toHaveLength(2);
   });
+
+  // Contrôle sémantique de sumInRange (checkSemantics) : min <= max.
+  // La liste plus haut vérifie que min > max est refusé ; ces deux tests
+  // fixent la borne exacte du contrôle.
+  describe("sumInRange bounds", () => {
+    it("accepts min equal to max", () => {
+      // Égalité : la section doit valoir exactement cette valeur. Si le
+      // contrôle utilisait >= au lieu de >, ce test échouerait.
+      const clock = withSectionRule(0, {
+        kind: "sumInRange",
+        params: { min: 7, max: 7 },
+      });
+      expect(parseClock(clock, "equal-bounds.json")).toEqual(clock);
+    });
+
+    it("reports min greater than max as a single semantic issue", () => {
+      // toEqual sur la liste entière, pas seulement sur le chemin : on vérifie
+      // que l'erreur vient bien du contrôle sémantique, et que le schéma n'en
+      // a pas signalé d'autre au même endroit.
+      const clock = withSectionRule(0, {
+        kind: "sumInRange",
+        params: { min: 8, max: 7 },
+      });
+      expect(issuesOf(clock)).toEqual([
+        {
+          path: "/sections/0/rules/0/params",
+          message: "min must be less than or equal to max",
+        },
+      ]);
+    });
+  });
 });
