@@ -177,3 +177,12 @@ const KIND_RANK: Record<Violation["kind"], number> = {
 export function compareViolations(a: Violation, b: Violation): number {
   return KIND_RANK[a.kind] - KIND_RANK[b.kind] || a.section - b.section;
 }
+
+/**
+ * Une violation éventuelle, sous forme de liste : vide si aucune. Les points
+ * d'entrée accumulent des listes, les vérifications renvoient une violation
+ * ou undefined.
+ */
+export function listOf(violation: Violation | undefined): Violation[] {
+  return violation === undefined ? [] : [violation];
+}

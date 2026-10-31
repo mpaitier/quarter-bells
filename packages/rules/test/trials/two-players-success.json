@@ -1,0 +1,110 @@
+{
+  "description": "À 2 joueurs, l'épreuve réussit : la réserve rejoint la main après 4 poses, un œil est dépensé, et les yeux bonus sont remis à zéro",
+  "clock": "example-clock.json",
+  "turnOrder": ["ana", "ben"],
+  "startSection": 4,
+  "seed": 7,
+  "bonusEyes": 2,
+  "eyeSettings": { "maxBonusEyes": 3 },
+  "steps": [
+    {
+      "player": "ben",
+      "card": { "family": "instant", "value": 5 },
+      "section": 0,
+      "faceUp": false,
+      "rejected": "notYourTurn"
+    },
+    {
+      "player": "ana",
+      "card": { "family": "eternity", "value": 3 },
+      "section": 0,
+      "faceUp": false,
+      "rejected": "cardNotInHand"
+    },
+    {
+      "player": "ana",
+      "card": { "family": "eternity", "value": 1 },
+      "section": 5,
+      "faceUp": true
+    },
+    {
+      "player": "ben",
+      "card": { "family": "instant", "value": 5 },
+      "section": 4,
+      "faceUp": false
+    },
+    {
+      "player": "ana",
+      "card": { "family": "eternity", "value": 9 },
+      "section": 2,
+      "faceUp": false
+    },
+    {
+      "player": "ben",
+      "card": { "family": "instant", "value": 4 },
+      "section": 3,
+      "faceUp": false
+    },
+    {
+      "player": "ana",
+      "card": { "family": "instant", "value": 9 },
+      "section": 2,
+      "faceUp": false
+    },
+    {
+      "player": "ben",
+      "card": { "family": "eternity", "value": 5 },
+      "section": 4,
+      "faceUp": false
+    },
+    {
+      "player": "ana",
+      "card": { "family": "instant", "value": 10 },
+      "section": 0,
+      "faceUp": false
+    },
+    {
+      "player": "ben",
+      "card": { "family": "instant", "value": 7 },
+      "section": 3,
+      "faceUp": false
+    },
+    {
+      "player": "ana",
+      "card": { "family": "eternity", "value": 3 },
+      "section": 5,
+      "faceUp": false
+    },
+    {
+      "player": "ben",
+      "card": { "family": "instant", "value": 6 },
+      "section": 5,
+      "faceUp": false
+    },
+    {
+      "player": "ana",
+      "card": { "family": "eternity", "value": 10 },
+      "section": 1,
+      "faceUp": false
+    },
+    {
+      "player": "ben",
+      "card": { "family": "instant", "value": 11 },
+      "section": 3,
+      "faceUp": false
+    }
+  ],
+  "expected": {
+    "phase": "succeeded",
+    "bonusEyesAfter": 0,
+    "sections": [
+      { "section": 4, "value": 10, "ascending": true },
+      { "section": 5, "value": 10, "ascending": true },
+      { "section": 0, "value": 10, "ascending": true },
+      { "section": 1, "value": 10, "ascending": true },
+      { "section": 2, "value": 18, "ascending": true },
+      { "section": 3, "value": 22, "ascending": true }
+    ],
+    "violations": []
+  }
+}

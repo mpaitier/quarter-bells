@@ -62,3 +62,35 @@ export {
 // signaler les sections interdites (F-JEU-08).
 export type { Placement } from "./placements/placement.js";
 export { evaluatePlacement } from "./evaluation/evaluate-placement.js";
+
+// Résolution : forme du rapport, que le serveur envoie dans TrialResolved.
+// L'évaluation elle-même est déclenchée par la dernière pose d'une épreuve.
+export type {
+  ResolutionReport,
+  SectionReveal,
+} from "./evaluation/evaluate-resolution.js";
+
+// Épreuve : création et actions, sur le modèle du reducer (ADR 0010).
+export { createTrial, type TrialSetup } from "./trial/create-trial.js";
+export {
+  applyTrialAction,
+  type PlaceCardAction,
+  type TrialAction,
+  type TrialRejection,
+  type TrialResult,
+} from "./trial/apply-trial-action.js";
+export {
+  currentPlayer,
+  type PlacingTrial,
+  type PlayerId,
+  type ResolvedTrial,
+  type Seat,
+  type Trial,
+  type TrialPlacement,
+} from "./trial/trial.js";
+export {
+  MAX_BONUS_EYES,
+  availableEyes,
+  type EyeSettings,
+  type Eyes,
+} from "./trial/eyes.js";

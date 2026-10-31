@@ -1,15 +1,15 @@
-import {
-  SECTION_COUNT,
-  type Clock,
-  type ClockRule,
-  type SectionRule,
-} from "../clocks/clock.js";
+import type { Clock, ClockRule, SectionRule } from "../clocks/clock.js";
+import { isSectionIndex } from "../clocks/section.js";
 import { GENERAL_MAX_SUM } from "../general-rules/evaluate-general-rules.js";
 import type { Placement } from "../placements/placement.js";
 import { checkFirstPlacements } from "../rule-checks/first-placements.js";
 import { checkMaxSumAtPlacement } from "../rule-checks/max-sum.js";
 import { checkSumInRangeAtPlacement } from "../rule-checks/sum-in-range.js";
-import { compareViolations, type Violation } from "../rule-checks/violation.js";
+import {
+  compareViolations,
+  listOf,
+  type Violation,
+} from "../rule-checks/violation.js";
 
 /**
  * Évalue une pose proposée pendant la Pose, avant de l'accepter (ADR 0009).
@@ -41,11 +41,7 @@ export function evaluatePlacement(
   // Le type promet un index valide, mais seulement si la commande a été
   // validée. Une section inexistante produirait une violation fausse
   // (attemptedSection hors du cadran) : mieux vaut échouer ici.
-  const isValidSection =
-    Number.isInteger(candidate.sectionIndex) &&
-    candidate.sectionIndex >= 0 &&
-    candidate.sectionIndex < SECTION_COUNT;
-  if (!isValidSection) {
+  if (!isSectionIndex(candidate.sectionIndex)) {
     throw new RangeError(
       `Candidate targets an unknown section: ${String(candidate.sectionIndex)}`,
     );
@@ -155,9 +151,4 @@ function clockRuleAtPlacement(
         ),
       );
   }
-}
-
-/** Une violation éventuelle, sous forme de liste : vide si aucune. */
-function listOf(violation: Violation | undefined): Violation[] {
-  return violation === undefined ? [] : [violation];
 }
