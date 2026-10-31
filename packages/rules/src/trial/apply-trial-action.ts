@@ -3,6 +3,7 @@ import { isSectionIndex } from "../clocks/section.js";
 import { evaluatePlacement } from "../evaluation/evaluate-placement.js";
 import type { Violation } from "../rule-checks/violation.js";
 import { availableEyes } from "./eyes.js";
+import { isPlacementComplete, resolveTrial } from "./resolve-trial.js";
 import {
   currentSeat,
   type PlacingTrial,
@@ -116,7 +117,13 @@ function placeCard(trial: Trial, action: PlaceCardAction): TrialResult {
     return reject({ reason: "ruleViolation", violations });
   }
 
-  return { accepted: true, trial: withPlacement(trial, seat, placement) };
+  // La dernière pose déclenche la Résolution, dans la même action : il n'y a
+  // pas d'état intermédiaire « toutes les cartes posées, pas encore résolue ».
+  const next = withPlacement(trial, seat, placement);
+  return {
+    accepted: true,
+    trial: isPlacementComplete(next) ? resolveTrial(next) : next,
+  };
 }
 
 /** Nouvelle épreuve, après une pose acceptée. */
