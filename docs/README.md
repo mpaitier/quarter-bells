@@ -44,6 +44,7 @@ Point d'entrée de la documentation. À ouvrir en premier en revenant sur le pro
 | 0007                                                         | Vocal et vidéo en WebRTC                 | à rédiger avant le J5 |
 | [0008](adr/0008-validation-des-horloges.md)                  | Validation des horloges                  | Accepté               |
 | [0009](adr/0009-evaluer-une-pose-avant-de-l-accepter.md)     | Évaluer une pose avant de l'accepter     | Accepté               |
+| [0010](adr/0010-faire-jouer-une-epreuve-avec-un-reducer.md)  | Faire jouer une épreuve avec un reducer  | Accepté               |
 
 Nouveau ADR : partir de [template.md](adr/template.md).
 
