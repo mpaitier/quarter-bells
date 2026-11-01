@@ -241,6 +241,138 @@ describe("applyTrialAction / placeCard", () => {
     });
   });
 
+  // ADR 0011 : une borne haute connue guide sans bloquer. Scénario de jeu
+  // réaliste, sous le plafond général de 24 : ana et ben posent face visible
+  // leurs plus fortes cartes en section 1, qui vaut alors 21 aux yeux de
+  // tous. Avec la graine 6, cleo n'a que des cartes de 5 ou plus : chacune
+  // ferait dépasser 24 en section 1.
+  describe("known upper bounds", () => {
+    /**
+     * Horloge sans règle, ou avec la 3e pose (rang 2) imposée en section 1.
+     * Aucune borne sur la section 1 en dehors du plafond général, comme
+     * l'exigent les règles de conception (clock-format.md).
+     */
+    const clockWith = (rules: unknown[]) =>
+      parseClock(
+        {
+          ...exampleClock,
+          noMaxSum: false,
+          defaultStartSection: 0,
+          sections: exampleClock.sections.map((section) => ({
+            ...section,
+            rules: section.index === 1 ? rules : [],
+          })),
+        },
+        "known-bound.json",
+      );
+
+    /** Le joueur du tour pose cette carte de sa main. */
+    const place = (
+      trial: PlacingTrial,
+      family: Card["family"],
+      value: Card["value"],
+      sectionIndex: number,
+      faceUp = false,
+    ): PlaceCardAction => {
+      const card = currentSeat(trial).hand.find(
+        (candidate) => candidate.family === family && candidate.value === value,
+      );
+      if (card === undefined) {
+        throw new Error(
+          `${currentSeat(trial).player} does not hold ${family} ${String(value)}`,
+        );
+      }
+      return {
+        type: "placeCard",
+        player: currentSeat(trial).player,
+        cardId: card.id,
+        sectionIndex,
+        faceUp,
+      };
+    };
+
+    /** L'épreuve après les poses d'ana (Instant 11) et de ben (Éternité 10). */
+    const afterTwentyOne = (rules: unknown[]): PlacingTrial => {
+      let trial = createTrial({
+        ...setup,
+        clock: clockWith(rules),
+        startSection: 0,
+        seed: 6,
+      });
+      trial = acceptedTrial(
+        applyTrialAction(trial, place(trial, "instant", 11, 1, true)),
+      );
+      return acceptedTrial(
+        applyTrialAction(trial, place(trial, "eternity", 10, 1, true)),
+      );
+    };
+
+    const thirdPlacementOnSection1 = [
+      { kind: "firstPlacements", params: { placementIndexes: [2] } },
+    ];
+
+    it("starts with 21 on section 1 and no card below 4 for cleo", () => {
+      // Garde-fou : si la distribution changeait, les tests suivants ne
+      // vérifieraient plus ce qu'ils annoncent.
+      const trial = afterTwentyOne([]);
+      expect(currentPlayer(trial)).toBe("cleo");
+      for (const card of currentSeat(trial).hand) {
+        expect(21 + card.value).toBeGreaterThan(24);
+      }
+    });
+
+    it("rejects a placement over a known bound when another one is permitted", () => {
+      // Sans pose imposée, cleo peut jouer ailleurs : le refus la guide.
+      const trial = afterTwentyOne([]);
+      expect(applyTrialAction(trial, place(trial, "eternity", 5, 1))).toEqual({
+        accepted: false,
+        rejection: {
+          reason: "ruleViolation",
+          violations: [
+            { kind: "maxSum", params: { max: 24 }, section: 1, value: 26 },
+          ],
+        },
+      });
+    });
+
+    describe("when the placement is required on that section", () => {
+      // La 3e pose doit aller en section 1, et aucune carte de cleo n'y
+      // tient sous 24 : aucune pose n'est entièrement permise.
+
+      it("accepts a placement that only breaks a known bound", () => {
+        // Sans cette exception, cleo ne pourrait rien poser et la partie
+        // resterait figée. La section dépassera 24 : l'épreuve échouera à
+        // la Résolution.
+        const trial = afterTwentyOne(thirdPlacementOnSection1);
+        expect(
+          applyTrialAction(trial, place(trial, "eternity", 5, 1)).accepted,
+        ).toBe(true);
+      });
+
+      it("still rejects a placement that breaks a placement constraint", () => {
+        // La section 3 ne dépasse rien, mais la pose imposée ne cède jamais.
+        const trial = afterTwentyOne(thirdPlacementOnSection1);
+        expect(applyTrialAction(trial, place(trial, "eternity", 5, 3))).toEqual(
+          {
+            accepted: false,
+            rejection: {
+              reason: "ruleViolation",
+              violations: [
+                {
+                  kind: "firstPlacements",
+                  params: { placementIndexes: [2] },
+                  section: 1,
+                  placementIndex: 2,
+                  attemptedSection: 3,
+                },
+              ],
+            },
+          },
+        );
+      });
+    });
+  });
+
   describe("reserve at 2 players", () => {
     const twoPlayers = createTrial({ ...setup, turnOrder: ["ana", "ben"] });
 

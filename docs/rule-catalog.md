@@ -91,3 +91,4 @@ Idées pour concevoir des horloges originales. Chacune doit être validée par u
   - Une section vide n'a aucune carte cachée : sa valeur publique est 0. Une carte qui dépasse à elle seule une borne haute y est donc refusée.
   - Le moteur ne sait pas qui a posé une carte : une carte cachée désactive la vérification quel que soit son auteur.
   - La violation est la même qu'à la Résolution (`maxSum` ou `sumInRange`). Sa `value` est la valeur qu'aurait la section avec la carte proposée.
+  - Une borne connue guide sans bloquer ([ADR 0011](adr/0011-une-borne-connue-guide-sans-bloquer.md)) : si le joueur n'a aucune pose entièrement permise, une pose refusée seulement par des bornes connues est acceptée. Les contraintes de pose comme `firstPlacements` ne cèdent jamais. `isKnownBoundViolation` dit quelles violations peuvent céder.
