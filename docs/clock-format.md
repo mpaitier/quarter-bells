@@ -113,7 +113,7 @@ packages/rules/clocks/
 - **uid** : `chNN-clkI`, où `NN` est le chapitre sur deux chiffres et `I` la position dans le chapitre (`indexInChapter`, de 0 à 3). L'uid se déduit donc de `chapter` et `indexInChapter`.
 - **Fichier** : `chNN/<uid>.json`. Le nom du fichier est l'uid, le dossier est le chapitre.
 - **Règles générales** : une horloge ne réécrit pas `ascendingOrder` dans `clockRules`. La règle s'applique déjà à toute épreuve ; la répéter ne change rien au jeu et laisse croire qu'elle est propre à l'horloge.
-- **Réussite possible** : chaque horloge a une pose gagnante connue, rejouée par un test.
+- **Réussite possible** : chaque horloge a une pose gagnante connue dans `packages/rules/test/clock-solutions/`, au même chemin, rejouée par `test/clocks/clock-solutions.test.ts` (voir la [stratégie de tests](testing.md)).
 
 `test/clocks/game-clocks.test.ts` vérifie ces conventions sur toutes les horloges du dossier. Les horloges de `test/fixtures/clocks/` ne servent qu'aux tests du moteur : leur uid commence par `fixture-` pour ne jamais être confondu avec celui d'une horloge du jeu.
 
