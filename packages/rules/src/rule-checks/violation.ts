@@ -30,7 +30,8 @@ export const MinCardCountViolationSchema = Type.Object(
     // kind et params viennent du schéma de la règle : une seule définition.
     ...MinCardCountSchema.properties,
     section: SectionIndexSchema,
-    // Nombre de cartes réellement posées.
+    // Nombre de cartes comptées : celles de params.family si elle est
+    // précisée, toutes sinon. Même convention qu'exactCardCount.
     cardCount: Type.Integer({ minimum: 0 }),
   },
   { additionalProperties: false },

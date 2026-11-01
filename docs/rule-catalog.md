@@ -19,14 +19,14 @@ Ces types sont nécessaires pour reproduire les mécaniques décrites dans les r
 
 Le plafond et la section de départ ne sont pas des règles : ce sont des propriétés de l'horloge (`noMaxSum`, `startSectionMode`, `defaultStartSection`), voir le [format des horloges](clock-format.md).
 
-| Type              | Portée             | Nature                       | Paramètres         | Signification                                                                                                                              |
-| ----------------- | ------------------ | ---------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `minCardCount`    | section            | réussite                     | `min`              | Au moins `min` cartes devant la section. Règle générale avec `min = 1` sur chaque section.                                                 |
-| `ascendingOrder`  | horloge            | réussite                     | —                  | La valeur de chaque section est supérieure ou égale à la précédente, à partir de la section de départ. Règle générale.                     |
-| `maxSum`          | section ou horloge | réussite, pose (borne haute) | `max`              | Valeur de la section inférieure ou égale à `max`. Règle générale avec `max = 24`.                                                          |
-| `exactCardCount`  | section            | réussite                     | `count`, `family?` | Exactement `count` cartes devant la section, d'une famille donnée ou toutes familles confondues.                                           |
-| `sumInRange`      | section            | réussite, pose (borne haute) | `min`, `max`       | Valeur de la section comprise entre `min` et `max`, bornes incluses.                                                                       |
-| `firstPlacements` | section            | pose                         | `placementIndexes` | Les poses de rang indiqué (par exemple la 1re et la 2e) doivent se faire devant cette section. D'autres poses y restent possibles ensuite. |
+| Type              | Portée             | Nature                       | Paramètres         | Signification                                                                                                                                  |
+| ----------------- | ------------------ | ---------------------------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `minCardCount`    | section            | réussite                     | `min`, `family?`   | Au moins `min` cartes devant la section, d'une famille donnée ou toutes familles confondues. Règle générale avec `min = 1` sur chaque section. |
+| `ascendingOrder`  | horloge            | réussite                     | —                  | La valeur de chaque section est supérieure ou égale à la précédente, à partir de la section de départ. Règle générale.                         |
+| `maxSum`          | section ou horloge | réussite, pose (borne haute) | `max`              | Valeur de la section inférieure ou égale à `max`. Règle générale avec `max = 24`.                                                              |
+| `exactCardCount`  | section            | réussite                     | `count`, `family?` | Exactement `count` cartes devant la section, d'une famille donnée ou toutes familles confondues.                                               |
+| `sumInRange`      | section            | réussite, pose (borne haute) | `min`, `max`       | Valeur de la section comprise entre `min` et `max`, bornes incluses.                                                                           |
+| `firstPlacements` | section            | pose                         | `placementIndexes` | Les poses de rang indiqué (par exemple la 1re et la 2e) doivent se faire devant cette section. D'autres poses y restent possibles ensuite.     |
 
 ### Paramètres
 
@@ -35,6 +35,7 @@ Les bornes sont vérifiées par le schéma des horloges (`packages/rules/src/clo
 | Type              | Paramètre          | Type                    | Contrainte                      |
 | ----------------- | ------------------ | ----------------------- | ------------------------------- |
 | `minCardCount`    | `min`              | entier                  | ≥ 1                             |
+|                   | `family`           | `instant` ou `eternity` | facultatif                      |
 | `ascendingOrder`  | aucun              |                         | `params` est un objet vide `{}` |
 | `maxSum`          | `max`              | entier                  | ≥ 1                             |
 | `exactCardCount`  | `count`            | entier                  | ≥ 0                             |
@@ -54,6 +55,8 @@ Les bornes sont vérifiées par le schéma des horloges (`packages/rules/src/clo
 ```
 
 La violation indique dans `cardCount` le nombre de cartes comptées : le client sait ainsi s'il en manque ou s'il y en a trop.
+
+`minCardCount` : `family` suit la même convention qu'`exactCardCount`. Sans `family`, toutes les cartes de la section comptent. Avec `family`, seules les cartes de cette famille comptent : celles des autres familles peuvent être présentes, mais ne rapprochent pas du minimum. Les deux règles partagent le même comptage (`countCards`), pour ne jamais diverger. La violation indique dans `cardCount` le nombre de cartes comptées, celles de la famille si elle est précisée.
 
 `sumInRange` : les deux bornes sont incluses. Avec `min = max`, la section doit valoir exactement cette valeur. Une section vide vaut 0, elle échoue donc dès que `min` est positif. Un `min` supérieur à `max` rend la règle impossible à réussir : `parseClock` refuse l'horloge au chargement. La violation indique dans `value` la valeur de la section, et le client la compare aux bornes pour savoir laquelle est franchie. Pendant la Pose, seul `max` est vérifié, et seulement quand la valeur de la section est connue (voir « Bornes hautes connues » plus bas).
 
