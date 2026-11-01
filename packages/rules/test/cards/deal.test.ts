@@ -1,4 +1,5 @@
-import { describe, expect, it } from "vitest";
+import { fc, it } from "@fast-check/vitest";
+import { describe, expect } from "vitest";
 import type { Card } from "../../src/cards/card.js";
 import {
   PLAYER_COUNTS,
@@ -12,6 +13,7 @@ import { createDeck } from "../../src/cards/deck.js";
 import { InvalidPlayerCountError } from "../../src/errors.js";
 import { createSeededRng } from "../../src/random/rng.js";
 import { shuffle } from "../../src/random/shuffle.js";
+import { playerCountArb, seedArb } from "../support/arbitraries.js";
 
 const SEED = 42;
 
@@ -157,4 +159,52 @@ describe("dealTrialCards", () => {
       "expected one of 2, 3, 4, received 5",
     );
   });
+});
+
+// Mêmes règles que les tests d'exemple plus haut, vérifiées sur des graines
+// tirées au hasard plutôt que sur SEED seule (issue #14).
+describe("dealTrialCards properties", () => {
+  // Critère : 12 cartes sans doublon. Deux sens de « doublon » : la même
+  // carte physique (identifiant) et deux cartes de même face, que le jeu
+  // ne contient pas.
+  it.prop([playerCountArb, seedArb])(
+    "deals 12 distinct cards",
+    (playerCount, seed) => {
+      const dealt = allDealtCards(
+        dealTrialCards(playerCount, createSeededRng(seed)),
+      );
+      expect(dealt).toHaveLength(12);
+      expect(new Set(dealt.map((card) => card.id)).size).toBe(12);
+      expect(
+        new Set(dealt.map((card) => `${card.family}-${String(card.value)}`))
+          .size,
+      ).toBe(12);
+    },
+  );
+
+  // Critère : répartition selon le nombre de joueurs. Une ligne de
+  // DEAL_RULES tirée au hasard donne le nombre de joueurs et les tailles
+  // attendues.
+  it.prop([fc.constantFrom(...DEAL_RULES), seedArb])(
+    "follows the deal rules for the number of players",
+    ([playerCount, handSize, reserveSize], seed) => {
+      const lots = dealTrialCards(playerCount, createSeededRng(seed));
+      expect(lots).toHaveLength(playerCount);
+      for (const lot of lots) {
+        expect(lot.hand).toHaveLength(handSize);
+        expect(lot.reserve).toHaveLength(reserveSize);
+      }
+    },
+  );
+
+  // Critère : une même graine donne toujours la même distribution. Deux
+  // générateurs distincts, créés avec la même graine : aucun état partagé.
+  it.prop([playerCountArb, seedArb])(
+    "gives the same deal for the same seed",
+    (playerCount, seed) => {
+      expect(dealTrialCards(playerCount, createSeededRng(seed))).toEqual(
+        dealTrialCards(playerCount, createSeededRng(seed)),
+      );
+    },
+  );
 });

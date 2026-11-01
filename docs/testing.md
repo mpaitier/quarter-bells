@@ -108,6 +108,8 @@ Pour rejouer exactement cet échec, passer cet objet en second argument de `it.p
 it.prop([fc.integer({ min: 0, max: 5 })], { seed: -1155677064, path: "13", endOnFailure: true })(…)
 ```
 
+Les générateurs propres au domaine (graines, nombre de joueurs, poses, horloges) sont regroupés dans `packages/rules/test/support/arbitraries.ts`. Le générateur d'horloges produit des horloges quelconques puis ne garde que celles que `parseClock` accepte : une propriété vaut ainsi pour toute horloge que le moteur peut charger, pas seulement pour celles du jeu. Si une horloge acceptée casse une propriété, c'est la validation qu'il faut corriger.
+
 Propriétés à vérifier :
 
 - une distribution donne exactement 12 cartes, sans doublon, réparties selon le nombre de joueurs ;
