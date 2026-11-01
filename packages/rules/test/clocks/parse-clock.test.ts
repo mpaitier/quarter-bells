@@ -178,7 +178,9 @@ describe("parseClock", () => {
 
   // Critère : le message indique le fichier.
   it("names the source file in the error message", () => {
-    expect(() => parseClock(null, "ch03-clk1.json")).toThrow(/ch03-clk1\.json/);
+    expect(() => parseClock(null, "players-choice-clock.json")).toThrow(
+      /players-choice-clock\.json/,
+    );
   });
 
   // Deux erreurs à deux endroits : les deux doivent remonter ensemble.

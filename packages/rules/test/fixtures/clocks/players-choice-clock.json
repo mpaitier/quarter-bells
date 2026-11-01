@@ -1,7 +1,7 @@
 {
   "$schema": "../../../schema/clock.schema.json",
   "formatVersion": 1,
-  "uid": "ch03-clk1",
+  "uid": "fixture-players-choice",
   "chapter": 3,
   "indexInChapter": 1,
   "noMaxSum": false,
