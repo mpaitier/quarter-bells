@@ -76,5 +76,21 @@ describe("game clocks", () => {
       const uids = parseAll().map((clock) => clock.uid);
       expect(new Set(uids).size).toBe(uids.length);
     });
+
+    // Critère : 4 horloges par chapitre, indexInChapter de 0 à 3. Un chapitre
+    // incomplet ferait échouer ce test : un chapitre arrive donc entier, en
+    // une seule PR.
+    it("has the four positions of every chapter", () => {
+      // Map.groupBy (ES2024) : chapitre → horloges de ce chapitre.
+      const byChapter = Map.groupBy(parseAll(), (clock) => clock.chapter);
+      for (const [chapter, clocks] of byChapter) {
+        // Tri numérique : sans comparateur, toSorted compare des chaînes.
+        const positions = clocks
+          .map((clock) => clock.indexInChapter)
+          .toSorted((a, b) => a - b);
+        // Le message nomme le chapitre fautif.
+        expect(positions, `chapter ${String(chapter)}`).toEqual([0, 1, 2, 3]);
+      }
+    });
   });
 });

@@ -117,7 +117,9 @@ packages/rules/clocks/
 
 `test/clocks/game-clocks.test.ts` vérifie ces conventions sur toutes les horloges du dossier. Les horloges de `test/fixtures/clocks/` ne servent qu'aux tests du moteur : leur uid commence par `fixture-` pour ne jamais être confondu avec celui d'une horloge du jeu.
 
-La conception de chaque chapitre (notion introduite, progression de la difficulté) est décrite dans `docs/clocks/`.
+Un chapitre arrive complet, en une seule PR : le test vérifie que chaque chapitre présent a ses quatre positions, de 0 à 3.
+
+La conception de chaque chapitre (notions introduites, progression de la difficulté) est décrite dans `docs/clocks/`. Pour écrire une nouvelle horloge, partir de [`docs/clocks/clock-template.json`](clocks/clock-template.json), puis la copier dans le dossier de son chapitre. Le modèle reste hors de `packages/rules/clocks/`, car le test y lit tous les fichiers JSON.
 
 ## État d'une épreuve
 

@@ -1,0 +1,90 @@
+{
+  "description": "Valeurs 4, 5, 6, 7, 17, 46 depuis la section 0 : ordre croissant. La section 0 a 3 cartes dont 2 Instant et 1 Éternité. La section 1 vaut 5, sous son plafond de 9. La section 4 vaut 17, entre 17 et 21. La section 5 dépasse 24, permis par noMaxSum.",
+  "clock": "ch01-clk2",
+  "steps": [
+    {
+      "section": 0,
+      "card": {
+        "family": "instant",
+        "value": 1
+      }
+    },
+    {
+      "section": 0,
+      "card": {
+        "family": "eternity",
+        "value": 1
+      }
+    },
+    {
+      "section": 0,
+      "card": {
+        "family": "instant",
+        "value": 2
+      }
+    },
+    {
+      "section": 1,
+      "card": {
+        "family": "instant",
+        "value": 5
+      }
+    },
+    {
+      "section": 2,
+      "card": {
+        "family": "eternity",
+        "value": 6
+      }
+    },
+    {
+      "section": 3,
+      "card": {
+        "family": "eternity",
+        "value": 7
+      }
+    },
+    {
+      "section": 4,
+      "card": {
+        "family": "instant",
+        "value": 8
+      }
+    },
+    {
+      "section": 4,
+      "card": {
+        "family": "instant",
+        "value": 9
+      }
+    },
+    {
+      "section": 5,
+      "card": {
+        "family": "instant",
+        "value": 12
+      }
+    },
+    {
+      "section": 5,
+      "card": {
+        "family": "eternity",
+        "value": 12
+      }
+    },
+    {
+      "section": 5,
+      "card": {
+        "family": "instant",
+        "value": 11
+      }
+    },
+    {
+      "section": 5,
+      "card": {
+        "family": "eternity",
+        "value": 11
+      }
+    }
+  ]
+}
