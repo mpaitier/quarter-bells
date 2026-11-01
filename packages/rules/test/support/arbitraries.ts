@@ -20,6 +20,8 @@ import { parseClock } from "../../src/clocks/parse-clock.js";
 import { InvalidClockError } from "../../src/errors.js";
 import type { Placement } from "../../src/placements/placement.js";
 import { MAX_SEED } from "../../src/random/rng.js";
+import type { TrialSetup } from "../../src/trial/create-trial.js";
+import { MAX_BONUS_EYES } from "../../src/trial/eyes.js";
 
 /** Toute graine acceptée par createSeededRng. */
 export const seedArb = fc.integer({ min: 0, max: MAX_SEED });
@@ -85,33 +87,35 @@ function withOptionalFamily<P extends object>(
 }
 
 /**
- * Une règle de section du catalogue, avec des paramètres dans leurs bornes.
- * Les plages sont choisies pour produire aussi bien des règles faciles que
- * des règles impossibles à tenir : une propriété doit tenir dans les deux cas.
+ * Une règle de section du catalogue, avec des paramètres jouables, du même
+ * ordre que ceux des horloges du jeu (docs/clocks/) : un plafond de section
+ * de 5 à 30, un intervalle de 2 à 10 valeurs, 1 à 3 cartes. Un contre-exemple
+ * trouvé par fast-check ressemble ainsi à une vraie partie, pas à une horloge
+ * absurde que personne n'écrira.
  */
 const sectionRuleArb = fc.oneof(
   fc.record({
     kind: fc.constant("minCardCount"),
     params: withOptionalFamily(
-      fc.record({ min: fc.integer({ min: 1, max: 4 }) }),
+      fc.record({ min: fc.integer({ min: 1, max: 3 }) }),
     ),
   }),
   fc.record({
     kind: fc.constant("maxSum"),
-    params: fc.record({ max: fc.integer({ min: 1, max: 40 }) }),
+    params: fc.record({ max: fc.integer({ min: 5, max: 30 }) }),
   }),
   fc.record({
     kind: fc.constant("exactCardCount"),
     params: withOptionalFamily(
-      fc.record({ count: fc.integer({ min: 0, max: 4 }) }),
+      fc.record({ count: fc.integer({ min: 0, max: 3 }) }),
     ),
   }),
   fc.record({
     kind: fc.constant("sumInRange"),
-    // Deux bornes triées : min > max serait refusé par parseClock.
+    // Un minimum, puis une largeur : min <= max par construction.
     params: fc
-      .tuple(fc.integer({ min: 0, max: 40 }), fc.integer({ min: 0, max: 40 }))
-      .map(([a, b]) => ({ min: Math.min(a, b), max: Math.max(a, b) })),
+      .tuple(fc.integer({ min: 1, max: 24 }), fc.integer({ min: 2, max: 10 }))
+      .map(([min, width]) => ({ min, max: min + width })),
   }),
   fc.record({
     kind: fc.constant("firstPlacements"),
@@ -119,18 +123,21 @@ const sectionRuleArb = fc.oneof(
     params: fc.record({
       placementIndexes: fc.uniqueArray(fc.integer({ min: 0, max: 11 }), {
         minLength: 1,
-        maxLength: 3,
+        maxLength: 2,
       }),
     }),
   }),
 );
 
-/** Une règle d'horloge du catalogue. */
+/**
+ * Une règle d'horloge du catalogue. Un plafond d'horloge reste proche du
+ * plafond général de 24, comme celui de 26 au chapitre 1.
+ */
 const clockRuleArb = fc.oneof(
   fc.record({ kind: fc.constant("ascendingOrder"), params: fc.constant({}) }),
   fc.record({
     kind: fc.constant("maxSum"),
-    params: fc.record({ max: fc.integer({ min: 1, max: 40 }) }),
+    params: fc.record({ max: fc.integer({ min: 20, max: 30 }) }),
   }),
 );
 
@@ -176,3 +183,50 @@ export const clockArb: fc.Arbitrary<Clock> = fc
   })
   .map(parseOrUndefined)
   .filter((clock): clock is Clock => clock !== undefined);
+
+/** Joueurs disponibles, dans l'ordre de passage. Les premiers jouent. */
+const PLAYERS = ["ana", "ben", "cleo", "dan"] as const;
+
+/**
+ * Une configuration d'épreuve que createTrial accepte : horloge quelconque,
+ * 2 à 4 joueurs, graine, section de départ cohérente avec le mode de
+ * l'horloge, yeux dans leurs bornes.
+ */
+export const trialSetupArb: fc.Arbitrary<TrialSetup> = fc
+  .record({
+    clock: clockArb,
+    playerCount: playerCountArb,
+    seed: seedArb,
+    // Utilisée seulement si l'horloge laisse les joueurs choisir.
+    chosenStart: sectionIndexArb,
+    maxBonusEyes: fc.integer({ min: 0, max: MAX_BONUS_EYES }),
+    // Absent une fois sur deux : pas de plafond.
+    baseEyesCap: fc.option(fc.integer({ min: 0, max: 5 }), { nil: undefined }),
+  })
+  // Les yeux bonus dépendent du maximum tiré : chain fait un second tirage
+  // à partir du premier.
+  .chain((drawn) =>
+    fc
+      .integer({ min: 0, max: drawn.maxBonusEyes })
+      .map((bonusEyes): TrialSetup => {
+        const { clock, playerCount, seed, chosenStart } = drawn;
+        return {
+          clock,
+          turnOrder: PLAYERS.slice(0, playerCount),
+          startSection:
+            clock.startSectionMode === "fixed"
+              ? clock.defaultStartSection
+              : chosenStart,
+          seed,
+          bonusEyes,
+          // Champ absent plutôt qu'undefined (exactOptionalPropertyTypes).
+          eyeSettings:
+            drawn.baseEyesCap === undefined
+              ? { maxBonusEyes: drawn.maxBonusEyes }
+              : {
+                  maxBonusEyes: drawn.maxBonusEyes,
+                  baseEyesCap: drawn.baseEyesCap,
+                },
+        };
+      }),
+  );

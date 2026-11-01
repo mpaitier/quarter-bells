@@ -81,7 +81,7 @@ Certains comportements se vérifient mieux par des invariants que par des exempl
 
 Un test de propriétés complète les tests d'exemple sans les remplacer : il vérifie que le résultat ne change pas quand on fait varier l'entrée, jamais que le résultat est le bon.
 
-Les propriétés s'écrivent avec `it.prop` de [`@fast-check/vitest`](https://github.com/dubzzz/fast-check/tree/main/packages/vitest), qui intègre fast-check à Vitest. Chaque propriété est vérifiée sur 100 entrées par défaut.
+Les propriétés s'écrivent avec `it.prop` de [`@fast-check/vitest`](https://github.com/dubzzz/fast-check/tree/main/packages/vitest), qui intègre fast-check à Vitest. Chaque propriété est vérifiée sur 100 entrées par défaut. Une propriété qui cherche une suite de coups rare peut en demander plus (`{ numRuns: 1000 }`), en le justifiant dans un commentaire.
 
 ```ts
 import { fc, it } from "@fast-check/vitest";
@@ -108,7 +108,7 @@ Pour rejouer exactement cet échec, passer cet objet en second argument de `it.p
 it.prop([fc.integer({ min: 0, max: 5 })], { seed: -1155677064, path: "13", endOnFailure: true })(…)
 ```
 
-Les générateurs propres au domaine (graines, nombre de joueurs, poses, horloges) sont regroupés dans `packages/rules/test/support/arbitraries.ts`. Le générateur d'horloges produit des horloges quelconques puis ne garde que celles que `parseClock` accepte : une propriété vaut ainsi pour toute horloge que le moteur peut charger, pas seulement pour celles du jeu. Si une horloge acceptée casse une propriété, c'est la validation qu'il faut corriger.
+Les générateurs propres au domaine (graines, nombre de joueurs, poses, horloges) sont regroupés dans `packages/rules/test/support/arbitraries.ts`. Le générateur d'horloges tire des règles du catalogue avec des paramètres jouables, du même ordre que ceux des horloges du jeu, puis ne garde que les horloges que `parseClock` accepte. Une propriété vaut ainsi pour toute horloge jouable, pas seulement pour celles du jeu, et un contre-exemple ressemble à une vraie partie. Si une horloge acceptée casse une propriété, c'est la validation ou le moteur qu'il faut corriger.
 
 Propriétés à vérifier :
 
@@ -116,7 +116,10 @@ Propriétés à vérifier :
 - une même graine donne toujours la même distribution ;
 - la somme d'une section est la somme de ses cartes, quel que soit l'ordre de pose ;
 - une pose refusée ne modifie pas l'état ;
+- une épreuve jouée jusqu'au bout, avec des poses choisies au hasard parmi celles que le moteur accepte, se termine toujours par une réussite ou un échec : le joueur dont c'est le tour a toujours au moins une pose permise ;
 - la vue d'un joueur ne contient jamais la valeur d'une carte face cachée posée par un autre.
+
+Les propriétés du moteur sont dans les fichiers de test de chaque module (distribution, Résolution), et celles du déroulement d'une épreuve dans `test/trial/trial-properties.test.ts`. La propriété sur la vue d'un joueur viendra avec `packages/protocol` (J3).
 
 ### Tests du format des horloges
 
