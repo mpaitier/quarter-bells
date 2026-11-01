@@ -1,6 +1,10 @@
 import type { CardId } from "../cards/card.js";
+import { SECTION_COUNT } from "../clocks/clock.js";
 import { isSectionIndex } from "../clocks/section.js";
-import { evaluatePlacement } from "../evaluation/evaluate-placement.js";
+import {
+  evaluatePlacement,
+  isKnownBoundViolation,
+} from "../evaluation/evaluate-placement.js";
 import type { Violation } from "../rule-checks/violation.js";
 import { availableEyes } from "./eyes.js";
 import { isPlacementComplete, resolveTrial } from "./resolve-trial.js";
@@ -113,7 +117,7 @@ function placeCard(trial: Trial, action: PlaceCardAction): TrialResult {
     trial.placements,
     placement,
   );
-  if (violations.length > 0) {
+  if (violations.length > 0 && !isForcedPlacement(trial, seat, violations)) {
     return reject({ reason: "ruleViolation", violations });
   }
 
@@ -124,6 +128,49 @@ function placeCard(trial: Trial, action: PlaceCardAction): TrialResult {
     accepted: true,
     trial: isPlacementComplete(next) ? resolveTrial(next) : next,
   };
+}
+
+/** Index de toutes les sections, de 0 à 5. */
+const ALL_SECTIONS = Array.from({ length: SECTION_COUNT }, (_, index) => index);
+
+/**
+ * Une pose refusée seulement par des bornes hautes connues est acceptée quand
+ * le joueur n'a aucune pose entièrement permise (ADR 0011). Sans cette
+ * exception, l'épreuve resterait bloquée : le joueur ne pourrait rien poser,
+ * et l'épreuve ne serait jamais résolue. La borne franchie fera échouer
+ * l'épreuve à la Résolution.
+ *
+ * Les contraintes de pose (firstPlacements) ne sont jamais franchies.
+ */
+function isForcedPlacement(
+  trial: PlacingTrial,
+  seat: Seat,
+  violations: readonly Violation[],
+): boolean {
+  // Clause de garde : une contrainte de pose suffit à refuser.
+  if (!violations.every(isKnownBoundViolation)) {
+    return false;
+  }
+  return !hasFullyPermittedPlacement(trial, seat);
+}
+
+/**
+ * Le joueur peut poser au moins une carte de sa main quelque part sans
+ * aucune violation. Seules les poses face cachée sont essayées : la face ne
+ * change pas l'évaluation (la valeur de sa propre carte reste connue du
+ * joueur), et une pose face cachée ne dépense pas d'œil.
+ */
+function hasFullyPermittedPlacement(trial: PlacingTrial, seat: Seat): boolean {
+  return seat.hand.some((card) =>
+    ALL_SECTIONS.some(
+      (sectionIndex) =>
+        evaluatePlacement(trial.clock, trial.placements, {
+          sectionIndex,
+          card,
+          faceUp: false,
+        }).length === 0,
+    ),
+  );
 }
 
 /** Nouvelle épreuve, après une pose acceptée. */

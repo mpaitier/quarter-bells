@@ -62,7 +62,7 @@ Priorités (méthode MoSCoW) :
 | F-JEU-18 | Si le joueur dont c'est le tour est déconnecté, la partie est mise en pause pour tous, avec le nom du joueur absent. L'hôte peut alors sauvegarder et arrêter.                                                       | M        |
 | F-JEU-19 | Après la 4e horloge d'un chapitre, un message annonce le chapitre suivant. Chaque joueur se déclare prêt pour continuer.                                                                                             | S        |
 | F-JEU-20 | Un joueur dont la pose est refusée est guidé vers la règle concernée et les cartes valides de sa main. Le guidage peut être désactivé dans les paramètres.                                                           | S        |
-| F-JEU-21 | Quand toutes les cartes d'une section sont face visible, une pose qui ferait dépasser une borne haute de la section est refusée.                                                                                     | S        |
+| F-JEU-21 | Quand toutes les cartes d'une section sont face visible, une pose qui ferait dépasser une borne haute de la section est refusée, sauf si le joueur n'a aucune autre pose permise (ADR 0011).                         | S        |
 | F-JEU-22 | Après une run perdue, retenter l'horloge ou recommencer le chapitre consomme un jeton de relance. Le groupe gagne des jetons en progressant. Les quantités sont paramétrables.                                       | C        |
 
 ### Règles et contenu

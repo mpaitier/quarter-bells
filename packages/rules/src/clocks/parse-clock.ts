@@ -99,20 +99,75 @@ function checkRule(
 /** Contrôles que JSON Schema ne sait pas exprimer. */
 function checkSemantics(clock: Clock): ClockIssue[] {
   const issues: ClockIssue[] = [];
+  // Rang de pose imposé par firstPlacements → section qui l'impose. Sert à
+  // repérer un rang imposé par deux sections différentes.
+  const sectionOfRank = new Map<number, number>();
+
   clock.sections.forEach((section, i) => {
     section.rules.forEach((rule, j) => {
+      const path = `/sections/${String(i)}/rules/${String(j)}/params`;
+
       // Après le test sur kind, TypeScript sait que rule est un sumInRange
       // et autorise rule.params.min. Sans ce test, il refuserait :
       // les autres règles n'ont pas forcément de min.
       if (rule.kind === "sumInRange" && rule.params.min > rule.params.max) {
-        issues.push({
-          path: `/sections/${String(i)}/rules/${String(j)}/params`,
-          message: "min must be less than or equal to max",
-        });
+        issues.push({ path, message: "min must be less than or equal to max" });
+      }
+
+      // Deux sections qui imposent le même rang : toute pose de ce rang est
+      // refusée par l'une ou par l'autre, l'épreuve se bloque à ce rang.
+      // Le même rang deux fois sur la même section reste possible : c'est
+      // redondant, pas bloquant.
+      if (rule.kind === "firstPlacements") {
+        for (const rank of rule.params.placementIndexes) {
+          const owner = sectionOfRank.get(rank);
+          if (owner !== undefined && owner !== section.index) {
+            issues.push({
+              path: `${path}/placementIndexes`,
+              message: `placement rank ${String(rank)} is already required on section ${String(owner)}`,
+            });
+          } else {
+            sectionOfRank.set(rank, section.index);
+          }
+        }
       }
     });
+
+    issues.push(...checkPlacementAndBound(section, i));
   });
   return issues;
+}
+
+/**
+ * Règle de conception : une section qui impose une pose (firstPlacements) ne
+ * borne pas sa valeur (maxSum, sumInRange). Imposer qu'une carte aille sur
+ * une section tout en limitant ce qu'elle peut valoir ferait dépendre la
+ * réussite de la donne plutôt que des choix des joueurs : de la fausse
+ * difficulté, exclue du jeu (docs/clock-format.md).
+ *
+ * L'erreur est signalée sur chaque borne : c'est elle qu'il faut déplacer.
+ */
+function checkPlacementAndBound(
+  section: Clock["sections"][number],
+  sectionPosition: number,
+): ClockIssue[] {
+  const requiresPlacement = section.rules.some(
+    (rule) => rule.kind === "firstPlacements",
+  );
+  // Clause de garde : sans pose imposée, toute borne est permise.
+  if (!requiresPlacement) {
+    return [];
+  }
+  return section.rules.flatMap((rule, j) =>
+    rule.kind === "maxSum" || rule.kind === "sumInRange"
+      ? [
+          {
+            path: `/sections/${String(sectionPosition)}/rules/${String(j)}/kind`,
+            message: `${rule.kind} cannot bound a section that requires placements (firstPlacements)`,
+          },
+        ]
+      : [],
+  );
 }
 
 /**

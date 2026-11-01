@@ -2,8 +2,8 @@
 // ascendingOrder s'appuie dessus : une erreur ici fausserait la règle
 // pour toutes les horloges.
 
-import fc from "fast-check";
-import { describe, expect, it } from "vitest";
+import { fc, it } from "@fast-check/vitest";
+import { describe, expect } from "vitest";
 import { SECTION_COUNT } from "../../src/clocks/clock.js";
 import { clockwiseOrder } from "../../src/clocks/clockwise-order.js";
 
@@ -39,27 +39,25 @@ describe("clockwiseOrder", () => {
     expect(() => clockwiseOrder(start)).toThrow(RangeError);
   });
 
-  it("commence par le départ et passe une fois par chaque section", () => {
-    // Liste attendue une fois triée : [0, 1, ..., SECTION_COUNT - 1].
-    // Construite à partir de SECTION_COUNT pour ne pas écrire 6 en dur.
-    const allSections = Array.from({ length: SECTION_COUNT }, (_, i) => i);
+  // Liste attendue une fois triée : [0, 1, ..., SECTION_COUNT - 1].
+  // Construite à partir de SECTION_COUNT pour ne pas écrire 6 en dur.
+  const allSections = Array.from({ length: SECTION_COUNT }, (_, i) => i);
 
-    fc.assert(
-      fc.property(
-        // Génère des départs valides : tous les entiers de 0 à SECTION_COUNT - 1.
-        fc.integer({ min: 0, max: SECTION_COUNT - 1 }),
-        (start) => {
-          const order = clockwiseOrder(start);
+  // it.prop reçoit les générateurs, puis le test reçoit une valeur générée par
+  // générateur. Ici, tous les départs valides : les entiers de 0 à
+  // SECTION_COUNT - 1.
+  it.prop([fc.integer({ min: 0, max: SECTION_COUNT - 1 })])(
+    "commence par le départ et passe une fois par chaque section",
+    (start) => {
+      const order = clockwiseOrder(start);
 
-          // Le parcours commence bien par la section de départ.
-          expect(order[0]).toBe(start);
+      // Le parcours commence bien par la section de départ.
+      expect(order[0]).toBe(start);
 
-          // Une fois trié, on retrouve chaque section exactement une fois :
-          // ni oubli, ni doublon. La copie [...order] évite de trier le
-          // résultat lui-même ; (a, b) => a - b trie en nombres, pas en texte.
-          expect([...order].sort((a, b) => a - b)).toEqual(allSections);
-        },
-      ),
-    );
-  });
+      // Une fois trié, on retrouve chaque section exactement une fois :
+      // ni oubli, ni doublon. La copie [...order] évite de trier le
+      // résultat lui-même ; (a, b) => a - b trie en nombres, pas en texte.
+      expect([...order].sort((a, b) => a - b)).toEqual(allSections);
+    },
+  );
 });

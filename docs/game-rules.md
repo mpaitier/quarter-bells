@@ -92,6 +92,8 @@ Une pose qui viole une contrainte de pose de l'horloge est refusée, et le joueu
 
 Les conditions sur les valeurs ne sont évaluées qu'à la Résolution, avec une exception : quand toutes les cartes déjà posées devant une section sont face visible, leur somme est connue de tous. Une pose qui ferait alors dépasser une borne haute de cette section (le plafond de 24 ou le maximum d'une règle de plage) est refusée, que la nouvelle carte soit posée face visible ou cachée. Par exemple, sur une section qui doit rester entre 12 et 18 et qui porte un 10 visible, poser un 9 est refusé. Si au moins une carte de la section est face cachée, y compris une carte que le joueur a posée lui-même, aucune limite n'est appliquée. Les bornes basses ne sont jamais vérifiées pendant la Pose, puisque d'autres cartes peuvent encore être ajoutées.
 
+Ce refus est une aide, il ne bloque jamais la partie. Si aucune carte de la main du joueur ne peut être posée sans dépasser une borne connue, il peut poser malgré tout, et l'épreuve échouera à la Résolution. Les poses imposées à une section restent obligatoires dans tous les cas.
+
 Si le guide est activé dans ses paramètres, le joueur dont la pose est refusée voit la règle concernée mise en avant et les cartes de sa main qui la respectent. Les autres joueurs ne voient rien de ce refus.
 
 À tout moment, un joueur peut revoir la valeur des cartes qu'il a lui-même posées face cachée. Il ne peut pas voir celles des autres.

@@ -2,8 +2,12 @@ import { describe, expect, it } from "vitest";
 import type { CardValue } from "../../src/cards/card.js";
 import type { Clock, ClockRule, SectionRule } from "../../src/clocks/clock.js";
 import { parseClock } from "../../src/clocks/parse-clock.js";
-import { evaluatePlacement } from "../../src/evaluation/evaluate-placement.js";
+import {
+  evaluatePlacement,
+  isKnownBoundViolation,
+} from "../../src/evaluation/evaluate-placement.js";
 import type { Placement } from "../../src/placements/placement.js";
+import type { Violation } from "../../src/rule-checks/violation.js";
 import playersChoiceClock from "../fixtures/clocks/players-choice-clock.json" with { type: "json" };
 
 // Le détail de chaque règle est couvert par test/cases/ (fichiers de
@@ -199,5 +203,60 @@ describe("evaluatePlacement", () => {
     expect(() => evaluatePlacement(clockWith({}), [], place(section))).toThrow(
       RangeError,
     );
+  });
+});
+
+describe("isKnownBoundViolation", () => {
+  // Une violation de chaque kind, dans l'ordre du catalogue, avec le
+  // classement attendu. Les bornes connues peuvent céder (ADR 0011), les
+  // contraintes de pose jamais. Les conditions de Résolution ne sortent pas
+  // de evaluatePlacement, mais la fonction doit quand même les classer.
+  it.each<[Violation, boolean]>([
+    [
+      { kind: "minCardCount", params: { min: 1 }, section: 0, cardCount: 0 },
+      false,
+    ],
+    [
+      {
+        kind: "ascendingOrder",
+        params: {},
+        section: 1,
+        value: 3,
+        previousSection: 0,
+        previousValue: 5,
+      },
+      false,
+    ],
+    [{ kind: "maxSum", params: { max: 24 }, section: 2, value: 26 }, true],
+    [
+      {
+        kind: "exactCardCount",
+        params: { count: 2 },
+        section: 3,
+        cardCount: 1,
+      },
+      false,
+    ],
+    [
+      {
+        kind: "sumInRange",
+        params: { min: 6, max: 10 },
+        section: 4,
+        value: 12,
+      },
+      true,
+    ],
+    [
+      {
+        kind: "firstPlacements",
+        params: { placementIndexes: [0] },
+        section: 5,
+        placementIndex: 0,
+        attemptedSection: 1,
+      },
+      false,
+    ],
+  ])("classifies %o as a known bound: %s", (violation, expected) => {
+    expect(isKnownBoundViolation(violation)).toBe(expected);
   });
 });

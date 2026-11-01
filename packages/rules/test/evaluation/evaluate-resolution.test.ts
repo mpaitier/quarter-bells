@@ -1,10 +1,17 @@
-import { describe, expect, it } from "vitest";
+import { fc, it } from "@fast-check/vitest";
+import { describe, expect } from "vitest";
 import type { CardValue } from "../../src/cards/card.js";
 import type { Clock, ClockRule, SectionRule } from "../../src/clocks/clock.js";
 import { parseClock } from "../../src/clocks/parse-clock.js";
 import { evaluateResolution } from "../../src/evaluation/evaluate-resolution.js";
 import type { Placement } from "../../src/placements/placement.js";
 import exampleClock from "../fixtures/clocks/example-clock.json" with { type: "json" };
+import {
+  clockArb,
+  permutationOf,
+  poseArb,
+  sectionIndexArb,
+} from "../support/arbitraries.js";
 
 // Le détail de chaque règle est couvert par test/cases/. Ce fichier teste ce
 // que fait le point d'entrée en plus : rassembler les règles générales et
@@ -192,4 +199,41 @@ describe("evaluateResolution", () => {
   it("rejects a start section outside the clock", () => {
     expect(() => evaluateResolution(clockWith({}), 6, [])).toThrow(RangeError);
   });
+});
+
+describe("evaluateResolution properties", () => {
+  // Critère de l'issue #14 : la somme d'une section ne dépend pas de l'ordre
+  // des poses. sectionValue le vérifie sur une section isolée
+  // (by-section.test.ts) ; ici, sur tout le cadran et toutes les règles
+  // d'une horloge quelconque. À la Résolution, aucune règle ne lit l'ordre :
+  // firstPlacements a déjà été appliquée pendant la Pose.
+  it.prop([
+    clockArb,
+    sectionIndexArb,
+    // Une pose, puis la même dans un autre ordre.
+    poseArb.chain((pose) => fc.tuple(fc.constant(pose), permutationOf(pose))),
+  ])(
+    "does not depend on the placement order",
+    (clock, startSection, [pose, reordered]) => {
+      const report = evaluateResolution(clock, startSection, pose);
+      const reorderedReport = evaluateResolution(
+        clock,
+        startSection,
+        reordered,
+      );
+
+      // Les cartes de chaque section changent d'ordre, pas leur somme.
+      const values = (sections: typeof report.sections) =>
+        sections.map(({ section, value, ascending }) => ({
+          section,
+          value,
+          ascending,
+        }));
+      expect(values(reorderedReport.sections)).toEqual(values(report.sections));
+      // Les violations ne citent aucune pose : elles doivent être identiques,
+      // dans le même ordre.
+      expect(reorderedReport.violations).toEqual(report.violations);
+      expect(reorderedReport.succeeded).toBe(report.succeeded);
+    },
+  );
 });

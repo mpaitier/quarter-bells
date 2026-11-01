@@ -222,4 +222,104 @@ describe("parseClock", () => {
       ]);
     });
   });
+
+  // Contrôle sémantique de firstPlacements : un rang ne peut être imposé que
+  // par une seule section, sinon l'épreuve se bloque à ce rang.
+  describe("firstPlacements ranks", () => {
+    /** Copie de l'horloge valide avec un firstPlacements sur deux sections. */
+    const withRanks = (
+      first: { section: number; ranks: number[] },
+      second: { section: number; ranks: number[] },
+    ) => ({
+      ...exampleClock,
+      sections: exampleClock.sections.map((section) => {
+        const rules = [first, second]
+          .filter((entry) => entry.section === section.index)
+          .map((entry) => ({
+            kind: "firstPlacements",
+            params: { placementIndexes: entry.ranks },
+          }));
+        return rules.length > 0 ? { ...section, rules } : section;
+      }),
+    });
+
+    it("rejects a rank required on two sections", () => {
+      // Le rang 3 est imposé en section 1 puis en section 4 : l'erreur est
+      // signalée sur la seconde, et nomme la première.
+      const clock = withRanks(
+        { section: 1, ranks: [0, 3] },
+        { section: 4, ranks: [3] },
+      );
+      expect(issuesOf(clock)).toEqual([
+        {
+          path: "/sections/4/rules/0/params/placementIndexes",
+          message: "placement rank 3 is already required on section 1",
+        },
+      ]);
+    });
+
+    it("accepts different ranks on different sections", () => {
+      const clock = withRanks(
+        { section: 1, ranks: [0, 3] },
+        { section: 4, ranks: [1] },
+      );
+      expect(parseClock(clock, "distinct-ranks.json")).toEqual(clock);
+    });
+
+    it("accepts the same rank twice on the same section", () => {
+      // Redondant mais jouable : la pose de rang 2 va en section 1, ce qui
+      // satisfait les deux règles.
+      const clock = withRanks(
+        { section: 1, ranks: [2] },
+        { section: 1, ranks: [2] },
+      );
+      expect(parseClock(clock, "same-section.json")).toEqual(clock);
+    });
+  });
+
+  // Règle de conception : pas de pose imposée et de borne de valeur sur la
+  // même section (docs/clock-format.md).
+  describe("placement and value bound on one section", () => {
+    /** Copie de l'horloge valide avec ces règles en section 2, vide au départ. */
+    const withSection2 = (rules: unknown[]) => ({
+      ...exampleClock,
+      sections: exampleClock.sections.map((section) =>
+        section.index === 2 ? { ...section, rules } : section,
+      ),
+    });
+    const firstPlacements = {
+      kind: "firstPlacements",
+      params: { placementIndexes: [0] },
+    };
+
+    it.each([
+      ["maxSum", { kind: "maxSum", params: { max: 9 } }],
+      ["sumInRange", { kind: "sumInRange", params: { min: 4, max: 9 } }],
+    ])("rejects %s next to firstPlacements", (kind, bound) => {
+      // La borne est en position 1 : c'est elle que l'erreur désigne.
+      expect(issuesOf(withSection2([firstPlacements, bound]))).toEqual([
+        {
+          path: "/sections/2/rules/1/kind",
+          message: `${kind} cannot bound a section that requires placements (firstPlacements)`,
+        },
+      ]);
+    });
+
+    it("accepts a card count next to firstPlacements", () => {
+      // Nombre et famille de cartes restent combinables avec une pose
+      // imposée : ils ne dépendent pas de la valeur des cartes.
+      const clock = withSection2([
+        firstPlacements,
+        { kind: "exactCardCount", params: { count: 2, family: "instant" } },
+      ]);
+      expect(parseClock(clock, "count-and-placement.json")).toEqual(clock);
+    });
+
+    it("accepts a value bound on another section", () => {
+      // example-clock borne déjà la section 1 (sumInRange) : la pose imposée
+      // en section 2 ne la concerne pas.
+      const clock = withSection2([firstPlacements]);
+      expect(parseClock(clock, "separate-sections.json")).toEqual(clock);
+    });
+  });
 });

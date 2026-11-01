@@ -1,5 +1,5 @@
-import fc from "fast-check";
-import { describe, expect, it } from "vitest";
+import { fc, it } from "@fast-check/vitest";
+import { describe, expect } from "vitest";
 import { CARD_VALUES, type CardValue } from "../../src/cards/card.js";
 import { SECTION_COUNT } from "../../src/clocks/clock.js";
 import {
@@ -81,27 +81,22 @@ describe("sectionValue", () => {
 
   // Propriété tirée de docs/testing.md : la valeur d'une section ne dépend
   // pas de l'ordre dans lequel ses cartes ont été posées.
-  it("does not depend on the placement order", () => {
-    fc.assert(
-      fc.property(
-        // Une liste de valeurs de carte, puis une permutation de cette liste :
-        // un sous-tableau mélangé de même longueur contient les mêmes éléments
-        // dans un autre ordre.
-        fc.array(fc.constantFrom(...CARD_VALUES)).chain((values) =>
-          fc.tuple(
-            fc.constant(values),
-            fc.shuffledSubarray(values, {
-              minLength: values.length,
-              maxLength: values.length,
-            }),
-          ),
-        ),
-        ([values, shuffled]) => {
-          const inOrder = values.map((value) => place(0, value));
-          const reordered = shuffled.map((value) => place(0, value));
-          expect(sectionValue(reordered)).toBe(sectionValue(inOrder));
-        },
+  it.prop([
+    // Une liste de valeurs de carte, puis une permutation de cette liste :
+    // un sous-tableau mélangé de même longueur contient les mêmes éléments
+    // dans un autre ordre.
+    fc.array(fc.constantFrom(...CARD_VALUES)).chain((values) =>
+      fc.tuple(
+        fc.constant(values),
+        fc.shuffledSubarray(values, {
+          minLength: values.length,
+          maxLength: values.length,
+        }),
       ),
-    );
+    ),
+  ])("does not depend on the placement order", ([values, shuffled]) => {
+    const inOrder = values.map((value) => place(0, value));
+    const reordered = shuffled.map((value) => place(0, value));
+    expect(sectionValue(reordered)).toBe(sectionValue(inOrder));
   });
 });

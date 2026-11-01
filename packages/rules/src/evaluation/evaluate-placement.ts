@@ -152,3 +152,34 @@ function clockRuleAtPlacement(
       );
   }
 }
+
+/**
+ * Dit si une violation renvoyée pendant la Pose vient d'une borne haute
+ * connue (F-JEU-21) plutôt que d'une contrainte de pose.
+ *
+ * La différence compte pour l'épreuve (ADR 0011) : une borne connue guide le
+ * joueur, et peut être franchie quand il n'a aucune autre pose permise. Une
+ * contrainte de pose, elle, ne cède jamais.
+ *
+ * Un case par kind, sans default : un nouveau type de règle doit déclarer
+ * ici s'il peut être franchi, sinon le lint échoue.
+ */
+export function isKnownBoundViolation(violation: Violation): boolean {
+  switch (violation.kind) {
+    // Pendant la Pose, ces deux règles ne refusent que sur une borne haute
+    // connue : leurs autres conditions attendent la Résolution.
+    case "maxSum":
+    case "sumInRange":
+      return true;
+
+    // Contrainte de pose stricte.
+    case "firstPlacements":
+      return false;
+
+    // Jamais renvoyées pendant la Pose : conditions de Résolution seulement.
+    case "minCardCount":
+    case "ascendingOrder":
+    case "exactCardCount":
+      return false;
+  }
+}
