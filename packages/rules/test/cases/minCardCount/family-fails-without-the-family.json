@@ -1,0 +1,28 @@
+{
+  "description": "minCardCount avec une famille échoue quand la section n'a que des cartes de l'autre famille, même si une carte de la famille est posée ailleurs",
+  "rule": {
+    "kind": "minCardCount",
+    "params": { "min": 1, "family": "eternity" }
+  },
+  "section": 1,
+  "placements": [
+    {
+      "sectionIndex": 1,
+      "card": { "family": "instant", "value": 6 },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 2,
+      "card": { "family": "eternity", "value": 7 },
+      "faceUp": false
+    }
+  ],
+  "expected": [
+    {
+      "kind": "minCardCount",
+      "params": { "min": 1, "family": "eternity" },
+      "section": 1,
+      "cardCount": 0
+    }
+  ]
+}

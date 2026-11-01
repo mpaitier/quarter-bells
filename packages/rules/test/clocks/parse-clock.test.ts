@@ -141,6 +141,16 @@ describe("parseClock", () => {
       }),
       "/sections/0/rules/0/params/family",
     ],
+    // minCardCount partage le schéma de famille d'exactCardCount : une
+    // famille inconnue doit y être refusée de la même façon.
+    [
+      "an unknown family on minCardCount",
+      withSectionRule(0, {
+        kind: "minCardCount",
+        params: { min: 1, family: "noon" },
+      }),
+      "/sections/0/rules/0/params/family",
+    ],
     // Critère : section de départ hors de 0 à 5, aux deux bornes.
     [
       "a start section of -1",
@@ -168,7 +178,9 @@ describe("parseClock", () => {
 
   // Critère : le message indique le fichier.
   it("names the source file in the error message", () => {
-    expect(() => parseClock(null, "ch03-clk1.json")).toThrow(/ch03-clk1\.json/);
+    expect(() => parseClock(null, "players-choice-clock.json")).toThrow(
+      /players-choice-clock\.json/,
+    );
   });
 
   // Deux erreurs à deux endroits : les deux doivent remonter ensemble.

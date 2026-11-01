@@ -1,6 +1,7 @@
 import type { Static } from "typebox";
 import type { MinCardCountSchema } from "../clocks/rule-schemas.js";
 import type { Placement } from "../placements/placement.js";
+import { countCards } from "./count-cards.js";
 import type { MinCardCountViolation } from "./violation.js";
 
 /** Paramètres de minCardCount, déduits du schéma de la règle. */
@@ -11,6 +12,11 @@ export type MinCardCountParams = Static<typeof MinCardCountSchema>["params"];
  * Sert à la règle générale (min 1 sur chaque section) comme aux règles de
  * section des horloges.
  *
+ * Sans `params.family`, toutes les cartes de la section comptent. Avec
+ * `params.family`, seules les cartes de cette famille comptent : les autres
+ * peuvent être présentes, mais ne rapprochent pas du minimum. Le comptage
+ * est celui de countCards, partagé avec exactCardCount.
+ *
  * @returns la violation, ou undefined si la règle est respectée
  */
 export function checkMinCardCount(
@@ -18,7 +24,7 @@ export function checkMinCardCount(
   placements: readonly Placement[],
   params: MinCardCountParams,
 ): MinCardCountViolation | undefined {
-  const cardCount = placements.length;
+  const cardCount = countCards(placements, params.family);
   // Clause de garde : assez de cartes, rien à signaler.
   if (cardCount >= params.min) {
     return undefined;

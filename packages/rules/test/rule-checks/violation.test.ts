@@ -85,6 +85,26 @@ describe("ViolationSchema", () => {
       ).toBe(false);
     });
 
+    it("accepts a well-formed violation with a family", () => {
+      // La famille est facultative dans la règle, donc dans la violation.
+      expect(
+        Value.Check(ViolationSchema, {
+          ...validMinCardCount,
+          params: { min: 1, family: "eternity" },
+        }),
+      ).toBe(true);
+    });
+
+    it("rejects an unknown family", () => {
+      // Même schéma de famille que la règle : « noon » n'en est pas une.
+      expect(
+        Value.Check(ViolationSchema, {
+          ...validMinCardCount,
+          params: { min: 1, family: "noon" },
+        }),
+      ).toBe(false);
+    });
+
     it("rejects a parameter from another rule", () => {
       // max appartient à maxSum : l'union ne doit pas mélanger les variantes.
       expect(

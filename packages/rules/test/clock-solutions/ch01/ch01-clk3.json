@@ -1,0 +1,90 @@
+{
+  "description": "Valeurs 3, 4, 9, 12, 14, 17 depuis la section 0 : ordre croissant. La 5e pose (Instant 2) va en section 0 et la 8e (Éternité 1) en section 1. La section 3 vaut 12, entre 11 et 13. La section 5 vaut 17, sous son plafond de 26.",
+  "clock": "ch01-clk3",
+  "steps": [
+    {
+      "section": 0,
+      "card": {
+        "family": "instant",
+        "value": 1
+      }
+    },
+    {
+      "section": 1,
+      "card": {
+        "family": "instant",
+        "value": 3
+      }
+    },
+    {
+      "section": 2,
+      "card": {
+        "family": "eternity",
+        "value": 4
+      }
+    },
+    {
+      "section": 2,
+      "card": {
+        "family": "eternity",
+        "value": 5
+      }
+    },
+    {
+      "section": 0,
+      "card": {
+        "family": "instant",
+        "value": 2
+      }
+    },
+    {
+      "section": 3,
+      "card": {
+        "family": "instant",
+        "value": 6
+      }
+    },
+    {
+      "section": 3,
+      "card": {
+        "family": "eternity",
+        "value": 6
+      }
+    },
+    {
+      "section": 1,
+      "card": {
+        "family": "eternity",
+        "value": 1
+      }
+    },
+    {
+      "section": 4,
+      "card": {
+        "family": "instant",
+        "value": 7
+      }
+    },
+    {
+      "section": 4,
+      "card": {
+        "family": "eternity",
+        "value": 7
+      }
+    },
+    {
+      "section": 5,
+      "card": {
+        "family": "instant",
+        "value": 8
+      }
+    },
+    {
+      "section": 5,
+      "card": {
+        "family": "instant",
+        "value": 9
+      }
+    }
+  ]
+}

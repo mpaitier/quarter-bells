@@ -97,6 +97,30 @@ Le format est conçu pour qu'une horloge invalide ne puisse pas s'écrire, ou so
 
 Ces contraintes seront vérifiées par un JSON Schema, dans `packages/rules`, et par un test qui charge toutes les horloges du jeu. Le schéma est écrit avec TypeBox, voir l'[ADR 0008](adr/0008-validation-des-horloges.md).
 
+## Horloges du jeu
+
+Les horloges du jeu sont rangées dans `packages/rules/clocks/`, un dossier par chapitre :
+
+```
+packages/rules/clocks/
+└── ch01/
+    ├── ch01-clk0.json
+    ├── ch01-clk1.json
+    ├── ch01-clk2.json
+    └── ch01-clk3.json
+```
+
+- **uid** : `chNN-clkI`, où `NN` est le chapitre sur deux chiffres et `I` la position dans le chapitre (`indexInChapter`, de 0 à 3). L'uid se déduit donc de `chapter` et `indexInChapter`.
+- **Fichier** : `chNN/<uid>.json`. Le nom du fichier est l'uid, le dossier est le chapitre.
+- **Règles générales** : une horloge ne réécrit pas `ascendingOrder` dans `clockRules`. La règle s'applique déjà à toute épreuve ; la répéter ne change rien au jeu et laisse croire qu'elle est propre à l'horloge.
+- **Réussite possible** : chaque horloge a une pose gagnante connue dans `packages/rules/test/clock-solutions/`, au même chemin, rejouée par `test/clocks/clock-solutions.test.ts` (voir la [stratégie de tests](testing.md)).
+
+`test/clocks/game-clocks.test.ts` vérifie ces conventions sur toutes les horloges du dossier. Les horloges de `test/fixtures/clocks/` ne servent qu'aux tests du moteur : leur uid commence par `fixture-` pour ne jamais être confondu avec celui d'une horloge du jeu.
+
+Un chapitre arrive complet, en une seule PR : le test vérifie que chaque chapitre présent a ses quatre positions, de 0 à 3.
+
+La conception de chaque chapitre (notions introduites, progression de la difficulté) est décrite dans `docs/clocks/`. Pour écrire une nouvelle horloge, partir de [`docs/clocks/clock-template.json`](clocks/clock-template.json), puis la copier dans le dossier de son chapitre. Le modèle reste hors de `packages/rules/clocks/`, car le test y lit tous les fichiers JSON.
+
 ## État d'une épreuve
 
 Pour mémoire, la partie de l'état qui fait le lien avec l'horloge. Le détail est dans le [modèle du domaine](diagrams/domain-model.md).

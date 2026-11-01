@@ -1,6 +1,7 @@
 import type { Static } from "typebox";
 import type { ExactCardCountSchema } from "../clocks/rule-schemas.js";
 import type { Placement } from "../placements/placement.js";
+import { countCards } from "./count-cards.js";
 import type { ExactCardCountViolation } from "./violation.js";
 
 /** Paramètres d'exactCardCount, déduits du schéma de la règle. */
@@ -17,8 +18,7 @@ export type ExactCardCountParams = Static<
  * composition exacte (2 instant et aucune eternity), l'horloge combine deux
  * règles, l'une avec count 0.
  *
- * La face (visible ou cachée) n'entre pas en compte : à la Résolution,
- * toutes les cartes sont révélées.
+ * Le comptage est celui de countCards, partagé avec minCardCount.
  *
  * @returns la violation, ou undefined si la règle est respectée
  */
@@ -27,10 +27,7 @@ export function checkExactCardCount(
   placements: readonly Placement[],
   params: ExactCardCountParams,
 ): ExactCardCountViolation | undefined {
-  const cardCount = placements.filter(
-    (placement) =>
-      params.family === undefined || placement.card.family === params.family,
-  ).length;
+  const cardCount = countCards(placements, params.family);
   // Clause de garde : le compte est bon, rien à signaler.
   if (cardCount === params.count) {
     return undefined;

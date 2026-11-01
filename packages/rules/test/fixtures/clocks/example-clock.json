@@ -1,7 +1,7 @@
 {
   "$schema": "../../../schema/clock.schema.json",
   "formatVersion": 1,
-  "uid": "ch01-clk2",
+  "uid": "fixture-example",
   "chapter": 1,
   "indexInChapter": 2,
   "noMaxSum": false,

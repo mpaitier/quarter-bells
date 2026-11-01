@@ -94,6 +94,7 @@ Propriétés à vérifier :
 - Chaque fichier d'horloge du jeu est validé par le JSON Schema.
 - Des horloges invalides écrites exprès (deux sections de départ, 5 sections, règle inconnue, paramètres manquants) sont rejetées.
 - Chaque chapitre contient exactement 4 horloges, avec des `uid` uniques dans tout le jeu.
+- Chaque horloge du jeu a une pose gagnante connue dans `test/clock-solutions/`, au même chemin que l'horloge. `test/clocks/clock-solutions.test.ts` la rejoue comme une épreuve : chaque carte doit être acceptée pendant la Pose, puis la pose complète doit réussir à la Résolution. La pose utilise toutes les cartes distribuées, chacune une seule fois, toutes face cachée : la réussite ne dépend ainsi ni du nombre de joueurs ni des yeux disponibles. Comme pour les autres cas, la pose est construite à la main, pas recopiée du moteur.
 
 ### Tests d'intégration du serveur
 

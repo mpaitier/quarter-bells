@@ -1,0 +1,32 @@
+{
+  "$schema": "../../schema/clock.schema.json",
+  "formatVersion": 1,
+  "uid": "ch01-clk1",
+  "chapter": 1,
+  "indexInChapter": 1,
+  "noMaxSum": true,
+  "startSectionMode": "fixed",
+  "defaultStartSection": 0,
+  "clockRules": [],
+  "sections": [
+    { "index": 0, "rules": [] },
+    {
+      "index": 1,
+      "rules": [
+        { "kind": "firstPlacements", "params": { "placementIndexes": [2] } }
+      ]
+    },
+    {
+      "index": 2,
+      "rules": [{ "kind": "sumInRange", "params": { "min": 9, "max": 15 } }]
+    },
+    { "index": 3, "rules": [] },
+    {
+      "index": 4,
+      "rules": [
+        { "kind": "firstPlacements", "params": { "placementIndexes": [4] } }
+      ]
+    },
+    { "index": 5, "rules": [] }
+  ]
+}

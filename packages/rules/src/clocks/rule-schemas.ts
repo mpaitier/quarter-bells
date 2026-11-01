@@ -27,8 +27,16 @@ const ruleSchema = <K extends string, P extends Type.TProperties>(
     { additionalProperties: false },
   );
 
-/** Au moins `min` cartes devant la section. */
-export const MinCardCountSchema = ruleSchema("minCardCount", { min: Int(1) });
+/**
+ * Au moins `min` cartes devant la section, d'une famille donnée ou toutes
+ * familles confondues. Même convention que exactCardCount pour `family`.
+ */
+export const MinCardCountSchema = ruleSchema("minCardCount", {
+  min: Int(1),
+  // Optional : absent, toutes les cartes comptent. La règle générale
+  // ({ min: 1 }) reste donc valide sans changement.
+  family: Type.Optional(CardFamilySchema),
+});
 
 /** Exactement `count` cartes, d'une famille donnée ou toutes familles confondues. */
 export const ExactCardCountSchema = ruleSchema("exactCardCount", {

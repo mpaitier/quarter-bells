@@ -1,0 +1,33 @@
+{
+  "description": "minCardCount avec une famille échoue quand le total de la section atteint le minimum mais pas les cartes de la famille",
+  "rule": {
+    "kind": "minCardCount",
+    "params": { "min": 2, "family": "eternity" }
+  },
+  "section": 3,
+  "placements": [
+    {
+      "sectionIndex": 3,
+      "card": { "family": "eternity", "value": 4 },
+      "faceUp": false
+    },
+    {
+      "sectionIndex": 3,
+      "card": { "family": "instant", "value": 4 },
+      "faceUp": true
+    },
+    {
+      "sectionIndex": 3,
+      "card": { "family": "instant", "value": 9 },
+      "faceUp": false
+    }
+  ],
+  "expected": [
+    {
+      "kind": "minCardCount",
+      "params": { "min": 2, "family": "eternity" },
+      "section": 3,
+      "cardCount": 1
+    }
+  ]
+}
