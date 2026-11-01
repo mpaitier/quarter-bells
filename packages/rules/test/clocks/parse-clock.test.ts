@@ -222,4 +222,58 @@ describe("parseClock", () => {
       ]);
     });
   });
+
+  // Contrôle sémantique de firstPlacements : un rang ne peut être imposé que
+  // par une seule section, sinon l'épreuve se bloque à ce rang.
+  describe("firstPlacements ranks", () => {
+    /** Copie de l'horloge valide avec un firstPlacements sur deux sections. */
+    const withRanks = (
+      first: { section: number; ranks: number[] },
+      second: { section: number; ranks: number[] },
+    ) => ({
+      ...exampleClock,
+      sections: exampleClock.sections.map((section) => {
+        const rules = [first, second]
+          .filter((entry) => entry.section === section.index)
+          .map((entry) => ({
+            kind: "firstPlacements",
+            params: { placementIndexes: entry.ranks },
+          }));
+        return rules.length > 0 ? { ...section, rules } : section;
+      }),
+    });
+
+    it("rejects a rank required on two sections", () => {
+      // Le rang 3 est imposé en section 1 puis en section 4 : l'erreur est
+      // signalée sur la seconde, et nomme la première.
+      const clock = withRanks(
+        { section: 1, ranks: [0, 3] },
+        { section: 4, ranks: [3] },
+      );
+      expect(issuesOf(clock)).toEqual([
+        {
+          path: "/sections/4/rules/0/params/placementIndexes",
+          message: "placement rank 3 is already required on section 1",
+        },
+      ]);
+    });
+
+    it("accepts different ranks on different sections", () => {
+      const clock = withRanks(
+        { section: 1, ranks: [0, 3] },
+        { section: 4, ranks: [1] },
+      );
+      expect(parseClock(clock, "distinct-ranks.json")).toEqual(clock);
+    });
+
+    it("accepts the same rank twice on the same section", () => {
+      // Redondant mais jouable : la pose de rang 2 va en section 1, ce qui
+      // satisfait les deux règles.
+      const clock = withRanks(
+        { section: 1, ranks: [2] },
+        { section: 1, ranks: [2] },
+      );
+      expect(parseClock(clock, "same-section.json")).toEqual(clock);
+    });
+  });
 });
