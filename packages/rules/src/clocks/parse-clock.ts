@@ -132,8 +132,42 @@ function checkSemantics(clock: Clock): ClockIssue[] {
         }
       }
     });
+
+    issues.push(...checkPlacementAndBound(section, i));
   });
   return issues;
+}
+
+/**
+ * Règle de conception : une section qui impose une pose (firstPlacements) ne
+ * borne pas sa valeur (maxSum, sumInRange). Imposer qu'une carte aille sur
+ * une section tout en limitant ce qu'elle peut valoir ferait dépendre la
+ * réussite de la donne plutôt que des choix des joueurs : de la fausse
+ * difficulté, exclue du jeu (docs/clock-format.md).
+ *
+ * L'erreur est signalée sur chaque borne : c'est elle qu'il faut déplacer.
+ */
+function checkPlacementAndBound(
+  section: Clock["sections"][number],
+  sectionPosition: number,
+): ClockIssue[] {
+  const requiresPlacement = section.rules.some(
+    (rule) => rule.kind === "firstPlacements",
+  );
+  // Clause de garde : sans pose imposée, toute borne est permise.
+  if (!requiresPlacement) {
+    return [];
+  }
+  return section.rules.flatMap((rule, j) =>
+    rule.kind === "maxSum" || rule.kind === "sumInRange"
+      ? [
+          {
+            path: `/sections/${String(sectionPosition)}/rules/${String(j)}/kind`,
+            message: `${rule.kind} cannot bound a section that requires placements (firstPlacements)`,
+          },
+        ]
+      : [],
+  );
 }
 
 /**

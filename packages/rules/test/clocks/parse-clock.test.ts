@@ -276,4 +276,50 @@ describe("parseClock", () => {
       expect(parseClock(clock, "same-section.json")).toEqual(clock);
     });
   });
+
+  // Règle de conception : pas de pose imposée et de borne de valeur sur la
+  // même section (docs/clock-format.md).
+  describe("placement and value bound on one section", () => {
+    /** Copie de l'horloge valide avec ces règles en section 2, vide au départ. */
+    const withSection2 = (rules: unknown[]) => ({
+      ...exampleClock,
+      sections: exampleClock.sections.map((section) =>
+        section.index === 2 ? { ...section, rules } : section,
+      ),
+    });
+    const firstPlacements = {
+      kind: "firstPlacements",
+      params: { placementIndexes: [0] },
+    };
+
+    it.each([
+      ["maxSum", { kind: "maxSum", params: { max: 9 } }],
+      ["sumInRange", { kind: "sumInRange", params: { min: 4, max: 9 } }],
+    ])("rejects %s next to firstPlacements", (kind, bound) => {
+      // La borne est en position 1 : c'est elle que l'erreur désigne.
+      expect(issuesOf(withSection2([firstPlacements, bound]))).toEqual([
+        {
+          path: "/sections/2/rules/1/kind",
+          message: `${kind} cannot bound a section that requires placements (firstPlacements)`,
+        },
+      ]);
+    });
+
+    it("accepts a card count next to firstPlacements", () => {
+      // Nombre et famille de cartes restent combinables avec une pose
+      // imposée : ils ne dépendent pas de la valeur des cartes.
+      const clock = withSection2([
+        firstPlacements,
+        { kind: "exactCardCount", params: { count: 2, family: "instant" } },
+      ]);
+      expect(parseClock(clock, "count-and-placement.json")).toEqual(clock);
+    });
+
+    it("accepts a value bound on another section", () => {
+      // example-clock borne déjà la section 1 (sumInRange) : la pose imposée
+      // en section 2 ne la concerne pas.
+      const clock = withSection2([firstPlacements]);
+      expect(parseClock(clock, "separate-sections.json")).toEqual(clock);
+    });
+  });
 });
