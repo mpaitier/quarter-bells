@@ -81,6 +81,33 @@ Certains comportements se vérifient mieux par des invariants que par des exempl
 
 Un test de propriétés complète les tests d'exemple sans les remplacer : il vérifie que le résultat ne change pas quand on fait varier l'entrée, jamais que le résultat est le bon.
 
+Les propriétés s'écrivent avec `it.prop` de [`@fast-check/vitest`](https://github.com/dubzzz/fast-check/tree/main/packages/vitest), qui intègre fast-check à Vitest. Chaque propriété est vérifiée sur 100 entrées par défaut.
+
+```ts
+import { fc, it } from "@fast-check/vitest";
+
+it.prop([fc.integer({ min: 0, max: 5 })])(
+  "starts at the given section",
+  (start) => {
+    expect(clockwiseOrder(start)[0]).toBe(start);
+  },
+);
+```
+
+Les entrées changent à chaque exécution, mais le hasard reste maîtrisé : en cas d'échec, Vitest affiche la graine dans le nom du test, et fast-check le contre-exemple réduit ainsi que la ligne qui permet de le rejouer :
+
+```
+Error: Property failed after 14 tests
+{ seed: -1155677064, path: "13", endOnFailure: true }
+Counterexample: [4]
+```
+
+Pour rejouer exactement cet échec, passer cet objet en second argument de `it.prop`, le temps de corriger. Il ne doit jamais être commité : une graine fixe ferait vérifier toujours les mêmes entrées.
+
+```ts
+it.prop([fc.integer({ min: 0, max: 5 })], { seed: -1155677064, path: "13", endOnFailure: true })(…)
+```
+
 Propriétés à vérifier :
 
 - une distribution donne exactement 12 cartes, sans doublon, réparties selon le nombre de joueurs ;
