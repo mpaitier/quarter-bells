@@ -19,7 +19,9 @@ Poser les bases avant le code.
 - L'ADR sur la stack est accepté.
 - Les questions ouvertes des documents de conception qui bloquent J1 sont tranchées.
 
-## J1 - Moteur de règles
+## J1 - Moteur de règles (terminé)
+
+Terminé le 2026-11-02.
 
 Le cœur du jeu, sans interface ni réseau.
 
@@ -29,6 +31,8 @@ Le cœur du jeu, sans interface ni réseau.
 - Évaluation complète d'une épreuve : pose, refus d'une pose interdite, résolution.
 - Format de données des horloges et 4 horloges du chapitre 1.
 - CI : lint, formatage et tests à chaque pull request.
+- ADR : validation des horloges (0008), évaluation d'une pose (0009), épreuve en reducer (0010), bornes connues sans blocage (0011).
+- Tests de propriétés sur des horloges générées.
 
 **Exigences couvertes** : F-JEU-06, F-JEU-13, F-REG-01, NF-QUA-01, NF-QUA-02, NF-QUA-04.
 
