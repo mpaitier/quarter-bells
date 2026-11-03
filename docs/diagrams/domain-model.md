@@ -86,6 +86,7 @@ classDiagram
     class GameSession {
         +List~PlayerId~ turnOrder
         +Trial currentTrial
+        +bool offRecord
     }
 
     class Trial {
@@ -160,6 +161,12 @@ classDiagram
         +int bonusEyes
         +List~ClockId~ completedClocks
         +List~ClockId~ suspendedClocks
+        +List~ClockFailures~ failures
+    }
+
+    class ClockFailures {
+        +ClockId clock
+        +int count
     }
 
     class Player {
@@ -174,6 +181,7 @@ classDiagram
     }
 
     Group "1" *-- "1" Progress
+    Progress "1" *-- "0..*" ClockFailures
     Group "1" o-- "2..4" Player
     Player "1" *-- "1" Profile
 ```
@@ -183,6 +191,7 @@ classDiagram
 - **Le groupe** est identifié par sa salle. Ses membres forment un ensemble fixe : une progression ne reprend qu'avec exactement les mêmes joueurs.
 - **Les yeux bonus** survivent aux épreuves et aux sessions sauvegardées : ils font partie de la progression du groupe, pas de l'épreuve.
 - **Le chapitre maximum** d'un joueur vit sur le joueur, puisqu'il se calcule toutes salles confondues.
+- **La partie hors sauvegarde** est un état de la partie, pas de la progression : elle ne survit pas à l'arrêt, et la partie suivante reprend au point sauvegardé.
 - **L'identifiant de carte** (`CardId`) est tiré au hasard à chaque distribution. Un identifiant stable comme `instant-12` donnerait la valeur à quiconque le lit.
 - **La section de départ** est une donnée de l'épreuve, puisqu'elle peut être choisie par les joueurs à partir du chapitre 3. L'horloge ne fournit que sa valeur par défaut.
 

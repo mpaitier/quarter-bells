@@ -53,25 +53,25 @@ Vocabulaire du domaine. Le même terme est utilisé partout : règles, diagramme
 
 ## Yeux
 
-| Terme            | Code            | Définition                                                                                                                                                                    |
-| ---------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Œil              | `Eye`           | Ressource collective qui permet de poser une carte face visible.                                                                                                              |
-| Yeux de base     | `baseEyes`      | Nombre d'yeux disponible à chaque épreuve, proportionnel au nombre de joueurs et plafonnable par l'hôte.                                                                      |
-| Options de salle | `LobbySettings` | Réglages de difficulté choisis par l'hôte à la création de la salle.                                                                                                          |
-| Œil bonus        | `bonusEye`      | Œil supplémentaire gagné après un échec, 3 au maximum. Un échec avec 3 yeux bonus met fin à la run. Remis à zéro après une réussite ou quand une horloge est mise en suspens. |
+| Terme            | Code            | Définition                                                                                                                                                                                                                                                    |
+| ---------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Œil              | `Eye`           | Ressource collective qui permet de poser une carte face visible.                                                                                                                                                                                              |
+| Yeux de base     | `baseEyes`      | Nombre d'yeux disponible à chaque épreuve, proportionnel au nombre de joueurs et plafonnable par l'hôte.                                                                                                                                                      |
+| Options de salle | `LobbySettings` | Réglages de difficulté choisis par l'hôte à la création de la salle.                                                                                                                                                                                          |
+| Œil bonus        | `bonusEye`      | Œil supplémentaire gagné après un échec, 3 au maximum. Un échec avec 3 yeux bonus met fin à la run. Remis à zéro après une réussite, quand une horloge est mise en suspens, ou quand l'hôte retente l'horloge ou recommence le chapitre après une run perdue. |
 
 ## Progression
 
-| Terme                             | Code                | Définition                                                                                                      |
-| --------------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------- |
-| Chapitre                          | `Chapter`           | Groupe de 4 horloges de difficulté croissante. Le jeu en compte 10.                                             |
-| Groupe                            | `Group`             | Ensemble de joueurs qui partagent une progression.                                                              |
-| Progression                       | `Progress`          | Chapitre et horloge en cours d'un groupe, plus ses horloges en suspens.                                         |
-| Invité                            | `guest`             | Joueur sans compte. Sa présence dans une salle désactive la sauvegarde de la progression.                       |
-| Jeton de relance                  | `retryToken`        | Ressource du groupe qui permet de retenter une horloge ou de recommencer un chapitre après une run perdue.      |
-| Run                               | `Run`               | Progression d'un groupe depuis son chapitre de départ. Elle prend fin quand le groupe échoue avec 3 yeux bonus. |
-| Chapitre maximum                  | `maxChapterReached` | Chapitre le plus avancé atteint par un joueur, toutes salles confondues.                                        |
-| Horloge en suspens _(provisoire)_ | `suspendedClocks`   | Horloge sautée par le groupe, qu'il pourra retenter plus tard.                                                  |
+| Terme                             | Code                | Définition                                                                                                                                                                              |
+| --------------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Chapitre                          | `Chapter`           | Groupe de 4 horloges de difficulté croissante. Le jeu en compte 10.                                                                                                                     |
+| Groupe                            | `Group`             | Ensemble de joueurs qui partagent une progression.                                                                                                                                      |
+| Progression                       | `Progress`          | Chapitre et horloge en cours d'un groupe, ses horloges en suspens et le nombre d'échecs de chaque horloge.                                                                              |
+| Invité                            | `guest`             | Joueur sans compte. Sa présence dans une salle désactive la sauvegarde de la progression.                                                                                               |
+| Run                               | `Run`               | Progression d'un groupe depuis son chapitre de départ ou depuis le chapitre recommencé. Elle prend fin quand le groupe échoue avec 3 yeux bonus.                                        |
+| Partie hors sauvegarde            | `offRecord`         | Partie qui continue après une run perdue. Ni la progression du groupe ni le chapitre maximum des joueurs ne changent, sauf le nombre d'échecs de l'horloge où la progression est figée. |
+| Chapitre maximum                  | `maxChapterReached` | Chapitre le plus avancé atteint par un joueur, toutes salles confondues.                                                                                                                |
+| Horloge en suspens _(provisoire)_ | `suspendedClocks`   | Horloge sautée par le groupe, qu'il pourra retenter plus tard.                                                                                                                          |
 
 ## Plateforme
 
