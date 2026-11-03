@@ -29,7 +29,7 @@ Point d'entrée de la documentation. À ouvrir en premier en revenant sur le pro
 | [Protocole](protocol.md)                            | Commandes et événements                        | brouillon                 |
 | Architecture C4                                     | Contexte et conteneurs                         | à faire, après l'ADR 0006 |
 | [Stratégie de tests](testing.md)                    | Niveaux de tests, organisation, couverture, CI | à jour                    |
-| Maquettes                                           | Écrans du jeu                                  | à faire                   |
+| Maquettes                                           | Écrans du jeu                                  | dans les issues du J2     |
 
 ## Décisions
 

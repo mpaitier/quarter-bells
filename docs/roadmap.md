@@ -45,12 +45,21 @@ Le cœur du jeu, sans interface ni réseau.
 
 Une épreuve jouable de bout en bout dans le navigateur, sans serveur. Tous les joueurs se partagent le même écran et jouent à tour de rôle. Ce mode sert au développement et aux tests : il n'est pas proposé aux joueurs, puisque le jeu ne se joue pas seul.
 
+L'écran vise le format paysage, sur ordinateur et tablette. Le portrait du téléphone viendra avec l'application mobile du J6.
+
 - Écran de jeu : horloge, mains, pose, yeux, résolution animée.
 - Phases Discussion, Distribution, Pose et Résolution.
 - Guidage du joueur quand une pose est refusée.
-- Enchaînement des 4 horloges du chapitre 1, avec réussite, échec, yeux bonus et fin de run.
+- Enchaînement des 4 horloges du chapitre 1, avec réussite, échec, yeux bonus, fin de run et annonce du chapitre suivant.
+- Textes traduisibles, contrastes AA, animations réductibles et premier affichage rapide.
 
-**Exigences couvertes** : F-JEU-02 à F-JEU-16, F-JEU-20, NF-ACC-01, NF-CMP-01.
+**Simplifications du mode local**
+
+- L'hôte est le premier joueur. Les salles et le rôle d'hôte arrivent au J3.
+- Après un échec, seul « retenter » est proposé. La mise en suspens arrive au J4 avec F-JEU-15.
+- Pas de jetons de relance : après une run perdue, retenter l'horloge et recommencer le chapitre sont gratuits.
+
+**Exigences couvertes** : F-JEU-02 à F-JEU-14, F-JEU-16, F-JEU-19 à F-JEU-21, NF-ACC-01 à NF-ACC-03, NF-CMP-01, NF-I18N-01, NF-PERF-02.
 
 **Critères de sortie**
 
@@ -77,12 +86,11 @@ Plusieurs joueurs sur des appareils différents.
 ## J4 - Progression et contenu
 
 - Sauvegarde de la progression des groupes, choix du chapitre de départ.
-- Annonce de fin de chapitre.
 - Horloges en suspens.
 - Tutoriel.
 - Chapitres 2 à 10, avec des horloges originales.
 
-**Exigences couvertes** : F-PRG-01, F-PRG-02, F-JEU-15, F-JEU-19, F-TUT-01, F-REG-02, F-REG-03, F-LOB-10, NF-REL-03.
+**Exigences couvertes** : F-PRG-01, F-PRG-02, F-JEU-15, F-TUT-01, F-REG-02, F-REG-03, F-LOB-10, NF-REL-03.
 
 ## J5 - Vocal et vidéo
 
@@ -94,8 +102,9 @@ Plusieurs joueurs sur des appareils différents.
 ## J6 - Application mobile
 
 - Client mobile en Flutter. Le partage des règles et du protocole fera l'objet d'un ADR (voir l'ADR 0003).
+- Écran de jeu en portrait pour le téléphone.
 - Gestion de la mise en arrière-plan et des reconnexions.
 
 ## Plus tard
 
-Paramètres audio, icône personnalisée, chat écrit, anglais, animations réduites, suppression des salles inactives. Ces éléments sont intégrés aux jalons quand la base est stable.
+Paramètres audio, icône personnalisée, chat écrit, anglais, suppression des salles inactives. Ces éléments sont intégrés aux jalons quand la base est stable.
