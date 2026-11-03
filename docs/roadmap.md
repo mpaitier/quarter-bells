@@ -57,7 +57,6 @@ L'écran vise le format paysage, sur ordinateur et tablette. Le portrait du tél
 
 - L'hôte est le premier joueur. Les salles et le rôle d'hôte arrivent au J3.
 - Après un échec, seul « retenter » est proposé. La mise en suspens arrive au J4 avec F-JEU-15.
-- Pas de jetons de relance : après une run perdue, retenter l'horloge et recommencer le chapitre sont gratuits.
 
 **Exigences couvertes** : F-JEU-02 à F-JEU-14, F-JEU-16, F-JEU-19 à F-JEU-21, NF-ACC-01 à NF-ACC-03, NF-CMP-01, NF-I18N-01, NF-PERF-02.
 
@@ -87,10 +86,11 @@ Plusieurs joueurs sur des appareils différents.
 
 - Sauvegarde de la progression des groupes, choix du chapitre de départ.
 - Horloges en suspens.
+- Partie hors sauvegarde après une run perdue.
 - Tutoriel.
 - Chapitres 2 à 10, avec des horloges originales.
 
-**Exigences couvertes** : F-PRG-01, F-PRG-02, F-JEU-15, F-TUT-01, F-REG-02, F-REG-03, F-LOB-10, NF-REL-03.
+**Exigences couvertes** : F-PRG-01, F-PRG-02, F-JEU-15, F-JEU-23, F-TUT-01, F-REG-02, F-REG-03, F-LOB-10, NF-REL-03.
 
 ## J5 - Vocal et vidéo
 

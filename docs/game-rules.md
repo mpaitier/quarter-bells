@@ -117,7 +117,7 @@ L'épreuve est réussie si toutes les conditions suivantes sont remplies :
 
 ## Après une épreuve
 
-Les décisions de cette section (continuer, retenter, mettre en suspens, arrêter) appartiennent à l'hôte.
+Les décisions de cette section (continuer, retenter, mettre en suspens, recommencer le chapitre, mettre fin à la progression, arrêter) appartiennent à l'hôte.
 
 ### En cas de réussite
 
@@ -127,13 +127,14 @@ Les décisions de cette section (continuer, retenter, mettre en suspens, arrête
 
 ### En cas d'échec
 
-- Si le groupe avait moins de 3 yeux bonus, il en gagne un.
-- Si le groupe avait déjà 3 yeux bonus, la run est perdue. L'hôte choisit alors entre retenter l'horloge, recommencer le chapitre en cours depuis sa première horloge, ou mettre fin à la progression du groupe. Retenter et recommencer consomment un jeton de relance (voir ci-dessous).
-- Sinon, l'hôte choisit entre retenter l'horloge et la mettre en suspens.
+- Le nombre d'échecs de l'horloge augmente de un.
+- Si le groupe avait moins de 3 yeux bonus, il en gagne un. L'hôte choisit entre retenter l'horloge et la mettre en suspens.
+- Si le groupe avait déjà 3 yeux bonus, la run est perdue. L'hôte choisit entre retenter l'horloge, recommencer le chapitre en cours depuis sa première horloge, ou mettre fin à la progression du groupe.
 - Retenter relance une nouvelle épreuve sur la même horloge, avec une nouvelle distribution.
 - Mettre en suspens remet les yeux bonus à zéro et passe à l'horloge suivante. L'horloge pourra être retentée plus tard.
+- Recommencer le chapitre remet les yeux bonus à zéro et lance une nouvelle run depuis la première horloge du chapitre.
 
-> **Choix de design.** Dans le jeu original, les yeux bonus plafonnent à 3 et le groupe peut retenter indéfiniment. Ici, un échec avec 3 yeux bonus met fin à la run.
+> **Choix de design.** Dans le jeu original, les yeux bonus plafonnent à 3 et le groupe peut retenter indéfiniment. Ici, le groupe peut toujours retenter, mais seule une run qui n'a pas été perdue fait avancer la progression sauvegardée.
 
 L'hôte peut aussi mettre une horloge en suspens avant de l'avoir tentée.
 
@@ -141,11 +142,15 @@ L'hôte peut aussi mettre une horloge en suspens avant de l'avoir tentée.
 
 Au début de chaque partie, les horloges en suspens sont proposées avant l'horloge en cours, dans l'ordre choisi par l'hôte. Une horloge en suspens réussie en sort définitivement.
 
-### Jetons de relance
+### Partie hors sauvegarde
 
-Après une run perdue, retenter l'horloge ou recommencer le chapitre coûte un jeton de relance. Le groupe en gagne régulièrement en progressant, par exemple un tous les deux chapitres terminés. Sans jeton, la seule option est de mettre fin à la progression.
+Retenter l'horloge après une run perdue remet les yeux bonus à zéro et fait passer la partie hors sauvegarde. La progression sauvegardée reste figée sur l'horloge de la run perdue. Les échecs suivants suivent la règle habituelle : le groupe regagne des yeux bonus, et une nouvelle run perdue propose de nouveau les trois mêmes choix.
 
-> **À définir** : nombre de jetons au départ et rythme de gain. Ces valeurs sont des paramètres de configuration, à ajuster après les parties de test.
+Quand le groupe réussit l'horloge, il peut continuer. Avant de passer à la suite, un message prévient le groupe qu'elle ne sera pas sauvegardée : pour faire avancer la progression, il faut recommencer le chapitre et le terminer sans perdre la run. S'il continue, le groupe enchaîne les horloges et les chapitres suivants, mais ni la progression du groupe ni le chapitre maximum des joueurs ne changent.
+
+Pendant une partie hors sauvegarde, seul le nombre d'échecs de l'horloge où la progression est figée continue d'être sauvegardé.
+
+La partie sort de ce mode quand l'hôte recommence le chapitre où la progression est figée, ou quand il arrête la partie. À la partie suivante, le groupe reprend au point sauvegardé.
 
 ## Comptes
 
@@ -155,7 +160,7 @@ Un joueur peut aussi jouer en invité, sans compte. Une salle qui compte au moin
 
 ## Progression
 
-La progression (chapitre et horloge en cours, horloges en suspens, yeux bonus) appartient au groupe, c'est-à-dire à la salle. Pour reprendre une progression, la salle doit réunir exactement les mêmes joueurs. Si un joueur rejoint le groupe, une nouvelle progression commence, au chapitre 1 ou au chapitre choisi par l'hôte dans la limite décrite ci-dessous.
+La progression (chapitre et horloge en cours, horloges en suspens, yeux bonus, nombre d'échecs de chaque horloge) appartient au groupe, c'est-à-dire à la salle. Pour reprendre une progression, la salle doit réunir exactement les mêmes joueurs. Si un joueur rejoint le groupe, une nouvelle progression commence, au chapitre 1 ou au chapitre choisi par l'hôte dans la limite décrite ci-dessous.
 
 Chaque joueur conserve aussi le chapitre le plus avancé qu'il a atteint, toutes salles confondues. Au lancement d'une partie, l'hôte peut choisir le chapitre de départ, jusqu'au plus petit de ces maximums parmi les joueurs présents. Par exemple, si trois joueurs ont atteint les chapitres 7, 2 et 5, l'hôte peut choisir entre les chapitres 1 et 2.
 
@@ -167,6 +172,4 @@ Le jeu est terminé quand les 40 horloges ont été réussies.
 
 ## Questions ouvertes
 
-- Après une run perdue, les yeux bonus restent-ils à 3 si l'hôte retente l'horloge ?
-- Combien de jetons de relance au départ, et à quel rythme le groupe en gagne-t-il ?
 - Les horloges en suspens comptent-elles comme atteintes pour le chapitre maximum d'un joueur ?
