@@ -46,6 +46,7 @@ Point d'entrée de la documentation. À ouvrir en premier en revenant sur le pro
 | [0009](adr/0009-evaluer-une-pose-avant-de-l-accepter.md)     | Évaluer une pose avant de l'accepter     | Accepté               |
 | [0010](adr/0010-faire-jouer-une-epreuve-avec-un-reducer.md)  | Faire jouer une épreuve avec un reducer  | Accepté               |
 | [0011](adr/0011-une-borne-connue-guide-sans-bloquer.md)      | Une borne connue guide sans bloquer      | Accepté               |
+| [0012](adr/0012-framework-web-et-rendu-de-l-horloge.md)      | Framework web et rendu de l'horloge      | Proposé               |
 
 Nouveau ADR : partir de [template.md](adr/template.md).
 
