@@ -24,6 +24,17 @@ import { deepFreeze } from "../support/deep-freeze.js";
 /** Nombre de cartes posées dans une épreuve, quel que soit le nombre de joueurs. */
 const CARDS_PER_TRIAL = 12;
 
+/**
+ * Délai de la propriété « always ends in success or failure », qui joue
+ * 1000 épreuves complètes. Mesurée seule : environ 1,4 s, 2,7 s avec la
+ * couverture. Pendant pnpm check, les fichiers de tests tournent en
+ * parallèle et elle a dépassé le délai par défaut de Vitest (5 s).
+ * 30 s laissent une marge d'environ dix fois la mesure avec couverture.
+ * Le délai global n'est pas relevé : il continue de détecter les tests
+ * bloqués partout ailleurs.
+ */
+const FULL_TRIAL_PROPERTY_TIMEOUT_MS = 30_000;
+
 /** Un coup accepté : l'action et l'épreuve qui en résulte. */
 interface Move {
   readonly action: PlaceCardAction;
@@ -158,7 +169,8 @@ describe("trial properties", () => {
   // demande une suite de coups précise (plusieurs cartes fortes face visible
   // sur une section, puis la pose imposée sur cette section). Avec 100
   // essais, la propriété ne le trouvait pas sans l'exception de l'ADR 0011 ;
-  // avec 1000, elle le trouve à chaque exécution, en environ une seconde.
+  // avec 1000, elle le trouve à chaque exécution. Ce nombre d'essais rend
+  // le test lent : voir FULL_TRIAL_PROPERTY_TIMEOUT_MS.
   it.prop(
     [
       trialSetupArb,
@@ -168,23 +180,27 @@ describe("trial properties", () => {
       }),
     ],
     { numRuns: 1000 },
-  )("always ends in success or failure", (setup, choices) => {
-    const trial = play(createTrial(setup), choices);
+  )(
+    "always ends in success or failure",
+    (setup, choices) => {
+      const trial = play(createTrial(setup), choices);
 
-    if (trial.phase === "placement") {
-      throw new Error(
-        `Trial still in placement after ${String(trial.placements.length)} placements`,
+      if (trial.phase === "placement") {
+        throw new Error(
+          `Trial still in placement after ${String(trial.placements.length)} placements`,
+        );
+      }
+      // runLost est un échec : celui qui fait perdre la run.
+      expect(["succeeded", "failed", "runLost"]).toContain(trial.phase);
+      expect(trial.placements).toHaveLength(CARDS_PER_TRIAL);
+      // L'issue doit correspondre au rapport : réussite si et seulement si
+      // aucune violation.
+      expect(trial.phase === "succeeded").toBe(
+        trial.resolution.violations.length === 0,
       );
-    }
-    // runLost est un échec : celui qui fait perdre la run.
-    expect(["succeeded", "failed", "runLost"]).toContain(trial.phase);
-    expect(trial.placements).toHaveLength(CARDS_PER_TRIAL);
-    // L'issue doit correspondre au rapport : réussite si et seulement si
-    // aucune violation.
-    expect(trial.phase === "succeeded").toBe(
-      trial.resolution.violations.length === 0,
-    );
-  });
+    },
+    FULL_TRIAL_PROPERTY_TIMEOUT_MS,
+  );
 
   // Critère : une pose refusée ne modifie jamais l'état. Un refus ne renvoie
   // pas d'épreuve : la seule façon de modifier l'état serait de changer
