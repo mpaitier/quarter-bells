@@ -47,6 +47,7 @@ Point d'entrée de la documentation. À ouvrir en premier en revenant sur le pro
 | [0010](adr/0010-faire-jouer-une-epreuve-avec-un-reducer.md)  | Faire jouer une épreuve avec un reducer  | Accepté               |
 | [0011](adr/0011-une-borne-connue-guide-sans-bloquer.md)      | Une borne connue guide sans bloquer      | Accepté               |
 | [0012](adr/0012-framework-web-et-rendu-de-l-horloge.md)      | Framework web et rendu de l'horloge      | Accepté               |
+| [0013](adr/0013-logo-et-generation-des-icones.md)            | Logo et génération des icônes            | Accepté               |
 
 Nouveau ADR : partir de [template.md](adr/template.md).
 
