@@ -13,6 +13,9 @@ Le projet comprend un serveur de jeu, un client web et, plus tard, un client mob
   qui lit `.nvmrc` et change de version automatiquement en entrant dans le dossier.
 - **pnpm** : la version est fixée par le champ `packageManager` du `package.json`
   et fournie par Corepack, livré avec Node 24.
+- **Git LFS** : les sources Krita (`.kra`) sont stockées par [Git LFS](https://git-lfs.com).
+  À activer une fois par machine avec `git lfs install`, avant de cloner ou de récupérer
+  les assets. Sans lui, les `.kra` arrivent sous forme de petits fichiers texte (des pointeurs).
 
 Le champ `engines` du `package.json` indique la plage de versions de Node attendue.
 Il est seulement indicatif : pnpm ne bloque pas l'installation si la version ne

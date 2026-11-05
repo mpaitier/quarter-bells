@@ -32,6 +32,10 @@ build/
 dist/
 coverage/
 
+# Krita : sauvegardes et enregistrements automatiques créés à côté du document
+*.kra~
+*.kra-autosave.kra
+
 # Flutter (apps/mobile)
 .dart_tool/
 .flutter-plugins
