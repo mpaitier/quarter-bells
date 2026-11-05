@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // Le navigateur ajoute le DOM à la bibliothèque standard.
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+
+    // Vite résout les imports comme un bundler : pas d'extension .js
+    // obligatoire dans les imports relatifs, contrairement à NodeNext.
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+
+    // JSX transformé par le runtime automatique de React : pas besoin
+    // d'importer React dans chaque fichier .tsx.
+    "jsx": "react-jsx",
+
+    // Types des imports propres à Vite (import.meta.env, fichiers .png...).
+    // Ce sont les seuls types globaux : toujours aucune API de Node dans src/.
+    "types": ["vite/client"]
+  },
+  // vite.config.ts est inclus pour que tsc et ESLint le vérifient aussi.
+  // Il n'utilise aucune API de Node, il n'a donc pas besoin de "types": ["node"].
+  "include": ["src", "vite.config.ts"]
+}
