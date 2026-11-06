@@ -11,6 +11,8 @@ Ce client ne décide jamais du résultat d'une action : il peut prévisualiser u
 
 Aucune dépendance vers `apps/server` ni `apps/mobile`.
 
+Un paquet s'importe uniquement par son API publique, `@quarter-bells/<paquet>`, qui correspond à son `index.ts`. ESLint refuse les sous-chemins (`@quarter-bells/rules/src/...`), les chemins relatifs vers un autre dossier du monorepo et les imports des autres applications.
+
 ## Stack
 
 React, TypeScript en mode `strict`, rendu de l'horloge en SVG et build par Vite ([ADR 0012](../../docs/adr/0012-framework-web-et-rendu-de-l-horloge.md)).
