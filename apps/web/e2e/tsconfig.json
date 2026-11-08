@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    // Playwright tourne sous Node : la configuration lit process.env.
+    // Le code des tests, lui, pilote le navigateur à distance.
+    "types": ["node"]
+  },
+  "include": ["."]
+}

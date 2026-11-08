@@ -33,10 +33,25 @@ ESLint refuse le texte écrit en dur dans les composants de `src/` : texte entre
 
 Depuis la racine du dépôt :
 
-| Commande                                   | Rôle                                                       |
-| ------------------------------------------ | ---------------------------------------------------------- |
-| `pnpm --filter web dev`                    | serveur de développement, rechargement à chaud             |
-| `pnpm --filter web build`                  | site statique dans `apps/web/dist/`                        |
-| `pnpm --filter web preview`                | sert le contenu de `dist/` pour vérifier le build en local |
-| `pnpm --filter web typecheck`              | vérification des types                                     |
-| `pnpm vitest --project @quarter-bells/web` | tests de composants de `test/`, en mode surveillance       |
+| Commande                                   | Rôle                                                                                  |
+| ------------------------------------------ | ------------------------------------------------------------------------------------- |
+| `pnpm --filter web dev`                    | serveur de développement, rechargement à chaud                                        |
+| `pnpm --filter web build`                  | site statique dans `apps/web/dist/`                                                   |
+| `pnpm --filter web preview`                | sert le contenu de `dist/` pour vérifier le build en local                            |
+| `pnpm --filter web typecheck`              | vérification des types                                                                |
+| `pnpm vitest --project @quarter-bells/web` | tests de composants de `test/`, en mode surveillance                                  |
+| `pnpm test:e2e`                            | test de fumée Playwright sur le build de production, dans Chromium, Firefox et WebKit |
+
+## Tests de bout en bout
+
+Les tests Playwright sont dans `e2e/`, avec leur configuration. Ils visent le build de production, servi sur le port 4173 : la commande construit le site avant de lancer les navigateurs.
+
+Avant le premier lancement, installer les navigateurs une fois par machine, puis à chaque mise à jour de `@playwright/test` :
+
+```
+pnpm --filter web exec playwright install chromium firefox webkit
+```
+
+Ils ne font pas partie de `pnpm check`, trop lents pour une vérification avant chaque commit. La CI les lance à chaque PR, après les autres vérifications.
+
+Quand un test échoue en CI, le rapport HTML est publié comme artefact `playwright-report` du workflow. Après une nouvelle tentative, il contient une trace (DOM, réseau, console) à ouvrir avec `pnpm --filter web exec playwright show-trace <fichier>`.
