@@ -1,4 +1,5 @@
 import { SECTION_COUNT } from "@quarter-bells/rules";
+import { FormattedMessage } from "react-intl";
 
 // Géométrie de l'esquisse d'horloge, dans le repère du viewBox.
 const CENTER = 50;
@@ -14,8 +15,9 @@ const SEPARATOR_ANGLES = Array.from(
 export function App() {
   return (
     <main>
-      {/* Texte provisoire : il passera par le système de traduction à l'étape i18n. */}
-      <h1>Quarter Bells</h1>
+      <h1>
+        <FormattedMessage id="app.title" />
+      </h1>
       {/* Décoratif : masqué aux lecteurs d'écran. */}
       <svg viewBox="0 0 100 100" width="200" height="200" aria-hidden="true">
         <circle

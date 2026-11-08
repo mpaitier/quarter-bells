@@ -17,6 +17,18 @@ Un paquet s'importe uniquement par son API publique, `@quarter-bells/<paquet>`, 
 
 React, TypeScript en mode `strict`, rendu de l'horloge en SVG et build par Vite ([ADR 0012](../../docs/adr/0012-framework-web-et-rendu-de-l-horloge.md)).
 
+## Traductions
+
+Aucun texte affiché n'est écrit en dur (NF-I18N-01). Les textes passent par react-intl ([ADR 0014](../../docs/adr/0014-bibliotheque-de-traduction.md)).
+
+- Les messages vivent dans `src/i18n/messages/`, un fichier JSON par langue. Le catalogue français `fr.json` fait référence : ses clés sont les seuls identifiants acceptés par TypeScript.
+- Un identifiant se nomme par écran puis par élément : `app.title`.
+- Un message avec pluriel ou variable s'écrit en syntaxe ICU : `{count, plural, one {# carte} other {# cartes}}`.
+- Dans un composant : `<FormattedMessage id="app.title" />`, ou `useIntl().formatMessage({ id: "app.title" })` pour un attribut comme `aria-label`.
+- Dans un test : `renderWithTranslations(<Composant />)` à la place de `render`.
+
+ESLint refuse le texte écrit en dur dans les composants de `src/` : texte entre deux balises, chaîne entre accolades, et attributs comme `aria-label`, `alt` ou `title`.
+
 ## Commandes
 
 Depuis la racine du dépôt :

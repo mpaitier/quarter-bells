@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./app";
+import { TranslationProvider } from "./i18n/translation-provider";
 
 // L'élément racine est déclaré dans index.html. S'il manque, autant échouer
 // tout de suite avec un message clair plutôt que sur un « null » plus loin.
@@ -13,6 +14,8 @@ if (root === null) {
 // les effets mal nettoyés (voir ADR 0012). Il n'a aucun effet en production.
 createRoot(root).render(
   <StrictMode>
-    <App />
+    <TranslationProvider>
+      <App />
+    </TranslationProvider>
   </StrictMode>,
 );

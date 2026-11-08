@@ -11,6 +11,8 @@ const DETERMINISM_MESSAGE =
   "packages/rules ne lit ni l'heure système ni un hasard non maîtrisé : injecter une horloge ou une graine.";
 const PUBLIC_API_MESSAGE =
   "apps/web n'importe que l'API publique d'un paquet (son index.ts) : @quarter-bells/<paquet>, sans sous-chemin.";
+const HARDCODED_TEXT_MESSAGE =
+  "Aucun texte affiché en dur (NF-I18N-01) : ajouter le message dans apps/web/src/i18n/messages/fr.json et l'afficher avec react-intl.";
 const WEB_DEPENDENCIES_MESSAGE =
   "apps/web ne dépend que de packages/rules et packages/protocol (voir apps/web/README.md).";
 
@@ -121,6 +123,34 @@ export default defineConfig([
               message: WEB_DEPENDENCIES_MESSAGE,
             },
           ],
+        },
+      ],
+    },
+  },
+
+  // apps/web : aucun texte affiché écrit en dur dans les composants (NF-I18N-01).
+  // Les sélecteurs repèrent le texte entre deux balises, une chaîne placée
+  // entre accolades, et les attributs lus par l'utilisateur ou un lecteur
+  // d'écran. Un texte qui doit vraiment rester en dur (rare) se justifie par
+  // un commentaire eslint-disable-next-line.
+  {
+    files: ["apps/web/src/**/*.tsx"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        { selector: "JSXText[value=/\\S/]", message: HARDCODED_TEXT_MESSAGE },
+        {
+          selector: "JSXExpressionContainer > Literal[value=/\\S/]",
+          message: HARDCODED_TEXT_MESSAGE,
+        },
+        {
+          selector: "JSXExpressionContainer > TemplateLiteral",
+          message: HARDCODED_TEXT_MESSAGE,
+        },
+        {
+          selector:
+            "JSXAttribute[name.name=/^(aria-label|aria-description|aria-placeholder|aria-valuetext|title|alt|placeholder|label)$/] > Literal",
+          message: HARDCODED_TEXT_MESSAGE,
         },
       ],
     },
