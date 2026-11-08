@@ -21,9 +21,10 @@ React, TypeScript en mode `strict`, rendu de l'horloge en SVG et build par Vite 
 
 Depuis la racine du dépôt :
 
-| Commande                      | Rôle                                                       |
-| ----------------------------- | ---------------------------------------------------------- |
-| `pnpm --filter web dev`       | serveur de développement, rechargement à chaud             |
-| `pnpm --filter web build`     | site statique dans `apps/web/dist/`                        |
-| `pnpm --filter web preview`   | sert le contenu de `dist/` pour vérifier le build en local |
-| `pnpm --filter web typecheck` | vérification des types                                     |
+| Commande                                   | Rôle                                                       |
+| ------------------------------------------ | ---------------------------------------------------------- |
+| `pnpm --filter web dev`                    | serveur de développement, rechargement à chaud             |
+| `pnpm --filter web build`                  | site statique dans `apps/web/dist/`                        |
+| `pnpm --filter web preview`                | sert le contenu de `dist/` pour vérifier le build en local |
+| `pnpm --filter web typecheck`              | vérification des types                                     |
+| `pnpm vitest --project @quarter-bells/web` | tests de composants de `test/`, en mode surveillance       |

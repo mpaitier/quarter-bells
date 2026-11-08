@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    // Les tests tournent sous Node (Vitest et jsdom) : contrairement à src/,
+    // ils ont accès aux types de Node.
+    "types": ["vite/client", "node"]
+  },
+  // Chemins relatifs à ce fichier. Les fichiers de src/ importés par les tests
+  // sont vérifiés ici aussi, mais c'est ../tsconfig.json qui fait foi pour eux.
+  "include": ["."]
+}

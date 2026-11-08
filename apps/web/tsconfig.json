@@ -19,5 +19,6 @@
   },
   // vite.config.ts est inclus pour que tsc et ESLint le vérifient aussi.
   // Il n'utilise aucune API de Node, il n'a donc pas besoin de "types": ["node"].
+  // Les tests ont leur propre test/tsconfig.json.
   "include": ["src", "vite.config.ts"]
 }
