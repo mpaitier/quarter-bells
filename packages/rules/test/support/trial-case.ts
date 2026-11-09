@@ -17,7 +17,7 @@ const REJECTION_REASONS = [
   "notYourTurn",
   "cardNotInHand",
   "unknownSection",
-  "noEyeLeft",
+  "noCandleLeft",
   "ruleViolation",
 ] as const satisfies readonly TrialRejection["reason"][];
 
@@ -58,11 +58,11 @@ export const TrialCaseSchema = Type.Object(
     turnOrder: Type.Array(Type.String({ minLength: 1 })),
     startSection: Type.Integer(),
     seed: Type.Integer(),
-    bonusEyes: Type.Integer(),
-    eyeSettings: Type.Object(
+    bonusCandles: Type.Integer(),
+    candleSettings: Type.Object(
       {
-        maxBonusEyes: Type.Integer(),
-        baseEyesCap: Type.Optional(Type.Integer()),
+        maxBonusCandles: Type.Integer(),
+        baseCandlesCap: Type.Optional(Type.Integer()),
       },
       { additionalProperties: false },
     ),
@@ -70,7 +70,7 @@ export const TrialCaseSchema = Type.Object(
     expected: Type.Object(
       {
         phase: Type.Enum(["succeeded", "failed", "runLost"]),
-        bonusEyesAfter: Type.Integer({ minimum: 0 }),
+        bonusCandlesAfter: Type.Integer({ minimum: 0 }),
         // Dans l'ordre de révélation.
         sections: Type.Array(ExpectedSectionSchema, {
           minItems: 6,

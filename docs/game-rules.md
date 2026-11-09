@@ -20,22 +20,22 @@ Les deux familles se distinguent par leur couleur (ambre pour Instant, violet po
 
 ## Mise en place d'une épreuve
 
-Le nombre d'yeux disponibles est fixé : yeux de base, plus les yeux bonus gagnés.
+Le nombre de bougies disponibles est fixé : bougies de base, plus les bougies bonus gagnées.
 
-Les yeux de base sont proportionnels au nombre de joueurs : `yeux de base = nombre de joueurs × yeux par joueur`.
+Les bougies de base sont proportionnelles au nombre de joueurs : `bougies de base = nombre de joueurs × bougies par joueur`.
 
-> **À définir** : valeur de `yeux par joueur` (1 par défaut, à ajuster en playtest).
+> **À définir** : valeur de `bougies par joueur` (1 par défaut, à ajuster en playtest).
 
 ### Options de la salle
 
 À la création de la salle, l'hôte peut durcir la partie :
 
-| Option                 | Effet                                               | Valeur par défaut |
-| ---------------------- | --------------------------------------------------- | ----------------- |
-| Plafond d'yeux de base | Les yeux de base ne dépassent pas cette valeur.     | aucun plafond     |
-| Yeux bonus maximum     | Nombre maximum d'yeux bonus, de 0 (désactivés) à 3. | 3                 |
+| Option                     | Effet                                                    | Valeur par défaut |
+| -------------------------- | -------------------------------------------------------- | ----------------- |
+| Plafond de bougies de base | Les bougies de base ne dépassent pas cette valeur.       | aucun plafond     |
+| Bougies bonus maximum      | Nombre maximum de bougies bonus, de 0 (désactivées) à 3. | 3                 |
 
-Avec un maximum de yeux bonus réduit, la run est perdue dès qu'un échec survient alors que ce maximum est atteint.
+Avec un maximum de bougies bonus réduit, la run est perdue dès qu'un échec survient alors que ce maximum est atteint.
 
 ## Déroulement d'une épreuve
 
@@ -86,7 +86,7 @@ Toute communication est interdite.
 
 Les joueurs jouent dans l'ordre de passage. À son tour, un joueur choisit une carte de sa main et la pose devant l'une des 6 sections, quel que soit le nombre de cartes déjà présentes.
 
-La carte est posée face cachée par défaut. Le joueur peut dépenser un œil pour la poser face visible : sa valeur est alors connue de tous. Les yeux sont communs au groupe.
+La carte est posée face cachée par défaut. Le joueur peut dépenser une bougie pour la poser face visible : sa valeur est alors connue de tous. Les bougies sont communes au groupe.
 
 Une pose qui viole une contrainte de pose de l'horloge est refusée, et le joueur doit choisir une autre carte ou une autre section. Les contraintes de pose portent sur des informations publiques (famille, rang de pose, nombre de cartes).
 
@@ -121,20 +121,20 @@ Les décisions de cette section (continuer, retenter, mettre en suspens, recomme
 
 ### En cas de réussite
 
-- Les yeux bonus sont remis à zéro.
+- Les bougies bonus sont remises à zéro.
 - Le groupe passe à l'horloge suivante.
 - Après la 4e horloge d'un chapitre, un message félicite le groupe et annonce le chapitre suivant. Chaque joueur se déclare prêt pour lancer la première horloge du nouveau chapitre.
 
 ### En cas d'échec
 
 - Le nombre d'échecs de l'horloge augmente de un.
-- Si le groupe avait moins de 3 yeux bonus, il en gagne un. L'hôte choisit entre retenter l'horloge et la mettre en suspens.
-- Si le groupe avait déjà 3 yeux bonus, la run est perdue. L'hôte choisit entre retenter l'horloge, recommencer le chapitre en cours depuis sa première horloge, ou mettre fin à la progression du groupe.
+- Si le groupe avait moins de 3 bougies bonus, il en gagne une. L'hôte choisit entre retenter l'horloge et la mettre en suspens.
+- Si le groupe avait déjà 3 bougies bonus, la run est perdue. L'hôte choisit entre retenter l'horloge, recommencer le chapitre en cours depuis sa première horloge, ou mettre fin à la progression du groupe.
 - Retenter relance une nouvelle épreuve sur la même horloge, avec une nouvelle distribution.
-- Mettre en suspens remet les yeux bonus à zéro et passe à l'horloge suivante. L'horloge pourra être retentée plus tard.
-- Recommencer le chapitre remet les yeux bonus à zéro et lance une nouvelle run depuis la première horloge du chapitre.
+- Mettre en suspens remet les bougies bonus à zéro et passe à l'horloge suivante. L'horloge pourra être retentée plus tard.
+- Recommencer le chapitre remet les bougies bonus à zéro et lance une nouvelle run depuis la première horloge du chapitre.
 
-> **Choix de design.** Dans le jeu original, les yeux bonus plafonnent à 3 et le groupe peut retenter indéfiniment. Ici, le groupe peut toujours retenter, mais seule une run qui n'a pas été perdue fait avancer la progression sauvegardée.
+> **Choix de design.** Dans le jeu original, les bougies bonus plafonnent à 3 et le groupe peut retenter indéfiniment. Ici, le groupe peut toujours retenter, mais seule une run qui n'a pas été perdue fait avancer la progression sauvegardée.
 
 L'hôte peut aussi mettre une horloge en suspens avant de l'avoir tentée.
 
@@ -144,7 +144,7 @@ Au début de chaque partie, les horloges en suspens sont proposées avant l'horl
 
 ### Partie hors sauvegarde
 
-Retenter l'horloge après une run perdue remet les yeux bonus à zéro et fait passer la partie hors sauvegarde. La progression sauvegardée reste figée sur l'horloge de la run perdue. Les échecs suivants suivent la règle habituelle : le groupe regagne des yeux bonus, et une nouvelle run perdue propose de nouveau les trois mêmes choix.
+Retenter l'horloge après une run perdue remet les bougies bonus à zéro et fait passer la partie hors sauvegarde. La progression sauvegardée reste figée sur l'horloge de la run perdue. Les échecs suivants suivent la règle habituelle : le groupe regagne des bougies bonus, et une nouvelle run perdue propose de nouveau les trois mêmes choix.
 
 Quand le groupe réussit l'horloge, il peut continuer. Avant de passer à la suite, un message prévient le groupe qu'elle ne sera pas sauvegardée : pour faire avancer la progression, il faut recommencer le chapitre et le terminer sans perdre la run. S'il continue, le groupe enchaîne les horloges et les chapitres suivants, mais ni la progression du groupe ni le chapitre maximum des joueurs ne changent.
 
@@ -160,7 +160,7 @@ Un joueur peut aussi jouer en invité, sans compte. Une salle qui compte au moin
 
 ## Progression
 
-La progression (chapitre et horloge en cours, horloges en suspens, yeux bonus, nombre d'échecs de chaque horloge) appartient au groupe, c'est-à-dire à la salle. Pour reprendre une progression, la salle doit réunir exactement les mêmes joueurs. Si un joueur rejoint le groupe, une nouvelle progression commence, au chapitre 1 ou au chapitre choisi par l'hôte dans la limite décrite ci-dessous.
+La progression (chapitre et horloge en cours, horloges en suspens, bougies bonus, nombre d'échecs de chaque horloge) appartient au groupe, c'est-à-dire à la salle. Pour reprendre une progression, la salle doit réunir exactement les mêmes joueurs. Si un joueur rejoint le groupe, une nouvelle progression commence, au chapitre 1 ou au chapitre choisi par l'hôte dans la limite décrite ci-dessous.
 
 Chaque joueur conserve aussi le chapitre le plus avancé qu'il a atteint, toutes salles confondues. Au lancement d'une partie, l'hôte peut choisir le chapitre de départ, jusqu'au plus petit de ces maximums parmi les joueurs présents. Par exemple, si trois joueurs ont atteint les chapitres 7, 2 et 5, l'hôte peut choisir entre les chapitres 1 et 2.
 

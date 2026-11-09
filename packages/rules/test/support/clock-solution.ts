@@ -4,7 +4,7 @@
 //
 // Toutes les cartes sont posées face cachée, donc le fichier n'a pas de
 // champ faceUp. Aucune règle n'oblige à poser une carte visible : une
-// horloge qu'on ne réussit qu'avec des cartes visibles dépendrait des yeux
+// horloge qu'on ne réussit qu'avec des cartes visibles dépendrait des bougies
 // disponibles, et ne serait pas réussissable à coup sûr.
 
 import Type, { type Static } from "typebox";

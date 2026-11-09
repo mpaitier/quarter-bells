@@ -1,6 +1,6 @@
 // Propriétés du déroulement d'une épreuve (issue #14), sur des épreuves
 // générées : horloge quelconque acceptée par parseClock, 2 à 4 joueurs,
-// graine et yeux au hasard. Les tests d'exemple (apply-trial-action.test.ts)
+// graine et bougies au hasard. Les tests d'exemple (apply-trial-action.test.ts)
 // fixent chaque règle sur un cas ; ces propriétés vérifient qu'elle tient
 // partout.
 
@@ -98,7 +98,7 @@ function play(trial: Trial, choices: readonly number[]): Trial {
  * connaît pas encore l'état. Les poids visent surtout le joueur dont c'est
  * le tour et une carte de sa main : sans eux, presque toutes les actions
  * seraient refusées dès la première vérification (mauvais tour), et les
- * refus plus profonds (yeux, règles) ne seraient jamais essayés.
+ * refus plus profonds (bougies, règles) ne seraient jamais essayés.
  */
 const actionPickArb = fc.record({
   player: fc.oneof(

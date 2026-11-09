@@ -21,7 +21,7 @@ import { InvalidClockError } from "../../src/errors.js";
 import type { Placement } from "../../src/placements/placement.js";
 import { MAX_SEED } from "../../src/random/rng.js";
 import type { TrialSetup } from "../../src/trial/create-trial.js";
-import { MAX_BONUS_EYES } from "../../src/trial/eyes.js";
+import { MAX_BONUS_CANDLES } from "../../src/trial/candles.js";
 
 /** Toute graine acceptée par createSeededRng. */
 export const seedArb = fc.integer({ min: 0, max: MAX_SEED });
@@ -190,7 +190,7 @@ const PLAYERS = ["ana", "ben", "cleo", "dan"] as const;
 /**
  * Une configuration d'épreuve que createTrial accepte : horloge quelconque,
  * 2 à 4 joueurs, graine, section de départ cohérente avec le mode de
- * l'horloge, yeux dans leurs bornes.
+ * l'horloge, bougies dans leurs bornes.
  */
 export const trialSetupArb: fc.Arbitrary<TrialSetup> = fc
   .record({
@@ -199,16 +199,18 @@ export const trialSetupArb: fc.Arbitrary<TrialSetup> = fc
     seed: seedArb,
     // Utilisée seulement si l'horloge laisse les joueurs choisir.
     chosenStart: sectionIndexArb,
-    maxBonusEyes: fc.integer({ min: 0, max: MAX_BONUS_EYES }),
+    maxBonusCandles: fc.integer({ min: 0, max: MAX_BONUS_CANDLES }),
     // Absent une fois sur deux : pas de plafond.
-    baseEyesCap: fc.option(fc.integer({ min: 0, max: 5 }), { nil: undefined }),
+    baseCandlesCap: fc.option(fc.integer({ min: 0, max: 5 }), {
+      nil: undefined,
+    }),
   })
-  // Les yeux bonus dépendent du maximum tiré : chain fait un second tirage
+  // Les bougies bonus dépendent du maximum tiré : chain fait un second tirage
   // à partir du premier.
   .chain((drawn) =>
     fc
-      .integer({ min: 0, max: drawn.maxBonusEyes })
-      .map((bonusEyes): TrialSetup => {
+      .integer({ min: 0, max: drawn.maxBonusCandles })
+      .map((bonusCandles): TrialSetup => {
         const { clock, playerCount, seed, chosenStart } = drawn;
         return {
           clock,
@@ -218,14 +220,14 @@ export const trialSetupArb: fc.Arbitrary<TrialSetup> = fc
               ? clock.defaultStartSection
               : chosenStart,
           seed,
-          bonusEyes,
+          bonusCandles,
           // Champ absent plutôt qu'undefined (exactOptionalPropertyTypes).
-          eyeSettings:
-            drawn.baseEyesCap === undefined
-              ? { maxBonusEyes: drawn.maxBonusEyes }
+          candleSettings:
+            drawn.baseCandlesCap === undefined
+              ? { maxBonusCandles: drawn.maxBonusCandles }
               : {
-                  maxBonusEyes: drawn.maxBonusEyes,
-                  baseEyesCap: drawn.baseEyesCap,
+                  maxBonusCandles: drawn.maxBonusCandles,
+                  baseCandlesCap: drawn.baseCandlesCap,
                 },
         };
       }),

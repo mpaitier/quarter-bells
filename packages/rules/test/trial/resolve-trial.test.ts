@@ -27,8 +27,8 @@ const setup: TrialSetup = {
   turnOrder: ["ana", "ben", "cleo"],
   startSection: 4,
   seed: 42,
-  bonusEyes: 1,
-  eyeSettings: { maxBonusEyes: 3 },
+  bonusCandles: 1,
+  candleSettings: { maxBonusCandles: 3 },
 };
 
 /** Le joueur du tour pose sa première carte, face cachée, en section 0. */
@@ -61,23 +61,23 @@ function playAllInSection0(start: PlacingTrial): Trial {
 }
 
 describe("trialOutcome", () => {
-  // Chaque ligne : réussite, yeux bonus avant, maximum, issue attendue.
+  // Chaque ligne : réussite, bougies bonus avant, maximum, issue attendue.
   it.each<[boolean, number, number, TrialOutcome]>([
-    // Réussite : remise à zéro, quel que soit le nombre d'yeux bonus.
-    [true, 2, 3, { phase: "succeeded", bonusEyesAfter: 0 }],
-    // Échec sous le maximum : un œil bonus gagné.
-    [false, 0, 3, { phase: "failed", bonusEyesAfter: 1 }],
-    [false, 2, 3, { phase: "failed", bonusEyesAfter: 3 }],
-    // Échec au maximum : run perdue, yeux bonus inchangés.
-    [false, 3, 3, { phase: "runLost", bonusEyesAfter: 3 }],
+    // Réussite : remise à zéro, quel que soit le nombre de bougies bonus.
+    [true, 2, 3, { phase: "succeeded", bonusCandlesAfter: 0 }],
+    // Échec sous le maximum : une bougie bonus gagnée.
+    [false, 0, 3, { phase: "failed", bonusCandlesAfter: 1 }],
+    [false, 2, 3, { phase: "failed", bonusCandlesAfter: 3 }],
+    // Échec au maximum : run perdue, bougies bonus inchangées.
+    [false, 3, 3, { phase: "runLost", bonusCandlesAfter: 3 }],
     // Maximum réduit par la salle : la run est perdue plus tôt.
-    [false, 1, 1, { phase: "runLost", bonusEyesAfter: 1 }],
-    // Yeux bonus désactivés : tout échec fait perdre la run.
-    [false, 0, 0, { phase: "runLost", bonusEyesAfter: 0 }],
+    [false, 1, 1, { phase: "runLost", bonusCandlesAfter: 1 }],
+    // Bougies bonus désactivées : tout échec fait perdre la run.
+    [false, 0, 0, { phase: "runLost", bonusCandlesAfter: 0 }],
   ])(
-    "succeeded %s with %i bonus eyes out of %i",
-    (succeeded, bonusEyes, maxBonusEyes, expected) => {
-      expect(trialOutcome(succeeded, bonusEyes, maxBonusEyes)).toEqual(
+    "succeeded %s with %i bonus candles out of %i",
+    (succeeded, bonusCandles, maxBonusCandles, expected) => {
+      expect(trialOutcome(succeeded, bonusCandles, maxBonusCandles)).toEqual(
         expected,
       );
     },
@@ -104,13 +104,13 @@ describe("resolution at the last placement", () => {
 
   it("resolves the trial with the last placement", () => {
     // Les 12 cartes en section 0 : les autres sections sont vides, la pose
-    // échoue. 1 œil bonus sur 3 : un de plus.
+    // échoue. 1 bougie bonus sur 3 : une de plus.
     const trial = playAllInSection0(createTrial(setup));
     expect(trial.phase).toBe("failed");
     if (trial.phase === "placement") {
       return;
     }
-    expect(trial.bonusEyesAfter).toBe(2);
+    expect(trial.bonusCandlesAfter).toBe(2);
     expect(trial.resolution.succeeded).toBe(false);
     expect(trial.placements).toHaveLength(12);
     // Rapport dans l'ordre de révélation, depuis la section de départ 4.
@@ -124,7 +124,7 @@ describe("resolution at the last placement", () => {
   });
 
   it("loses the run when the failure happens at the maximum", () => {
-    const trial = playAllInSection0(createTrial({ ...setup, bonusEyes: 3 }));
+    const trial = playAllInSection0(createTrial({ ...setup, bonusCandles: 3 }));
     expect(trial.phase).toBe("runLost");
   });
 
@@ -147,7 +147,7 @@ describe("resolution at the last placement", () => {
 });
 
 describe("resolveTrial", () => {
-  it("resets the bonus eyes after a success", () => {
+  it("resets the bonus candles after a success", () => {
     // Pose valide pour example-clock depuis la section 4 (voir
     // evaluate-resolution.test.ts), mise directement dans l'épreuve : ce
     // test vérifie les conséquences, pas le déroulement des tours.
@@ -178,7 +178,7 @@ describe("resolveTrial", () => {
     );
     const resolved = resolveTrial({ ...start, placements });
     expect(resolved.phase).toBe("succeeded");
-    expect(resolved.bonusEyesAfter).toBe(0);
+    expect(resolved.bonusCandlesAfter).toBe(0);
     expect(resolved.resolution.violations).toEqual([]);
   });
 });

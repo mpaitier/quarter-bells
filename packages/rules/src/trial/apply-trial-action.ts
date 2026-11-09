@@ -6,7 +6,7 @@ import {
   isKnownBoundViolation,
 } from "../evaluation/evaluate-placement.js";
 import type { Violation } from "../rule-checks/violation.js";
-import { availableEyes } from "./eyes.js";
+import { availableCandles } from "./candles.js";
 import { isPlacementComplete, resolveTrial } from "./resolve-trial.js";
 import {
   currentSeat,
@@ -29,7 +29,7 @@ export interface PlaceCardAction {
   readonly player: PlayerId;
   readonly cardId: CardId;
   readonly sectionIndex: number;
-  /** Face visible : dépense un œil. */
+  /** Face visible : dépense une bougie. */
   readonly faceUp: boolean;
 }
 
@@ -45,7 +45,7 @@ export type TrialRejection =
   | { readonly reason: "notYourTurn"; readonly currentPlayer: PlayerId }
   | { readonly reason: "cardNotInHand" }
   | { readonly reason: "unknownSection" }
-  | { readonly reason: "noEyeLeft" }
+  | { readonly reason: "noCandleLeft" }
   | {
       readonly reason: "ruleViolation";
       /** Toutes les règles qui refusent la pose (F-JEU-20). */
@@ -102,8 +102,8 @@ function placeCard(trial: Trial, action: PlaceCardAction): TrialResult {
     return reject({ reason: "unknownSection" });
   }
 
-  if (action.faceUp && availableEyes(trial.eyes) === 0) {
-    return reject({ reason: "noEyeLeft" });
+  if (action.faceUp && availableCandles(trial.candles) === 0) {
+    return reject({ reason: "noCandleLeft" });
   }
 
   const placement: TrialPlacement = {
@@ -158,7 +158,7 @@ function isForcedPlacement(
  * Le joueur peut poser au moins une carte de sa main quelque part sans
  * aucune violation. Seules les poses face cachée sont essayées : la face ne
  * change pas l'évaluation (la valeur de sa propre carte reste connue du
- * joueur), et une pose face cachée ne dépense pas d'œil.
+ * joueur), et une pose face cachée ne dépense pas de bougie.
  */
 function hasFullyPermittedPlacement(trial: PlacingTrial, seat: Seat): boolean {
   return seat.hand.some((card) =>
@@ -195,9 +195,9 @@ function withPlacement(
     ...trial,
     placements,
     seats: joinReservesIfDue(seats, placements),
-    eyes: placement.faceUp
-      ? { ...trial.eyes, spent: trial.eyes.spent + 1 }
-      : trial.eyes,
+    candles: placement.faceUp
+      ? { ...trial.candles, spent: trial.candles.spent + 1 }
+      : trial.candles,
   };
 }
 

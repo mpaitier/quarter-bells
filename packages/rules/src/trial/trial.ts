@@ -4,7 +4,7 @@
 // qui se reconnecte.
 //
 // Tout ce qui peut se déduire n'est pas stocké : le joueur dont c'est le
-// tour vient du nombre de poses, les yeux disponibles des yeux dépensés.
+// tour vient du nombre de poses, les bougies disponibles des bougies dépensées.
 // Une seule source de vérité, donc pas d'incohérence possible.
 
 import { requireAt } from "../arrays/require-at.js";
@@ -12,7 +12,7 @@ import type { Card } from "../cards/card.js";
 import type { Clock } from "../clocks/clock.js";
 import type { ResolutionReport } from "../evaluation/evaluate-resolution.js";
 import type { Placement } from "../placements/placement.js";
-import type { Eyes } from "./eyes.js";
+import type { Candles } from "./candles.js";
 
 /**
  * Identifiant d'un joueur, attribué hors du moteur (serveur). Le moteur ne
@@ -47,9 +47,9 @@ interface TrialCommon {
   readonly seats: readonly Seat[];
   /** Les poses acceptées, dans l'ordre : la position est le rang de pose. */
   readonly placements: readonly TrialPlacement[];
-  readonly eyes: Eyes;
+  readonly candles: Candles;
   /** Option de la salle, nécessaire pour décider entre échec et run perdue. */
-  readonly maxBonusEyes: number;
+  readonly maxBonusCandles: number;
 }
 
 /** Épreuve en cours de Pose. */
@@ -61,8 +61,8 @@ export interface PlacingTrial extends TrialCommon {
 export interface ResolvedTrial extends TrialCommon {
   readonly phase: "succeeded" | "failed" | "runLost";
   readonly resolution: ResolutionReport<TrialPlacement>;
-  /** Yeux bonus du groupe après l'épreuve, à reporter dans sa progression. */
-  readonly bonusEyesAfter: number;
+  /** Bougies bonus du groupe après l'épreuve, à reporter dans sa progression. */
+  readonly bonusCandlesAfter: number;
 }
 
 /** Une épreuve, quelle que soit sa phase. Union discriminée sur phase. */

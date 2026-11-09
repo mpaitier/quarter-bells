@@ -7,7 +7,7 @@ import {
   type TrialResult,
 } from "../../src/trial/apply-trial-action.js";
 import { createTrial, type TrialSetup } from "../../src/trial/create-trial.js";
-import { availableEyes } from "../../src/trial/eyes.js";
+import { availableCandles } from "../../src/trial/candles.js";
 import {
   currentPlayer,
   currentSeat,
@@ -19,7 +19,7 @@ import exampleClock from "../fixtures/clocks/example-clock.json" with { type: "j
 import playersChoiceClock from "../fixtures/clocks/players-choice-clock.json" with { type: "json" };
 
 // La résolution déclenchée par la dernière pose est testée dans
-// resolve-trial.test.ts. Ici : tours, main, yeux, contraintes, réserve, et
+// resolve-trial.test.ts. Ici : tours, main, bougies, contraintes, réserve, et
 // l'immuabilité de l'état.
 
 // example-clock : seules ses sections 0, 2 et 3 n'ont aucune règle. Les
@@ -31,8 +31,8 @@ const setup: TrialSetup = {
   turnOrder: ["ana", "ben", "cleo"],
   startSection: 4,
   seed: 42,
-  bonusEyes: 0,
-  eyeSettings: { maxBonusEyes: 3 },
+  bonusCandles: 0,
+  candleSettings: { maxBonusCandles: 3 },
 };
 
 /** Première carte de la main du joueur dont c'est le tour. */
@@ -163,14 +163,16 @@ describe("applyTrialAction / placeCard", () => {
     });
   });
 
-  describe("eyes", () => {
-    it("spends one eye on a face-up placement", () => {
+  describe("candles", () => {
+    it("spends one candle on a face-up placement", () => {
       const trial = createTrial(setup);
       const next = acceptedTrial(
         applyTrialAction(trial, placeFirstCard(trial, { faceUp: true })),
       );
-      expect(next.eyes.spent).toBe(1);
-      expect(availableEyes(next.eyes)).toBe(availableEyes(trial.eyes) - 1);
+      expect(next.candles.spent).toBe(1);
+      expect(availableCandles(next.candles)).toBe(
+        availableCandles(trial.candles) - 1,
+      );
     });
 
     it("spends nothing on a face-down placement", () => {
@@ -178,36 +180,36 @@ describe("applyTrialAction / placeCard", () => {
       const next = acceptedTrial(
         applyTrialAction(trial, placeFirstCard(trial)),
       );
-      expect(next.eyes).toBe(trial.eyes);
+      expect(next.candles).toBe(trial.candles);
     });
 
-    it("rejects a face-up placement without eye left, not a face-down one", () => {
-      // Plafond à 0 et aucun œil bonus : aucun œil disponible.
+    it("rejects a face-up placement without candle left, not a face-down one", () => {
+      // Plafond à 0 et aucune bougie bonus : aucune bougie disponible.
       const trial = createTrial({
         ...setup,
-        eyeSettings: { maxBonusEyes: 3, baseEyesCap: 0 },
+        candleSettings: { maxBonusCandles: 3, baseCandlesCap: 0 },
       });
       expect(
         applyTrialAction(trial, placeFirstCard(trial, { faceUp: true })),
-      ).toEqual({ accepted: false, rejection: { reason: "noEyeLeft" } });
+      ).toEqual({ accepted: false, rejection: { reason: "noCandleLeft" } });
       expect(applyTrialAction(trial, placeFirstCard(trial)).accepted).toBe(
         true,
       );
     });
 
-    it("lets the group spend its bonus eyes", () => {
-      // Aucun œil de base, un œil bonus : une seule pose face visible.
+    it("lets the group spend its bonus candles", () => {
+      // Aucune bougie de base, une bougie bonus : une seule pose face visible.
       const trial = createTrial({
         ...setup,
-        bonusEyes: 1,
-        eyeSettings: { maxBonusEyes: 3, baseEyesCap: 0 },
+        bonusCandles: 1,
+        candleSettings: { maxBonusCandles: 3, baseCandlesCap: 0 },
       });
       const next = acceptedTrial(
         applyTrialAction(trial, placeFirstCard(trial, { faceUp: true })),
       );
       expect(
         applyTrialAction(next, placeFirstCard(next, { faceUp: true })),
-      ).toEqual({ accepted: false, rejection: { reason: "noEyeLeft" } });
+      ).toEqual({ accepted: false, rejection: { reason: "noCandleLeft" } });
     });
   });
 

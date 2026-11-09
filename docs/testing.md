@@ -71,7 +71,7 @@ Un seul test Vitest (`test/rule-cases.test.ts`) parcourt tous les fichiers du do
 
 Ce que le format JSON ne peut pas exprimer (une section de départ hors de l'horloge, par exemple, que le schéma de cas refuserait) se teste dans un fichier `.test.ts` classique.
 
-Les épreuves complètes, de la distribution à la résolution, sont testées de la même façon : une horloge, une graine, une suite de poses, un résultat attendu. Chaque fichier de `test/trials/` nomme une horloge de `test/fixtures/clocks/`, la configuration de l'épreuve (ordre de passage, section de départ, graine, yeux) et les poses tentées. Une carte y est désignée par sa famille et sa valeur, puisque son identifiant est tiré au hasard à la distribution. Une pose qui porte `rejected` doit être refusée pour cette raison ; les autres doivent être acceptées. `expected` décrit l'épreuve résolue : phase, yeux bonus après l'épreuve, sections dans l'ordre de révélation et violations. Le lanceur (`test/trial-cases.test.ts`) valide chaque fichier avec le schéma de `test/support/trial-case.ts`.
+Les épreuves complètes, de la distribution à la résolution, sont testées de la même façon : une horloge, une graine, une suite de poses, un résultat attendu. Chaque fichier de `test/trials/` nomme une horloge de `test/fixtures/clocks/`, la configuration de l'épreuve (ordre de passage, section de départ, graine, bougies) et les poses tentées. Une carte y est désignée par sa famille et sa valeur, puisque son identifiant est tiré au hasard à la distribution. Une pose qui porte `rejected` doit être refusée pour cette raison ; les autres doivent être acceptées. `expected` décrit l'épreuve résolue : phase, bougies bonus après l'épreuve, sections dans l'ordre de révélation et violations. Le lanceur (`test/trial-cases.test.ts`) valide chaque fichier avec le schéma de `test/support/trial-case.ts`.
 
 Les résultats attendus ne sont pas recopiés du moteur, ce qui ne prouverait rien : ils sont calculés à part (à la main, ou par un script indépendant), puis comparés à ce que produit le moteur.
 
@@ -126,7 +126,7 @@ Les propriétés du moteur sont dans les fichiers de test de chaque module (dist
 - Chaque fichier d'horloge du jeu est validé par le JSON Schema.
 - Des horloges invalides écrites exprès (deux sections de départ, 5 sections, règle inconnue, paramètres manquants) sont rejetées.
 - Chaque chapitre contient exactement 4 horloges, avec des `uid` uniques dans tout le jeu.
-- Chaque horloge du jeu a une pose gagnante connue dans `test/clock-solutions/`, au même chemin que l'horloge. `test/clocks/clock-solutions.test.ts` la rejoue comme une épreuve : chaque carte doit être acceptée pendant la Pose, puis la pose complète doit réussir à la Résolution. La pose utilise toutes les cartes distribuées, chacune une seule fois, toutes face cachée : la réussite ne dépend ainsi ni du nombre de joueurs ni des yeux disponibles. Comme pour les autres cas, la pose est construite à la main, pas recopiée du moteur.
+- Chaque horloge du jeu a une pose gagnante connue dans `test/clock-solutions/`, au même chemin que l'horloge. `test/clocks/clock-solutions.test.ts` la rejoue comme une épreuve : chaque carte doit être acceptée pendant la Pose, puis la pose complète doit réussir à la Résolution. La pose utilise toutes les cartes distribuées, chacune une seule fois, toutes face cachée : la réussite ne dépend ainsi ni du nombre de joueurs ni des bougies disponibles. Comme pour les autres cas, la pose est construite à la main, pas recopiée du moteur.
 
 ### Tests d'intégration du serveur
 
@@ -148,7 +148,7 @@ Playwright ouvre plusieurs contextes de navigateur, un par joueur, et joue une �
 Parcours couverts :
 
 - créer une salle, la rejoindre à 2, jouer et réussir une épreuve ;
-- échouer une épreuve et voir l'œil bonus apparaître ;
+- échouer une épreuve et voir la bougie bonus apparaître ;
 - un joueur se déconnecte pendant son tour, la partie se met en pause, il revient.
 
 ## Organisation des fichiers

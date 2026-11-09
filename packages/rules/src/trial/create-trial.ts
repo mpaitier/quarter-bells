@@ -3,7 +3,11 @@ import { dealTrialCards } from "../cards/deal.js";
 import type { Clock } from "../clocks/clock.js";
 import { isSectionIndex } from "../clocks/section.js";
 import { createSeededRng } from "../random/rng.js";
-import { MAX_BONUS_EYES, computeBaseEyes, type EyeSettings } from "./eyes.js";
+import {
+  MAX_BONUS_CANDLES,
+  computeBaseCandles,
+  type CandleSettings,
+} from "./candles.js";
 import type { PlacingTrial, PlayerId, Seat } from "./trial.js";
 
 /** Ce qu'il faut pour lancer une épreuve. */
@@ -21,9 +25,9 @@ export interface TrialSetup {
   readonly startSection: number;
   /** Graine du mélange, tirée par le serveur pour chaque épreuve. */
   readonly seed: number;
-  /** Yeux bonus du groupe au début de l'épreuve. */
-  readonly bonusEyes: number;
-  readonly eyeSettings: EyeSettings;
+  /** Bougies bonus du groupe au début de l'épreuve. */
+  readonly bonusCandles: number;
+  readonly candleSettings: CandleSettings;
 }
 
 /**
@@ -36,10 +40,10 @@ export interface TrialSetup {
  * @throws {InvalidPlayerCountError} s'il n'y a pas 2, 3 ou 4 joueurs
  * @throws {InvalidSeedError} si la graine n'est pas un entier sur 32 bits
  * @throws {RangeError} pour toute autre valeur incohérente (joueur en double,
- * section de départ, yeux)
+ * section de départ, bougies)
  */
 export function createTrial(setup: TrialSetup): PlacingTrial {
-  const { clock, turnOrder, startSection, seed, bonusEyes, eyeSettings } =
+  const { clock, turnOrder, startSection, seed, bonusCandles, candleSettings } =
     setup;
   checkSetup(setup);
 
@@ -57,18 +61,19 @@ export function createTrial(setup: TrialSetup): PlacingTrial {
     startSection,
     seats,
     placements: [],
-    eyes: {
-      base: computeBaseEyes(turnOrder.length, eyeSettings.baseEyesCap),
-      bonus: bonusEyes,
+    candles: {
+      base: computeBaseCandles(turnOrder.length, candleSettings.baseCandlesCap),
+      bonus: bonusCandles,
       spent: 0,
     },
-    maxBonusEyes: eyeSettings.maxBonusEyes,
+    maxBonusCandles: candleSettings.maxBonusCandles,
   };
 }
 
 /** Lève une RangeError si un champ de la configuration est incohérent. */
 function checkSetup(setup: TrialSetup): void {
-  const { clock, turnOrder, startSection, bonusEyes, eyeSettings } = setup;
+  const { clock, turnOrder, startSection, bonusCandles, candleSettings } =
+    setup;
 
   // Un Set ne garde qu'un exemplaire de chaque valeur : une taille plus
   // petite trahit un doublon, qui jouerait deux fois par tour.
@@ -88,23 +93,23 @@ function checkSetup(setup: TrialSetup): void {
     );
   }
 
-  const { maxBonusEyes, baseEyesCap } = eyeSettings;
-  if (!isIntegerBetween(maxBonusEyes, 0, MAX_BONUS_EYES)) {
+  const { maxBonusCandles, baseCandlesCap } = candleSettings;
+  if (!isIntegerBetween(maxBonusCandles, 0, MAX_BONUS_CANDLES)) {
     throw new RangeError(
-      `maxBonusEyes must be an integer between 0 and ${String(MAX_BONUS_EYES)}, received ${String(maxBonusEyes)}`,
+      `maxBonusCandles must be an integer between 0 and ${String(MAX_BONUS_CANDLES)}, received ${String(maxBonusCandles)}`,
     );
   }
-  if (!isIntegerBetween(bonusEyes, 0, maxBonusEyes)) {
+  if (!isIntegerBetween(bonusCandles, 0, maxBonusCandles)) {
     throw new RangeError(
-      `bonusEyes must be an integer between 0 and ${String(maxBonusEyes)}, received ${String(bonusEyes)}`,
+      `bonusCandles must be an integer between 0 and ${String(maxBonusCandles)}, received ${String(bonusCandles)}`,
     );
   }
   if (
-    baseEyesCap !== undefined &&
-    !isIntegerBetween(baseEyesCap, 0, Number.MAX_SAFE_INTEGER)
+    baseCandlesCap !== undefined &&
+    !isIntegerBetween(baseCandlesCap, 0, Number.MAX_SAFE_INTEGER)
   ) {
     throw new RangeError(
-      `baseEyesCap must be a non-negative integer, received ${String(baseEyesCap)}`,
+      `baseCandlesCap must be a non-negative integer, received ${String(baseCandlesCap)}`,
     );
   }
 }

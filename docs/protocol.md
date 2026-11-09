@@ -57,28 +57,28 @@ Tous les messages partagent la même enveloppe.
 
 ## Événements
 
-| Événement                 | Destinataires        | Payload                                                                                                                          |
-| ------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `CommandRejected`         | auteur               | `reason`, `violation` (règle concernée et ses paramètres, si une règle est en cause), `inReplyTo`                                |
-| `LobbyUpdated`            | tous                 | joueurs, hôte, statuts « prêt », état de la salle                                                                                |
-| `PlayerConnectionChanged` | tous                 | joueur, connecté ou non                                                                                                          |
-| `PresenceCheckStarted`    | tous                 | échéance de confirmation                                                                                                         |
-| `PresenceCheckEnded`      | tous                 | joueurs ayant confirmé                                                                                                           |
-| `SessionStarted`          | tous                 | ordre de passage, progression, chapitre maximum autorisé                                                                         |
-| `TrialAnnounced`          | tous                 | chapitre, horloge, règles, yeux disponibles, section de départ, partie hors sauvegarde ou non                                    |
-| `StartSectionChanged`     | tous                 | section de départ                                                                                                                |
-| `PhaseChanged`            | tous                 | nouvelle phase                                                                                                                   |
-| `CardsDealt`              | **privé** par joueur | sa main (identifiants, familles et valeurs), familles des cartes des autres, sa réserve en partie à 2 (identifiants et familles) |
-| `TurnChanged`             | tous                 | joueur actif                                                                                                                     |
-| `CardPlayed`              | **auteur**           | joueur, carte (avec sa valeur), section, rang, face visible                                                                      |
-| `CardPlayed`              | **les autres**       | joueur, famille, section, rang, face visible ; valeur **seulement si face visible**                                              |
-| `ReserveTaken`            | **privé** par joueur | valeurs des cartes de sa réserve                                                                                                 |
-| `GamePaused`              | tous                 | joueur absent                                                                                                                    |
-| `GameResumed`             | tous                 | —                                                                                                                                |
-| `TrialResolved`           | tous                 | pour chaque section : cartes et valeurs, somme, respect de l'ordre ; puis réussite ou échec, conditions non remplies, yeux bonus |
-| `ChapterCompleted`        | tous                 | chapitre terminé, chapitre suivant                                                                                               |
-| `RunLost`                 | tous                 | —                                                                                                                                |
-| `StateSnapshot`           | **privé** par joueur | vue complète de la partie pour ce joueur, envoyée à la reconnexion                                                               |
+| Événement                 | Destinataires        | Payload                                                                                                                             |
+| ------------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `CommandRejected`         | auteur               | `reason`, `violation` (règle concernée et ses paramètres, si une règle est en cause), `inReplyTo`                                   |
+| `LobbyUpdated`            | tous                 | joueurs, hôte, statuts « prêt », état de la salle                                                                                   |
+| `PlayerConnectionChanged` | tous                 | joueur, connecté ou non                                                                                                             |
+| `PresenceCheckStarted`    | tous                 | échéance de confirmation                                                                                                            |
+| `PresenceCheckEnded`      | tous                 | joueurs ayant confirmé                                                                                                              |
+| `SessionStarted`          | tous                 | ordre de passage, progression, chapitre maximum autorisé                                                                            |
+| `TrialAnnounced`          | tous                 | chapitre, horloge, règles, bougies disponibles, section de départ, partie hors sauvegarde ou non                                    |
+| `StartSectionChanged`     | tous                 | section de départ                                                                                                                   |
+| `PhaseChanged`            | tous                 | nouvelle phase                                                                                                                      |
+| `CardsDealt`              | **privé** par joueur | sa main (identifiants, familles et valeurs), familles des cartes des autres, sa réserve en partie à 2 (identifiants et familles)    |
+| `TurnChanged`             | tous                 | joueur actif                                                                                                                        |
+| `CardPlayed`              | **auteur**           | joueur, carte (avec sa valeur), section, rang, face visible                                                                         |
+| `CardPlayed`              | **les autres**       | joueur, famille, section, rang, face visible ; valeur **seulement si face visible**                                                 |
+| `ReserveTaken`            | **privé** par joueur | valeurs des cartes de sa réserve                                                                                                    |
+| `GamePaused`              | tous                 | joueur absent                                                                                                                       |
+| `GameResumed`             | tous                 | —                                                                                                                                   |
+| `TrialResolved`           | tous                 | pour chaque section : cartes et valeurs, somme, respect de l'ordre ; puis réussite ou échec, conditions non remplies, bougies bonus |
+| `ChapterCompleted`        | tous                 | chapitre terminé, chapitre suivant                                                                                                  |
+| `RunLost`                 | tous                 | —                                                                                                                                   |
+| `StateSnapshot`           | **privé** par joueur | vue complète de la partie pour ce joueur, envoyée à la reconnexion                                                                  |
 
 ## Décisions
 

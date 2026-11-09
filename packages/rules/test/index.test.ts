@@ -62,8 +62,8 @@ describe("public API", () => {
       turnOrder: ["ana", "ben"],
       startSection: 4,
       seed: 7,
-      bonusEyes: 0,
-      eyeSettings: { maxBonusEyes: rules.MAX_BONUS_EYES },
+      bonusCandles: 0,
+      candleSettings: { maxBonusCandles: rules.MAX_BONUS_CANDLES },
     });
     const card = trial.seats[0]?.hand[0];
     if (card === undefined) {
@@ -79,7 +79,7 @@ describe("public API", () => {
     });
 
     expect(result.accepted).toBe(true);
-    expect(rules.availableEyes(trial.eyes)).toBe(2);
+    expect(rules.availableCandles(trial.candles)).toBe(2);
   });
 
   // Les détails d'implémentation ne doivent pas fuiter : s'ils étaient
@@ -110,7 +110,7 @@ describe("public API", () => {
     "trialOutcome",
     "isPlacementComplete",
     "currentSeat",
-    "computeBaseEyes",
+    "computeBaseCandles",
     "isSectionIndex",
     "requireAt",
     // Outils de calcul sur la pose et le cadran.

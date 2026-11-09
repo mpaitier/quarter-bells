@@ -6,13 +6,13 @@ Format de données qui décrit une horloge. Les 40 horloges du jeu sont des fich
 
 Le format sépare deux niveaux qu'il ne faut jamais mélanger.
 
-|                                 | Définition d'une horloge                       | État d'une épreuve                                      |
-| ------------------------------- | ---------------------------------------------- | ------------------------------------------------------- |
-| Ce que c'est                    | Le contenu du jeu                              | Une partie en train de se jouer                         |
-| Change pendant la partie        | jamais                                         | à chaque action                                         |
-| Identique pour tous les groupes | oui                                            | non                                                     |
-| Où il vit                       | fichiers JSON dans `packages/rules`            | mémoire du serveur, sauvegardes                         |
-| Exemples                        | sections, règles, section de départ par défaut | cartes posées, section de départ choisie, yeux dépensés |
+|                                 | Définition d'une horloge                       | État d'une épreuve                                          |
+| ------------------------------- | ---------------------------------------------- | ----------------------------------------------------------- |
+| Ce que c'est                    | Le contenu du jeu                              | Une partie en train de se jouer                             |
+| Change pendant la partie        | jamais                                         | à chaque action                                             |
+| Identique pour tous les groupes | oui                                            | non                                                         |
+| Où il vit                       | fichiers JSON dans `packages/rules`            | mémoire du serveur, sauvegardes                             |
+| Exemples                        | sections, règles, section de départ par défaut | cartes posées, section de départ choisie, bougies dépensées |
 
 L'état d'une épreuve référence l'horloge par son `uid`, et chaque carte posée référence sa section par son `index`. Pour connaître les règles d'une section où une carte a été posée, le moteur charge l'horloge à partir de l'`uid` de l'épreuve, puis lit `sections[sectionIndex]`.
 
@@ -93,7 +93,7 @@ Le format est conçu pour qu'une horloge invalide ne puisse pas s'écrire, ou so
 - **Une seule aiguille.** La section de départ est une valeur unique au niveau de l'horloge. Il est impossible d'en déclarer deux, ou aucune.
 - **Six sections exactement**, avec des index de 0 à 5, chacun à sa place.
 - **Des règles connues.** Seuls les types connus du catalogue sont acceptés : un type candidat, un `kind` absent du catalogue ou des `params` qui ne correspondent pas à son type rendent l'horloge invalide.
-- **Aucune donnée de partie.** Les cartes posées, les yeux et la section de départ choisie n'ont pas de champ dans ce format.
+- **Aucune donnée de partie.** Les cartes posées, les bougies et la section de départ choisie n'ont pas de champ dans ce format.
 
 Ces contraintes seront vérifiées par un JSON Schema, dans `packages/rules`, et par un test qui charge toutes les horloges du jeu. Le schéma est écrit avec TypeBox, voir l'[ADR 0008](adr/0008-validation-des-horloges.md).
 

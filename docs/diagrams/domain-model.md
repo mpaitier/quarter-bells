@@ -93,8 +93,8 @@ classDiagram
         +ClockId clock
         +Phase phase
         +int startSection
-        +int baseEyes
-        +int eyesSpent
+        +int baseCandles
+        +int candlesSpent
         +int currentTurn
     }
 
@@ -158,7 +158,7 @@ classDiagram
         +int startChapter
         +int currentChapter
         +int currentClockIndex
-        +int bonusEyes
+        +int bonusCandles
         +List~ClockId~ completedClocks
         +List~ClockId~ suspendedClocks
         +List~ClockFailures~ failures
@@ -189,7 +189,7 @@ classDiagram
 ## Décisions de modélisation
 
 - **Le groupe** est identifié par sa salle. Ses membres forment un ensemble fixe : une progression ne reprend qu'avec exactement les mêmes joueurs.
-- **Les yeux bonus** survivent aux épreuves et aux sessions sauvegardées : ils font partie de la progression du groupe, pas de l'épreuve.
+- **Les bougies bonus** survivent aux épreuves et aux sessions sauvegardées : elles font partie de la progression du groupe, pas de l'épreuve.
 - **Le chapitre maximum** d'un joueur vit sur le joueur, puisqu'il se calcule toutes salles confondues.
 - **La partie hors sauvegarde** est un état de la partie, pas de la progression : elle ne survit pas à l'arrêt, et la partie suivante reprend au point sauvegardé.
 - **L'identifiant de carte** (`CardId`) est tiré au hasard à chaque distribution. Un identifiant stable comme `instant-12` donnerait la valeur à quiconque le lit.

@@ -89,8 +89,8 @@ export {
   type TrialPlacement,
 } from "./trial/trial.js";
 export {
-  MAX_BONUS_EYES,
-  availableEyes,
-  type EyeSettings,
-  type Eyes,
-} from "./trial/eyes.js";
+  MAX_BONUS_CANDLES,
+  availableCandles,
+  type CandleSettings,
+  type Candles,
+} from "./trial/candles.js";

@@ -3,10 +3,10 @@ import { parseClock } from "../../src/clocks/parse-clock.js";
 import { InvalidPlayerCountError, InvalidSeedError } from "../../src/errors.js";
 import { createTrial, type TrialSetup } from "../../src/trial/create-trial.js";
 import {
-  EYES_PER_PLAYER,
-  availableEyes,
-  computeBaseEyes,
-} from "../../src/trial/eyes.js";
+  CANDLES_PER_PLAYER,
+  availableCandles,
+  computeBaseCandles,
+} from "../../src/trial/candles.js";
 import { currentPlayer } from "../../src/trial/trial.js";
 import exampleClock from "../fixtures/clocks/example-clock.json" with { type: "json" };
 import playersChoiceClock from "../fixtures/clocks/players-choice-clock.json" with { type: "json" };
@@ -23,24 +23,27 @@ const validSetup: TrialSetup = {
   turnOrder: ["ana", "ben", "cleo"],
   startSection: 4,
   seed: 42,
-  bonusEyes: 1,
-  eyeSettings: { maxBonusEyes: 3 },
+  bonusCandles: 1,
+  candleSettings: { maxBonusCandles: 3 },
 };
 
-describe("computeBaseEyes", () => {
-  // Chaque ligne : joueurs, plafond de la salle, yeux de base attendus.
+describe("computeBaseCandles", () => {
+  // Chaque ligne : joueurs, plafond de la salle, bougies de base attendues.
   it.each<[number, number | undefined, number]>([
-    [2, undefined, 2 * EYES_PER_PLAYER],
-    [4, undefined, 4 * EYES_PER_PLAYER],
+    [2, undefined, 2 * CANDLES_PER_PLAYER],
+    [4, undefined, 4 * CANDLES_PER_PLAYER],
     // Plafond en dessous du calcul : il l'emporte.
     [4, 2, 2],
     // Plafond au-dessus du calcul : sans effet.
-    [3, 5, 3 * EYES_PER_PLAYER],
-    // Plafond à 0 : aucun œil de base, seuls les yeux bonus restent.
+    [3, 5, 3 * CANDLES_PER_PLAYER],
+    // Plafond à 0 : aucune bougie de base, seules les bougies bonus restent.
     [3, 0, 0],
-  ])("gives %i players with cap %s %i base eyes", (players, cap, expected) => {
-    expect(computeBaseEyes(players, cap)).toBe(expected);
-  });
+  ])(
+    "gives %i players with cap %s %i base candles",
+    (players, cap, expected) => {
+      expect(computeBaseCandles(players, cap)).toBe(expected);
+    },
+  );
 });
 
 describe("createTrial", () => {
@@ -83,19 +86,19 @@ describe("createTrial", () => {
     expect(currentPlayer(trial)).toBe("ana");
   });
 
-  it("makes base and bonus eyes available", () => {
-    // 3 joueurs : 3 yeux de base, plus 1 œil bonus.
+  it("makes base and bonus candles available", () => {
+    // 3 joueurs : 3 bougies de base, plus 1 bougie bonus.
     const trial = createTrial(validSetup);
-    expect(trial.eyes).toEqual({ base: 3, bonus: 1, spent: 0 });
-    expect(availableEyes(trial.eyes)).toBe(4);
+    expect(trial.candles).toEqual({ base: 3, bonus: 1, spent: 0 });
+    expect(availableCandles(trial.candles)).toBe(4);
   });
 
-  it("applies the base eyes cap of the room", () => {
+  it("applies the base candles cap of the room", () => {
     const trial = createTrial({
       ...validSetup,
-      eyeSettings: { maxBonusEyes: 3, baseEyesCap: 1 },
+      candleSettings: { maxBonusCandles: 3, baseCandlesCap: 1 },
     });
-    expect(trial.eyes.base).toBe(1);
+    expect(trial.candles.base).toBe(1);
   });
 
   it("accepts a start section chosen by the players", () => {
@@ -144,19 +147,22 @@ describe("createTrial", () => {
       );
     });
 
-    // Chaque ligne : réglages et yeux bonus qui doivent être refusés.
+    // Chaque ligne : réglages et bougies bonus qui doivent être refusés.
     it.each<[string, Partial<TrialSetup>]>([
-      ["more bonus eyes than the maximum", { bonusEyes: 4 }],
-      ["negative bonus eyes", { bonusEyes: -1 }],
-      ["a maximum above 3", { eyeSettings: { maxBonusEyes: 4 } }],
+      ["more bonus candles than the maximum", { bonusCandles: 4 }],
+      ["negative bonus candles", { bonusCandles: -1 }],
+      ["a maximum above 3", { candleSettings: { maxBonusCandles: 4 } }],
       [
-        "bonus eyes above a reduced maximum",
-        { bonusEyes: 2, eyeSettings: { maxBonusEyes: 1 } },
+        "bonus candles above a reduced maximum",
+        { bonusCandles: 2, candleSettings: { maxBonusCandles: 1 } },
       ],
-      ["a negative cap", { eyeSettings: { maxBonusEyes: 3, baseEyesCap: -1 } }],
+      [
+        "a negative cap",
+        { candleSettings: { maxBonusCandles: 3, baseCandlesCap: -1 } },
+      ],
       [
         "a fractional cap",
-        { eyeSettings: { maxBonusEyes: 3, baseEyesCap: 1.5 } },
+        { candleSettings: { maxBonusCandles: 3, baseCandlesCap: 1.5 } },
       ],
     ])("rejects %s", (_label, change) => {
       expect(() => createTrial({ ...validSetup, ...change })).toThrow(

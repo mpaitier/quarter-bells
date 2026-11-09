@@ -68,8 +68,8 @@ function play(testCase: TrialCase): Trial {
     turnOrder: testCase.turnOrder,
     startSection: testCase.startSection,
     seed: testCase.seed,
-    bonusEyes: testCase.bonusEyes,
-    eyeSettings: testCase.eyeSettings,
+    bonusCandles: testCase.bonusCandles,
+    candleSettings: testCase.candleSettings,
   });
 
   testCase.steps.forEach((step, index) => {
@@ -115,7 +115,7 @@ describe("trial cases", () => {
       throw new Error("The trial is not resolved after the last step");
     }
     expect(trial.phase).toBe(testCase.expected.phase);
-    expect(trial.bonusEyesAfter).toBe(testCase.expected.bonusEyesAfter);
+    expect(trial.bonusCandlesAfter).toBe(testCase.expected.bonusCandlesAfter);
     expect(
       trial.resolution.sections.map(({ section, value, ascending }) => ({
         section,
