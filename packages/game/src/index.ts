@@ -23,3 +23,13 @@ export {
   type PlacementGame,
   type ResolvedGame,
 } from "./game.js";
+
+// Actions : le reducer de la partie, sur le modèle de l'épreuve (ADR 0010).
+export {
+  applyGameAction,
+  type EndAnnouncementAction,
+  type GameAction,
+  type GameRejection,
+  type GameResult,
+  type SetReadyAction,
+} from "./apply-game-action.js";

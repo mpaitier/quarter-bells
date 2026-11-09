@@ -17,8 +17,27 @@ describe("public API", () => {
     expect(game.currentClock(created).uid).toBe(CHAPTER_1.clocks[0]?.uid);
   });
 
-  // Les vérifications internes ne font pas partie du contrat.
-  it.each(["checkSetup"])("does not expose %s", (name) => {
-    expect(game).not.toHaveProperty(name);
+  it("applies an action through the package entry point", () => {
+    const created = game.createGame({
+      chapters: [CHAPTER_1],
+      turnOrder: ["ana", "ben"],
+      host: "ana",
+      seed: 7,
+      candleSettings: { maxBonusCandles: 3 },
+    });
+    const result = game.applyGameAction(created, {
+      type: "endAnnouncement",
+      player: "ana",
+    });
+    expect(result.accepted && result.game.phase).toBe("discussion");
   });
+
+  // Les détails internes ne font pas partie du contrat. La dérivation de la
+  // graine reste interne : seul le moteur crée les épreuves.
+  it.each(["checkSetup", "deriveTrialSeed", "dealTrial"])(
+    "does not expose %s",
+    (name) => {
+      expect(game).not.toHaveProperty(name);
+    },
+  );
 });
