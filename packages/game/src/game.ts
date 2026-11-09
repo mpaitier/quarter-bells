@@ -113,18 +113,33 @@ export type Game =
   | EndedGame;
 
 /**
- * L'horloge en cours.
+ * Le chapitre en cours.
  *
- * @throws {RangeError} si la position ne désigne aucune horloge : createGame
+ * @throws {RangeError} si la position ne désigne aucun chapitre : createGame
  * et les actions ne produisent que des positions valides, c'est donc une
  * erreur de programmation
  */
+export function currentChapter(game: Game): Chapter {
+  const { chapterIndex } = game.position;
+  const chapter = game.setup.chapters[chapterIndex];
+  if (chapter === undefined) {
+    throw new RangeError(`No chapter at index ${String(chapterIndex)}`);
+  }
+  return chapter;
+}
+
+/**
+ * L'horloge en cours.
+ *
+ * @throws {RangeError} si la position ne désigne aucune horloge (voir
+ * currentChapter)
+ */
 export function currentClock(game: Game): Clock {
-  const { chapterIndex, clockIndex } = game.position;
-  const clock = game.setup.chapters[chapterIndex]?.clocks[clockIndex];
+  const { clockIndex } = game.position;
+  const clock = currentChapter(game).clocks[clockIndex];
   if (clock === undefined) {
     throw new RangeError(
-      `No clock at chapter ${String(chapterIndex)}, clock ${String(clockIndex)}`,
+      `No clock at index ${String(clockIndex)} in chapter ${String(game.position.chapterIndex)}`,
     );
   }
   return clock;

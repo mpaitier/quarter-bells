@@ -1,76 +1,20 @@
-import { currentPlayer, toCardId } from "@quarter-bells/rules";
+import { toCardId } from "@quarter-bells/rules";
 import { describe, expect, it } from "vitest";
 
 import { applyGameAction, type GameAction } from "../src/apply-game-action.js";
 import { createGame } from "../src/create-game.js";
-import type {
-  DiscussionGame,
-  Game,
-  GameSetup,
-  PlacementGame,
-} from "../src/game.js";
+import type { Game } from "../src/game.js";
 import { CHAPTER_1 } from "./support/chapters.js";
-import { deepFreeze } from "./support/deep-freeze.js";
-
-const setup: GameSetup = {
-  chapters: [CHAPTER_1],
-  turnOrder: ["ana", "ben", "cleo"],
-  host: "ana",
-  seed: 42,
-  candleSettings: { maxBonusCandles: 3 },
-};
-
-/**
- * Applique une action qui doit être acceptée. La partie est gelée avant :
- * si l'action la modifiait, le test échouerait sur une TypeError (ADR 0010).
- */
-function play(game: Game, action: GameAction): Game {
-  const result = applyGameAction(deepFreeze(game), action);
-  if (!result.accepted) {
-    throw new Error(`Rejected: ${JSON.stringify(result.rejection)}`);
-  }
-  return result.game;
-}
-
-/** Une partie en Discussion, sur la première horloge. */
-function discussion(): DiscussionGame {
-  const game = play(createGame(setup), {
-    type: "endAnnouncement",
-    player: "ana",
-  });
-  if (game.phase !== "discussion") {
-    throw new Error("Not in discussion");
-  }
-  return game;
-}
-
-/** Une partie en Pose : tous les joueurs se sont déclarés prêts. */
-function placement(from: DiscussionGame = discussion()): PlacementGame {
-  let game: Game = from;
-  for (const player of setup.turnOrder) {
-    game = play(game, { type: "setReady", player, ready: true });
-  }
-  if (game.phase !== "placement") {
-    throw new Error("Not in placement");
-  }
-  return game;
-}
-
-/** Le joueur du tour pose sa première carte, face cachée, en section 0. */
-function placeFirstInSection0(game: PlacementGame): Game {
-  const player = currentPlayer(game.trial);
-  const card = game.trial.seats.find((seat) => seat.player === player)?.hand[0];
-  if (player === undefined || card === undefined) {
-    throw new Error("No card to place");
-  }
-  return play(game, {
-    type: "placeCard",
-    player,
-    cardId: card.id,
-    sectionIndex: 0,
-    faceUp: false,
-  });
-}
+import {
+  CHAPTER_2,
+  SETUP as setup,
+  discussion,
+  lose,
+  placeFirstInSection0,
+  placement,
+  play,
+  succeedAt,
+} from "./support/games.js";
 
 describe("applyGameAction", () => {
   it("rejects a player who is not in the game, whatever the action", () => {
@@ -230,11 +174,43 @@ describe("placement", () => {
   it("takes the phase of the trial when the last card resolves it", () => {
     // Les 12 cartes en section 0 : les autres sections restent vides, la
     // pose échoue. Aucune bougie bonus sur 3 : le groupe en gagne une.
-    let game: Game = placement();
-    while (game.phase === "placement") {
-      game = placeFirstInSection0(game);
-    }
+    const game = lose();
     expect(game.phase).toBe("failed");
-    expect(game.phase === "failed" && game.trial.bonusCandlesAfter).toBe(1);
+    expect(game.trial.bonusCandlesAfter).toBe(1);
+  });
+});
+
+describe("end of a chapter", () => {
+  /** Fin du chapitre 1 d'une partie qui en compte deux. */
+  function chapterCompleted(): Game {
+    const twoChapters = { ...setup, chapters: [CHAPTER_1, CHAPTER_2] };
+    return play(succeedAt({ chapterIndex: 0, clockIndex: 3 }, twoChapters), {
+      type: "continue",
+      player: "ana",
+    });
+  }
+
+  it("waits until every player is ready", () => {
+    const game = play(chapterCompleted(), {
+      type: "setReady",
+      player: "ben",
+      ready: true,
+    });
+    expect(game.phase).toBe("chapterCompleted");
+    expect(game.phase === "chapterCompleted" && game.readyPlayers).toEqual([
+      "ben",
+    ]);
+  });
+
+  it("announces the first clock of the next chapter once all are ready", () => {
+    let game = chapterCompleted();
+    for (const player of setup.turnOrder) {
+      game = play(game, { type: "setReady", player, ready: true });
+    }
+    expect(game).toMatchObject({
+      phase: "announcing",
+      position: { chapterIndex: 1, clockIndex: 0 },
+      bonusCandles: 0,
+    });
   });
 });

@@ -34,10 +34,16 @@ describe("public API", () => {
 
   // Les détails internes ne font pas partie du contrat. La dérivation de la
   // graine reste interne : seul le moteur crée les épreuves.
-  it.each(["checkSetup", "deriveTrialSeed", "dealTrial"])(
-    "does not expose %s",
-    (name) => {
-      expect(game).not.toHaveProperty(name);
-    },
-  );
+  it.each([
+    "checkSetup",
+    "deriveTrialSeed",
+    "dealTrial",
+    "applyHostDecision",
+    "announce",
+    "currentChapter",
+    "accept",
+    "reject",
+  ])("does not expose %s", (name) => {
+    expect(game).not.toHaveProperty(name);
+  });
 });

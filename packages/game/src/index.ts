@@ -29,7 +29,13 @@ export {
   applyGameAction,
   type EndAnnouncementAction,
   type GameAction,
-  type GameRejection,
-  type GameResult,
   type SetReadyAction,
 } from "./apply-game-action.js";
+export type { GameRejection, GameResult } from "./game-result.js";
+export type {
+  ContinueAction,
+  HostDecision,
+  RestartChapterAction,
+  RetryAction,
+  StopAction,
+} from "./host-decisions.js";

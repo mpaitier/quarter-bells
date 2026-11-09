@@ -3,16 +3,22 @@ import {
   createTrial,
   type PlaceCardAction,
   type PlayerId,
-  type TrialRejection,
 } from "@quarter-bells/rules";
 
 import {
   currentClock,
   type AnnouncingGame,
+  type ChapterCompletedGame,
   type DiscussionGame,
   type Game,
   type PlacementGame,
 } from "./game.js";
+import { accept, reject, type GameResult } from "./game-result.js";
+import {
+  announce,
+  applyHostDecision,
+  type HostDecision,
+} from "./host-decisions.js";
 import { deriveTrialSeed } from "./trial-seed.js";
 
 /** L'hôte met fin à l'annonce de l'horloge : la Discussion commence. */
@@ -21,7 +27,10 @@ export interface EndAnnouncementAction {
   readonly player: PlayerId;
 }
 
-/** Un joueur se déclare prêt, ou revient sur sa décision (F-JEU-04). */
+/**
+ * Un joueur se déclare prêt, ou revient sur sa décision : pendant la
+ * Discussion (F-JEU-04), ou à la fin d'un chapitre (F-JEU-19).
+ */
 export interface SetReadyAction {
   readonly type: "setReady";
   readonly player: PlayerId;
@@ -34,28 +43,7 @@ export interface SetReadyAction {
  * carte reprend telle quelle l'action de l'épreuve.
  */
 export type GameAction =
-  EndAnnouncementAction | SetReadyAction | PlaceCardAction;
-
-/**
- * Raison structurée d'un refus : celles de l'épreuve, transmises telles
- * quelles, et celles de la partie.
- */
-export type GameRejection =
-  | TrialRejection
-  /** Le joueur ne fait pas partie de la partie. */
-  | { readonly reason: "unknownPlayer" }
-  /** L'action n'a pas de sens dans la phase actuelle. */
-  | { readonly reason: "wrongPhase" }
-  /** Action réservée à l'hôte. */
-  | { readonly reason: "notHost" };
-
-/**
- * Résultat d'une action. Un refus ne contient pas de partie : l'appelant
- * garde celle qu'il avait, qui n'a pas changé.
- */
-export type GameResult =
-  | { readonly accepted: true; readonly game: Game }
-  | { readonly accepted: false; readonly rejection: GameRejection };
+  EndAnnouncementAction | SetReadyAction | PlaceCardAction | HostDecision;
 
 /**
  * Applique une action à une partie (ADR 0015, sur le modèle de l'ADR 0010).
@@ -75,13 +63,21 @@ export function applyGameAction(game: Game, action: GameAction): GameResult {
         ? endAnnouncement(game, action)
         : reject({ reason: "wrongPhase" });
     case "setReady":
-      return game.phase === "discussion"
-        ? setReady(game, action)
+      if (game.phase === "discussion") {
+        return setReady(game, action);
+      }
+      return game.phase === "chapterCompleted"
+        ? setReadyForNextChapter(game, action)
         : reject({ reason: "wrongPhase" });
     case "placeCard":
       return game.phase === "placement"
         ? placeCard(game, action)
         : reject({ reason: "wrongPhase" });
+    case "continue":
+    case "retry":
+    case "restartChapter":
+    case "stop":
+      return applyHostDecision(game, action);
   }
 }
 
@@ -105,6 +101,33 @@ function setReady(game: DiscussionGame, action: SetReadyAction): GameResult {
   // d'état « tous prêts, cartes pas encore distribuées ».
   if (readyPlayers.length === game.setup.turnOrder.length) {
     return accept(dealTrial(game));
+  }
+  return accept({ ...game, readyPlayers });
+}
+
+/**
+ * Fin de chapitre : quand tous les joueurs sont prêts, la première horloge
+ * du chapitre suivant est annoncée, sans bougie bonus.
+ */
+function setReadyForNextChapter(
+  game: ChapterCompletedGame,
+  action: SetReadyAction,
+): GameResult {
+  const readyPlayers = updateReadyPlayers(
+    game.readyPlayers,
+    action.player,
+    action.ready,
+  );
+  if (readyPlayers.length === game.setup.turnOrder.length) {
+    // continueAfterSuccess ne passe en fin de chapitre que s'il en reste un
+    // après : la position suivante existe.
+    return accept(
+      announce(
+        game,
+        { chapterIndex: game.position.chapterIndex + 1, clockIndex: 0 },
+        0,
+      ),
+    );
   }
   return accept({ ...game, readyPlayers });
 }
@@ -170,12 +193,4 @@ function placeCard(game: PlacementGame, action: PlaceCardAction): GameResult {
       ? { ...game, trial }
       : { ...game, phase: trial.phase, trial },
   );
-}
-
-function accept(game: Game): GameResult {
-  return { accepted: true, game };
-}
-
-function reject(rejection: GameRejection): GameResult {
-  return { accepted: false, rejection };
 }
