@@ -7,5 +7,19 @@
  * réellement besoin.
  */
 
-// Vide tant que le paquet n'a pas de code : « export {} » en fait un module.
-export {};
+// Partie : configuration, état et création.
+export { createGame } from "./create-game.js";
+export {
+  currentClock,
+  type AnnouncingGame,
+  type Chapter,
+  type ChapterCompletedGame,
+  type ClockPosition,
+  type CompletedGame,
+  type DiscussionGame,
+  type EndedGame,
+  type Game,
+  type GameSetup,
+  type PlacementGame,
+  type ResolvedGame,
+} from "./game.js";

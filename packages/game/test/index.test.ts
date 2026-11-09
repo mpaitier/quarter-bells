@@ -1,16 +1,24 @@
 import { describe, expect, it } from "vitest";
 
-import * as rules from "@quarter-bells/rules";
-
 import * as game from "../src/index.js";
+import { CHAPTER_1 } from "./support/chapters.js";
 
-describe("package wiring", () => {
-  // Vérifie le branchement du paquet dans le monorepo : Vitest et TypeScript
-  // résolvent @quarter-bells/rules par le lien du workspace (pnpm), et le
-  // point d'entrée du paquet se charge. À remplacer par le test de l'API
-  // publique dès que index.ts exporte quelque chose.
-  it("loads its entry point and resolves rules through the workspace", () => {
-    expect(game).toBeDefined();
-    expect(rules.MAX_SEED).toBe(0xffffffff);
+describe("public API", () => {
+  // Parcours tel que le serveur ou l'adaptateur local le feront : créer la
+  // partie, puis lire l'horloge annoncée, à travers le point d'entrée.
+  it("creates a game through the package entry point", () => {
+    const created = game.createGame({
+      chapters: [CHAPTER_1],
+      turnOrder: ["ana", "ben"],
+      host: "ana",
+      seed: 7,
+      candleSettings: { maxBonusCandles: 3 },
+    });
+    expect(game.currentClock(created).uid).toBe(CHAPTER_1.clocks[0]?.uid);
+  });
+
+  // Les vérifications internes ne font pas partie du contrat.
+  it.each(["checkSetup"])("does not expose %s", (name) => {
+    expect(game).not.toHaveProperty(name);
   });
 });
