@@ -131,7 +131,8 @@ export default defineConfig([
   // apps/web : aucun texte affiché écrit en dur dans les composants (NF-I18N-01).
   // Les sélecteurs repèrent le texte entre deux balises, une chaîne placée
   // entre accolades, et les attributs lus par l'utilisateur ou un lecteur
-  // d'écran. Un texte qui doit vraiment rester en dur (rare) se justifie par
+  // d'écran. Un attribut vide reste permis : alt="" marque une image
+  // décorative, que le lecteur d'écran doit ignorer. Un texte qui doit vraiment rester en dur (rare) se justifie par
   // un commentaire eslint-disable-next-line.
   {
     files: ["apps/web/src/**/*.tsx"],
@@ -149,7 +150,7 @@ export default defineConfig([
         },
         {
           selector:
-            "JSXAttribute[name.name=/^(aria-label|aria-description|aria-placeholder|aria-valuetext|title|alt|placeholder|label)$/] > Literal",
+            "JSXAttribute[name.name=/^(aria-label|aria-description|aria-placeholder|aria-valuetext|title|alt|placeholder|label)$/] > Literal[value=/\\S/]",
           message: HARDCODED_TEXT_MESSAGE,
         },
       ],

@@ -1,0 +1,15 @@
+{
+  "name": "@quarter-bells/assets",
+  "private": true,
+  "description": "Sources des visuels du projet, palette de couleurs et génération des icônes.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "scripts": {
+    "icons": "node scripts/generate-icons.ts",
+    "typecheck": "tsc -p ."
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "sharp": "^0.35.5"
+  }
+}

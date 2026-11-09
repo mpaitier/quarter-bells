@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // Les scripts sont exécutés directement par Node, qui retire les types à
+    // la volée : rien n'est compilé, tsc ne fait que vérifier.
+    "noEmit": true,
+    // Scripts d'outillage lancés sous Node : ils ont accès à ses API.
+    "types": ["node"]
+  },
+  "include": ["scripts"]
+}

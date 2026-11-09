@@ -9,8 +9,8 @@ Sources des visuels du projet et palette de couleurs. Les décisions sont dans l
 | `palettes/quarter-bells.gpl`             | Palette des couleurs du projet, à importer dans Krita              |
 | `src/logo/quarter-bells-logo.kra`        | Source du logo, stockée par Git LFS                                |
 | `src/logo/quarter-bells-logo-master.png` | Master du logo exporté depuis Krita, 2400 × 2400, fond transparent |
-
-Les fichiers de `src/logo/` arrivent dans un commit séparé, après la configuration de Git LFS.
+| `src/logo/quarter-bells-logo-small.svg`  | Variante D du logo, pour les favicons de 16 et 32 px               |
+| `scripts/generate-icons.ts`              | Génération des icônes du site à partir du master                   |
 
 ## Règles
 
@@ -19,9 +19,30 @@ Les fichiers de `src/logo/` arrivent dans un commit séparé, après la configur
 - Les formats d'icônes sont générés depuis le master par un script. Aucun ne se retouche à la main.
 - Les couleurs viennent de la palette. Après une modification de `quarter-bells.gpl`, réimporter la palette dans Krita.
 
+## Générer les icônes
+
+```
+pnpm --filter assets icons
+```
+
+Le script lit le master, la variante D et la palette, puis écrit dans `apps/web` :
+
+| Fichier                               | Taille   | Rôle                                       |
+| ------------------------------------- | -------- | ------------------------------------------ |
+| `public/favicon.svg`                  | —        | favicon, variante D                        |
+| `public/favicon-32.png`               | 32       | favicon de secours, variante D             |
+| `public/apple-touch-icon.png`         | 180      | écran d'accueil iOS                        |
+| `public/icon-192.png`, `icon-512.png` | 192, 512 | manifeste de l'application                 |
+| `public/icon-maskable-512.png`        | 512      | manifeste, icône découpable par le système |
+| `src/assets/logo-header.png`          | 96       | en-tête du site, affiché à 48 px           |
+
+Les icônes à fond opaque et le logo de l'en-tête utilisent le fond ardoise de la palette (ADR 0013). Le résultat est identique d'un lancement à l'autre : relancer le script sans avoir modifié les sources ne change aucun fichier.
+
+La variante D a été dessinée une fois, en vectorisant le contour du corps de la cloche depuis le master. Elle ne se régénère pas : si la silhouette du master change, la redessiner.
+
 ## Retoucher le logo
 
 1. Modifier `quarter-bells-logo.kra` dans Krita.
 2. Réexporter `quarter-bells-logo-master.png` : PNG, canal alpha, profil sRGB inclus.
-3. Relancer le script de génération des icônes.
+3. Relancer `pnpm --filter assets icons`.
 4. Commiter les trois dans le même commit.
