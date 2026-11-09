@@ -33,14 +33,14 @@ ESLint refuse le texte écrit en dur dans les composants de `src/` : texte entre
 
 Depuis la racine du dépôt :
 
-| Commande                                   | Rôle                                                                                  |
-| ------------------------------------------ | ------------------------------------------------------------------------------------- |
-| `pnpm --filter web dev`                    | serveur de développement, rechargement à chaud                                        |
-| `pnpm --filter web build`                  | site statique dans `apps/web/dist/`                                                   |
-| `pnpm --filter web preview`                | sert le contenu de `dist/` pour vérifier le build en local                            |
-| `pnpm --filter web typecheck`              | vérification des types                                                                |
-| `pnpm vitest --project @quarter-bells/web` | tests de composants de `test/`, en mode surveillance                                  |
-| `pnpm test:e2e`                            | test de fumée Playwright sur le build de production, dans Chromium, Firefox et WebKit |
+| Commande                                       | Rôle                                                                                  |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `pnpm --filter web dev`                        | serveur de développement, rechargement à chaud                                        |
+| `pnpm --filter web build`                      | site statique dans `apps/web/dist/`                                                   |
+| `pnpm --filter web preview`                    | sert le contenu de `dist/` pour vérifier le build en local                            |
+| `pnpm --filter web typecheck`                  | vérification des types                                                                |
+| `pnpm test:watch --project @quarter-bells/web` | tests de composants de `test/`, en mode surveillance                                  |
+| `pnpm test:e2e`                                | test de fumée Playwright sur le build de production, dans Chromium, Firefox et WebKit |
 
 ## Tests de bout en bout
 

@@ -13,9 +13,9 @@
     "format:check": "prettier --check .",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc -p . && pnpm -r run typecheck",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
+    "test": "vitest run --pool=threads",
+    "test:watch": "vitest --pool=threads",
+    "test:coverage": "vitest run --coverage --pool=threads",
     "test:e2e": "pnpm --filter web test:e2e",
     "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test:coverage"
   },
