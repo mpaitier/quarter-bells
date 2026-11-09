@@ -3,8 +3,9 @@ import { dealTrialCards } from "../cards/deal.js";
 import type { Clock } from "../clocks/clock.js";
 import { isSectionIndex } from "../clocks/section.js";
 import { createSeededRng } from "../random/rng.js";
+import { isIntegerBetween } from "../numbers/is-integer-between.js";
 import {
-  MAX_BONUS_CANDLES,
+  checkCandleSettings,
   computeBaseCandles,
   type CandleSettings,
 } from "./candles.js";
@@ -93,28 +94,11 @@ function checkSetup(setup: TrialSetup): void {
     );
   }
 
-  const { maxBonusCandles, baseCandlesCap } = candleSettings;
-  if (!isIntegerBetween(maxBonusCandles, 0, MAX_BONUS_CANDLES)) {
-    throw new RangeError(
-      `maxBonusCandles must be an integer between 0 and ${String(MAX_BONUS_CANDLES)}, received ${String(maxBonusCandles)}`,
-    );
-  }
+  checkCandleSettings(candleSettings);
+  const { maxBonusCandles } = candleSettings;
   if (!isIntegerBetween(bonusCandles, 0, maxBonusCandles)) {
     throw new RangeError(
       `bonusCandles must be an integer between 0 and ${String(maxBonusCandles)}, received ${String(bonusCandles)}`,
     );
   }
-  if (
-    baseCandlesCap !== undefined &&
-    !isIntegerBetween(baseCandlesCap, 0, Number.MAX_SAFE_INTEGER)
-  ) {
-    throw new RangeError(
-      `baseCandlesCap must be a non-negative integer, received ${String(baseCandlesCap)}`,
-    );
-  }
-}
-
-/** Entier compris entre min et max, bornes incluses. */
-function isIntegerBetween(value: number, min: number, max: number): boolean {
-  return Number.isInteger(value) && value >= min && value <= max;
 }

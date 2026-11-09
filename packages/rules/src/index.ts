@@ -91,6 +91,7 @@ export {
 export {
   MAX_BONUS_CANDLES,
   availableCandles,
+  checkCandleSettings,
   type CandleSettings,
   type Candles,
 } from "./trial/candles.js";
