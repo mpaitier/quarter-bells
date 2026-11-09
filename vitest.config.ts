@@ -28,6 +28,7 @@ export default defineConfig({
       // packages/protocol (90 %) sera ajouté à sa création.
       thresholds: {
         "packages/rules/src/**": { lines: 95 },
+        "packages/game/src/**": { lines: 95 },
       },
     },
   },

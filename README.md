@@ -68,12 +68,13 @@ Lance dans l'ordre les vérifications de la CI. Chacune existe aussi séparémen
 
 ```text
 apps/      applications exécutables (server, web, mobile)
-packages/  code partagé (rules, protocol)
+packages/  code partagé (rules, game, protocol)
 docs/      documentation, décisions d'architecture, diagrammes
 ```
 
 Les règles de dépendance entre ces dossiers sont décrites dans
-[l'ADR 0002](docs/adr/0002-organiser-le-code-en-monorepo.md).
+[l'ADR 0002](docs/adr/0002-organiser-le-code-en-monorepo.md), complété par
+[l'ADR 0015](docs/adr/0015-enchainer-les-epreuves-dans-un-paquet-game.md).
 
 ## Documentation
 

@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // Paquet interne consommé en TypeScript (voir "exports" dans package.json) :
+    // rien n'est compilé ici, tsc ne fait que vérifier les types.
+    "noEmit": true
+  },
+  // Le code du paquet uniquement. Il hérite de "types": [] : aucune API de Node
+  // n'est disponible dans src/ (NF-QUA-04). Les tests ont leur propre
+  // configuration dans test/tsconfig.json.
+  "include": ["src"]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@quarter-bells/game",
+  "private": true,
+  "description": "Moteur de partie : enchaînement des épreuves d'une run, décisions de l'hôte et fin de chapitre.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p . && tsc -p test"
+  },
+  "dependencies": {
+    "@quarter-bells/rules": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2"
+  }
+}

@@ -7,8 +7,10 @@ import tseslint from "typescript-eslint";
 
 const PURE_RULES_MESSAGE =
   "packages/rules est un paquet pur (NF-QUA-04) : aucun import hors du paquet.";
+const PURE_GAME_MESSAGE =
+  "packages/game est un paquet pur (NF-QUA-04) : imports relatifs et API publique de @quarter-bells/rules uniquement (ADR 0015).";
 const DETERMINISM_MESSAGE =
-  "packages/rules ne lit ni l'heure système ni un hasard non maîtrisé : injecter une horloge ou une graine.";
+  "Les paquets purs (rules, game) ne lisent ni l'heure système ni un hasard non maîtrisé : injecter une horloge ou une graine.";
 const PUBLIC_API_MESSAGE =
   "apps/web n'importe que l'API publique d'un paquet (son index.ts) : @quarter-bells/<paquet>, sans sous-chemin.";
 const HARDCODED_TEXT_MESSAGE =
@@ -61,6 +63,35 @@ export default defineConfig([
           ],
         },
       ],
+    },
+  },
+
+  // packages/game, code de production : imports relatifs, et rules par son
+  // API publique (pas de sous-chemin comme @quarter-bells/rules/src/...).
+  {
+    files: ["packages/game/src/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              regex: "^(?!@quarter-bells/rules$)[^.]",
+              message: PURE_GAME_MESSAGE,
+            },
+            // ../../rules/src/... : contourne l'API publique en relatif.
+            { regex: "(^|/)rules/src/", message: PURE_GAME_MESSAGE },
+          ],
+        },
+      ],
+    },
+  },
+
+  // Paquets purs, code de production : ni heure système ni hasard sans graine.
+  {
+    files: ["packages/rules/src/**/*.ts", "packages/game/src/**/*.ts"],
+    ignores: ["**/*.test.ts"],
+    rules: {
       "no-restricted-properties": [
         "error",
         { object: "Math", property: "random", message: DETERMINISM_MESSAGE },

@@ -258,6 +258,16 @@ importers:
         specifier: ^0.35.5
         version: 0.35.5(@types/node@24.19.2)
 
+  packages/game:
+    dependencies:
+      '@quarter-bells/rules':
+        specifier: workspace:*
+        version: link:../rules
+    devDependencies:
+      '@types/node':
+        specifier: ^24.19.2
+        version: 24.19.2
+
   packages/rules:
     dependencies:
       typebox:
