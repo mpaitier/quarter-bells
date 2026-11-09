@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./app";
 import { TranslationProvider } from "./i18n/translation-provider";
+import "./styles.css";
 
 // L'élément racine est déclaré dans index.html. S'il manque, autant échouer
 // tout de suite avec un message clair plutôt que sur un « null » plus loin.

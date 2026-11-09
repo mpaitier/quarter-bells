@@ -11,6 +11,19 @@ Sources des visuels du projet et palette de couleurs. Les décisions sont dans l
 | `src/logo/quarter-bells-logo-master.png` | Master du logo exporté depuis Krita, 2400 × 2400, fond transparent |
 | `src/logo/quarter-bells-logo-small.svg`  | Variante D du logo, pour les favicons de 16 et 32 px               |
 | `scripts/generate-icons.ts`              | Génération des icônes du site à partir du master                   |
+| `src/table/table-background.kra`         | Source du fond de la table de jeu, stockée par Git LFS             |
+
+## Fond de la table de jeu
+
+Exporté depuis `src/table/table-background.kra` directement dans `apps/web/src/assets/table-background.webp` : tuile répétable de 2048 × 2048, affichée sur 1024 px CSS. Le document Krita contient la texture d'origine et un calque bleu nuit en mode Multiplier qui l'assombrit.
+
+## Provenance des sources externes
+
+| Fichier                          | Source                                                                          | Auteurs                                       | Licence |
+| -------------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------- | ------- |
+| `src/table/table-background.kra` | [Dark Wood](https://polyhaven.com/a/dark_wood), Poly Haven, carte Diffuse en 2K | Dario Barresi, Dimitrios Savva, Rico Cilliers | CC0     |
+
+Une ressource externe n'entre dans le repo qu'avec une licence qui autorise l'usage, la modification et la redistribution, et une ligne dans ce tableau.
 
 ## Règles
 
