@@ -2,6 +2,7 @@
 
 - Statut : Accepté
 - Date : 2026-11-05
+- Révisé : 2026-11-09, fond ardoise au lieu de bleu nuit pour les icônes
 
 ## Contexte
 
@@ -75,7 +76,7 @@ Le logo garde le trait du dessinateur. Le chemin SVG de la variante simplifiée 
   - **C, le logo complet**, de 64 px et au-delà : cloche bleu nuit, contour et séparations en laiton, section du bas en laiton, battant, moyeu et boule en crème, anneau en laiton ;
   - **D, la variante simplifiée**, pour 16 et 32 px : silhouette pleine en laiton, séparations épaisses en bleu nuit, sans moyeu ni battant. Elle est livrée en SVG, avec un PNG de 32 px en secours.
 - **Git LFS** pour les fichiers `.kra`.
-- **Une règle d'emploi** : le master transparent s'utilise sur fond sombre. Sur fond clair, on utilise la version posée sur une pastille bleu nuit, parce que la boule et le moyeu crème disparaissent sur du blanc.
+- **Une règle d'emploi** : le logo complet se pose sur un fond ardoise, qui contraste avec ses trois couleurs. Sur un fond bleu nuit, le corps de la cloche disparaît. Sur un fond clair, blanc ou crème, la boule du battant disparaît. Les icônes à fond opaque et le logo de l'en-tête utilisent donc l'ardoise.
 
 ### Spécification du master
 
@@ -86,6 +87,9 @@ Couleurs, reprises dans la palette `quarter-bells.gpl` et, à terme, dans les to
 | bleu-nuit | `#1f2a44`   | 31, 42, 68    |
 | laiton    | `#b08d57`   | 176, 141, 87  |
 | creme     | `#f3ead8`   | 243, 234, 216 |
+| ardoise   | `#5b6b8c`   | 91, 107, 140  |
+
+L'ardoise n'apparaît pas dans le logo : c'est la couleur de fond des icônes (voir la règle d'emploi).
 
 Épaisseurs, dans un rapport fixe pour que le cadran ne se confonde pas avec le contour :
 
