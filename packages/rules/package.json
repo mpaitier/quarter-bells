@@ -4,6 +4,7 @@
   "description": "Moteur de règles du jeu : cartes, horloges, contraintes de pose et conditions de réussite.",
   "license": "UNLICENSED",
   "type": "module",
+  "sideEffects": false,
   "exports": {
     ".": "./src/index.ts"
   },

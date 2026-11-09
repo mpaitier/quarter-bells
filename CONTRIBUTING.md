@@ -36,7 +36,7 @@ Types autorisés :
 | `style`    | formatage sans changement de logique              |
 | `perf`     | amélioration de performance                       |
 
-Le scope correspond au dossier concerné : `server`, `web`, `mobile`, `rules`, `protocol`, `docs`. Il est facultatif quand le changement touche tout le repo.
+Le scope correspond au dossier concerné : `server`, `web`, `mobile`, `rules`, `protocol`, `assets`, `docs`. Il est facultatif quand le changement touche tout le repo.
 
 Exemples :
 

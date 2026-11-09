@@ -1,3 +1,7 @@
 * text=auto eol=lf
 *.png binary
 *.jpg binary
+*.webp binary
+
+# Sources Krita : stockées par Git LFS, le repo ne garde qu'un pointeur (ADR 0013).
+*.kra filter=lfs diff=lfs merge=lfs -text

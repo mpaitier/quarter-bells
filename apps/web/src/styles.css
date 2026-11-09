@@ -1,0 +1,28 @@
+/* Couleurs du projet, reprises de packages/assets/palettes/quarter-bells.gpl
+   (ADR 0013). Elles rejoindront un fichier de tokens partagé avec le mobile. */
+:root {
+  --color-bleu-nuit: #1f2a44;
+  --color-laiton: #b08d57;
+  --color-creme: #f3ead8;
+  --color-ardoise: #5b6b8c;
+
+  /* Le fond de la page est sombre : le navigateur adapte ses propres
+     éléments (barres de défilement, champs de formulaire). */
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--color-creme);
+
+  /* Fond de la table de jeu : texture de bois répétée (packages/assets).
+     La couleur s'affiche pendant le chargement de l'image, et si elle
+     échoue : le texte crème reste lisible dans les deux cas. */
+  background-color: var(--color-bleu-nuit);
+  background-image: url("./assets/table-background.webp");
+  background-repeat: repeat;
+  /* Image de 2048 px affichée sur 1024 px : nette sur les écrans à haute
+     densité, où un pixel CSS vaut deux pixels physiques. */
+  background-size: 1024px;
+}

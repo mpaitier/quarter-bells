@@ -225,6 +225,12 @@ La couverture est un indicateur, pas un objectif. Un code couvert à 100 % par d
 
 Une étape en échec bloque la fusion (exigence NF-QUA-02). Seuls les paquets touchés par la PR, et ceux qui en dépendent, sont testés.
 
+## Exécution des tests
+
+Les scripts racine (`pnpm test`, `pnpm test:watch`, `pnpm test:coverage`) lancent Vitest avec `--pool=threads` : tous les fichiers de test tournent dans des threads d'un même processus Node. Par défaut, Vitest démarre un processus par fichier, et chacun recharge ses modules depuis le disque. Sous Windows, où la création d'un processus est lente et où l'antivirus analyse chaque fichier lu, la suite mettait plus de 80 secondes et les processus de `apps/web` (jsdom, React) dépassaient le délai de démarrage de 60 secondes de Vitest. Avec les threads, elle passe en quelques secondes, et sous Linux la durée ne change pas.
+
+L'option est passée en ligne de commande parce qu'un réglage `pool` dans `vitest.config.ts` ne s'applique pas aux projets déclarés par `projects`. Lancer Vitest directement (`pnpm vitest`) contourne donc ce choix : passer par les scripts, en ajoutant les options à la suite, par exemple `pnpm test --project @quarter-bells/web`.
+
 ## Ce qui n'est pas testé
 
 - Le rendu visuel exact (couleurs, positions au pixel près), vérifié à l'œil pendant le développement.

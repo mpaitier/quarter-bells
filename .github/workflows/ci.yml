@@ -61,3 +61,22 @@ jobs:
           path: coverage/
           retention-days: 7
           if-no-files-found: ignore
+
+      # Navigateurs de NF-CMP-01 et leurs dépendances système (--with-deps).
+      # La version des navigateurs suit celle de @playwright/test.
+      - name: Installer les navigateurs Playwright
+        run: pnpm --filter web exec playwright install --with-deps chromium firefox webkit
+
+      - name: Tests de bout en bout
+        run: pnpm test:e2e
+
+      # Uniquement en cas d'échec : le rapport contient les traces à rejouer
+      # dans le navigateur (voir apps/web/README.md).
+      - name: Publier le rapport Playwright
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
