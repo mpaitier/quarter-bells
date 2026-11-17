@@ -68,6 +68,14 @@ export type {
 } from "./placements/placement.js";
 export { evaluatePlacement } from "./evaluation/evaluate-placement.js";
 
+// Poses permises du joueur dont c'est le tour, exception des bornes connues
+// comprise (ADR 0011). Le client s'en sert pour l'écran de pose, l'épreuve
+// pour accepter ou refuser.
+export {
+  listPlacementOptions,
+  type PlacementOption,
+} from "./evaluation/list-placement-options.js";
+
 // Résolution : forme du rapport, que le serveur envoie dans TrialResolved.
 // L'évaluation elle-même est déclenchée par la dernière pose d'une épreuve.
 export type {
