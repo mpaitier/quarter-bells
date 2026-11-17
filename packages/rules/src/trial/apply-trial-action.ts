@@ -1,6 +1,5 @@
 import type { CardId } from "../cards/card.js";
-import { SECTION_COUNT } from "../clocks/clock.js";
-import { isSectionIndex } from "../clocks/section.js";
+import { SECTION_INDEXES, isSectionIndex } from "../clocks/section.js";
 import {
   evaluatePlacement,
   isKnownBoundViolation,
@@ -130,9 +129,6 @@ function placeCard(trial: Trial, action: PlaceCardAction): TrialResult {
   };
 }
 
-/** Index de toutes les sections, de 0 à 5. */
-const ALL_SECTIONS = Array.from({ length: SECTION_COUNT }, (_, index) => index);
-
 /**
  * Une pose refusée seulement par des bornes hautes connues est acceptée quand
  * le joueur n'a aucune pose entièrement permise (ADR 0011). Sans cette
@@ -162,7 +158,7 @@ function isForcedPlacement(
  */
 function hasFullyPermittedPlacement(trial: PlacingTrial, seat: Seat): boolean {
   return seat.hand.some((card) =>
-    ALL_SECTIONS.some(
+    SECTION_INDEXES.some(
       (sectionIndex) =>
         evaluatePlacement(trial.clock, trial.placements, {
           sectionIndex,

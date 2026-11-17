@@ -113,6 +113,7 @@ describe("public API", () => {
     "computeBaseCandles",
     "isSectionIndex",
     "requireAt",
+    "SECTION_INDEXES",
     // Outils de calcul sur la pose et le cadran.
     "clockwiseOrder",
     "placementsBySection",
