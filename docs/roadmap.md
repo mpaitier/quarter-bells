@@ -50,7 +50,7 @@ L'écran vise le format paysage, sur ordinateur et tablette. Le portrait du tél
 - Écran de jeu : horloge, mains, pose, bougies, résolution animée.
 - Phases Discussion, Distribution, Pose et Résolution.
 - Guidage du joueur quand une pose est refusée.
-- Enchaînement des 4 horloges du chapitre 1, avec réussite, échec, bougies bonus, fin de run et annonce du chapitre suivant.
+- Enchaînement des 4 horloges du chapitre 1, avec réussite, échec, bougies bonus, fin de run et fin du jeu. Le moteur gère déjà la fin de chapitre et l'annonce du suivant (F-JEU-19) : l'écran apparaîtra quand un deuxième chapitre existera.
 - Textes traduisibles, contrastes AA, animations réductibles et premier affichage rapide.
 
 **Simplifications du mode local**
