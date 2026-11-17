@@ -75,6 +75,8 @@ Les épreuves complètes, de la distribution à la résolution, sont testées de
 
 Les résultats attendus ne sont pas recopiés du moteur, ce qui ne prouverait rien : ils sont calculés à part (à la main, ou par un script indépendant), puis comparés à ce que produit le moteur.
 
+Dans `packages/game`, une partie entière se rejoue de la même façon (`test/chapter-01-run.test.ts`) : une graine de partie, l'ordre de passage, puis pour chaque épreuve l'horloge annoncée, les bougies bonus du groupe, les poses, l'issue attendue et la décision de l'hôte. La fixture (`test/runs/chapter-01.ts`) est écrite en TypeScript plutôt qu'en JSON : son type la vérifie à la compilation, et le paquet n'a pas à dépendre de TypeBox. Les mains dépendent de la graine, donc les poses ne valent que pour celle-ci. Elles ont été trouvées par une recherche hors du dépôt, puis vérifiées à la main règle par règle : chaque épreuve en donne la justification dans sa description. Si la distribution ou la dérivation des graines change, le test nomme la première carte absente de la main du joueur, et les poses sont à refaire.
+
 ### Tests de propriétés
 
 Certains comportements se vérifient mieux par des invariants que par des exemples. La bibliothèque fast-check génère des centaines d'entrées au hasard et vérifie que la propriété tient toujours. En cas d'échec, elle réduit l'entrée au plus petit contre-exemple.
