@@ -1,6 +1,6 @@
 import type { Static } from "typebox";
 import type { FirstPlacementsSchema } from "../clocks/rule-schemas.js";
-import type { Placement } from "../placements/placement.js";
+import type { Placement, PublicPlacement } from "../placements/placement.js";
 import type { FirstPlacementsViolation } from "./violation.js";
 
 /** Paramètres de firstPlacements, déduits du schéma de la règle. */
@@ -29,7 +29,7 @@ export type FirstPlacementsParams = Static<
  */
 export function checkFirstPlacements(
   section: number,
-  placements: readonly Placement[],
+  placements: readonly PublicPlacement[],
   candidate: Placement,
   params: FirstPlacementsParams,
 ): FirstPlacementsViolation | undefined {

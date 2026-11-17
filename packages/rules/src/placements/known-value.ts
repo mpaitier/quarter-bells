@@ -1,5 +1,9 @@
 import { sectionValue } from "./by-section.js";
-import type { Placement } from "./placement.js";
+import type {
+  FaceUpPlacement,
+  Placement,
+  PublicPlacement,
+} from "./placement.js";
 
 /**
  * Valeur qu'aurait `section` si `candidate` y était posée, quand cette valeur
@@ -23,7 +27,7 @@ import type { Placement } from "./placement.js";
  */
 export function knownValueAfter(
   section: number,
-  placements: readonly Placement[],
+  placements: readonly PublicPlacement[],
   candidate: Placement,
 ): number | undefined {
   // La pose ne change pas cette section : rien à vérifier ici.
@@ -35,9 +39,16 @@ export function knownValueAfter(
     (placement) => placement.sectionIndex === section,
   );
   // every renvoie true sur une liste vide : une section vide est publique.
-  if (!sectionPlacements.every((placement) => placement.faceUp)) {
+  // Le prédicat de type fait savoir à TypeScript que, passé ce test, chaque
+  // carte de la section a une valeur lisible.
+  if (!sectionPlacements.every(isFaceUp)) {
     return undefined;
   }
 
   return sectionValue([...sectionPlacements, candidate]);
+}
+
+/** Prédicat de type : la carte est face visible, sa valeur est publique. */
+function isFaceUp(placement: PublicPlacement): placement is FaceUpPlacement {
+  return placement.faceUp;
 }
