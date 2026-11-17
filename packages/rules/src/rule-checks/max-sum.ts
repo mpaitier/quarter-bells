@@ -2,7 +2,7 @@ import type { Static } from "typebox";
 import type { MaxSumSchema } from "../clocks/rule-schemas.js";
 import { sectionValue } from "../placements/by-section.js";
 import { knownValueAfter } from "../placements/known-value.js";
-import type { Placement } from "../placements/placement.js";
+import type { Placement, PublicPlacement } from "../placements/placement.js";
 import type { MaxSumViolation } from "./violation.js";
 
 /** Paramètres de maxSum, déduits du schéma de la règle. */
@@ -46,7 +46,7 @@ export function checkMaxSum(
  */
 export function checkMaxSumAtPlacement(
   section: number,
-  placements: readonly Placement[],
+  placements: readonly PublicPlacement[],
   candidate: Placement,
   params: MaxSumParams,
 ): MaxSumViolation | undefined {

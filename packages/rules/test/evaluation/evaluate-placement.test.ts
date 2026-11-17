@@ -1,13 +1,17 @@
 import { describe, expect, it } from "vitest";
 import type { CardValue } from "../../src/cards/card.js";
-import type { Clock, ClockRule, SectionRule } from "../../src/clocks/clock.js";
+import type { SectionRule } from "../../src/clocks/clock.js";
 import { parseClock } from "../../src/clocks/parse-clock.js";
 import {
   evaluatePlacement,
   isKnownBoundViolation,
 } from "../../src/evaluation/evaluate-placement.js";
-import type { Placement } from "../../src/placements/placement.js";
+import type {
+  Placement,
+  PublicPlacement,
+} from "../../src/placements/placement.js";
 import type { Violation } from "../../src/rule-checks/violation.js";
+import { clockWith } from "../support/placement-clock.js";
 import playersChoiceClock from "../fixtures/clocks/players-choice-clock.json" with { type: "json" };
 
 // Le détail de chaque règle est couvert par test/cases/ (fichiers de
@@ -24,34 +28,6 @@ function place(
   faceUp = false,
 ): Placement {
   return { sectionIndex, card: { family: "instant", value }, faceUp };
-}
-
-// Horloge réduite à ce que lit evaluatePlacement. Chaque section reçoit les
-// règles indiquées pour son index, aucune sinon.
-function clockWith(
-  rulesBySection: Partial<Record<number, SectionRule[]>>,
-  clockRules: ClockRule[] = [],
-  noMaxSum = false,
-): Pick<Clock, "sections" | "clockRules" | "noMaxSum"> {
-  // Clock.sections est un tuple de 6 sections dont l'index est littéral
-  // (0, puis 1...). Un map produirait un simple tableau de number, refusé :
-  // on écrit les six sections, et `const I` garde chaque index littéral.
-  const section = <const I extends number>(index: I) => ({
-    index,
-    rules: rulesBySection[index] ?? [],
-  });
-  return {
-    sections: [
-      section(0),
-      section(1),
-      section(2),
-      section(3),
-      section(4),
-      section(5),
-    ],
-    clockRules,
-    noMaxSum,
-  };
 }
 
 // Règle « la première pose doit se faire devant cette section ».
@@ -188,6 +164,32 @@ describe("evaluatePlacement", () => {
     expect(evaluatePlacement(clock, [place(0), place(0)], place(3))).toEqual(
       [],
     );
+  });
+
+  describe("public information only", () => {
+    // Pose vue par un autre joueur (ADR 0016) : la carte cachée de la
+    // section 3 n'a pas de valeur. Seule la carte visible en a une.
+    const publicView: PublicPlacement[] = [
+      { sectionIndex: 3, card: { family: "instant", value: 12 }, faceUp: true },
+      { sectionIndex: 3, card: { family: "eternity" }, faceUp: false },
+    ];
+
+    it("evaluates a pose seen by another player", () => {
+      // La carte cachée rend la valeur de la section inconnue : le plafond
+      // ne s'applique pas, même avec un 12.
+      expect(
+        evaluatePlacement(clockWith({}), publicView, place(3, 12)),
+      ).toEqual([]);
+    });
+
+    it("still follows the rank, which is public", () => {
+      // La carte cachée compte dans le rang : la pose proposée est la 3e
+      // (rang 2), que la section 0 réclame.
+      const clock = clockWith({
+        0: [{ kind: "firstPlacements", params: { placementIndexes: [2] } }],
+      });
+      expect(evaluatePlacement(clock, publicView, place(3))).toHaveLength(1);
+    });
   });
 
   it("does not modify the pose it receives", () => {

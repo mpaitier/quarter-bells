@@ -53,6 +53,26 @@ describe("public API", () => {
     expect(rules.evaluatePlacement(clock, [], candidate)).toEqual([]);
   });
 
+  // Même horloge sans règle : toutes les poses sont permises. Le détail est
+  // testé dans list-placement-options.test.ts.
+  it("lists placement options through the package entry point", () => {
+    const clock = rules.parseClock(exampleClock, "example-clock.json");
+    const trial = rules.createTrial({
+      clock,
+      turnOrder: ["ana", "ben"],
+      startSection: 4,
+      seed: 7,
+      bonusCandles: 0,
+      candleSettings: { maxBonusCandles: rules.MAX_BONUS_CANDLES },
+    });
+    const hand = trial.seats[0]?.hand ?? [];
+
+    const options = rules.listPlacementOptions(clock, trial.placements, hand);
+
+    // Une option par carte et par section.
+    expect(options).toHaveLength(hand.length * rules.SECTION_COUNT);
+  });
+
   // Une épreuve créée et une pose jouée à travers le point d'entrée : le
   // détail est testé dans test/trial/.
   it("plays a trial through the package entry point", () => {
@@ -113,6 +133,9 @@ describe("public API", () => {
     "computeBaseCandles",
     "isSectionIndex",
     "requireAt",
+    "requireFind",
+    "SECTION_INDEXES",
+    "isKnownBoundViolation",
     // Outils de calcul sur la pose et le cadran.
     "clockwiseOrder",
     "placementsBySection",

@@ -1,7 +1,7 @@
 import type { Clock, ClockRule, SectionRule } from "../clocks/clock.js";
 import { isSectionIndex } from "../clocks/section.js";
 import { GENERAL_MAX_SUM } from "../general-rules/evaluate-general-rules.js";
-import type { Placement } from "../placements/placement.js";
+import type { Placement, PublicPlacement } from "../placements/placement.js";
 import { checkFirstPlacements } from "../rule-checks/first-placements.js";
 import { checkMaxSumAtPlacement } from "../rule-checks/max-sum.js";
 import { checkSumInRangeAtPlacement } from "../rule-checks/sum-in-range.js";
@@ -27,6 +27,11 @@ import {
  * Seuls sections, clockRules et noMaxSum sont lus dans l'horloge : un test
  * n'a pas à construire une horloge entière.
  *
+ * Ne lit que des informations publiques dans la pose déjà faite (ADR 0016) :
+ * le client l'appelle avec la vue d'un joueur, où les cartes cachées des
+ * autres n'ont pas de valeur. La candidate, elle, est une carte de la main
+ * du joueur, dont il connaît la valeur.
+ *
  * @param placements pose déjà faite, dans l'ordre des poses
  * @param candidate pose proposée ; son rang est placements.length
  * @returns toutes les violations, triées par règle puis par section ; liste
@@ -35,7 +40,7 @@ import {
  */
 export function evaluatePlacement(
   clock: Pick<Clock, "sections" | "clockRules" | "noMaxSum">,
-  placements: readonly Placement[],
+  placements: readonly PublicPlacement[],
   candidate: Placement,
 ): Violation[] {
   // Le type promet un index valide, mais seulement si la commande a été
@@ -97,7 +102,7 @@ export function evaluatePlacement(
 function sectionRuleAtPlacement(
   section: number,
   rule: SectionRule,
-  placements: readonly Placement[],
+  placements: readonly PublicPlacement[],
   candidate: Placement,
 ): Violation[] {
   switch (rule.kind) {
@@ -131,7 +136,7 @@ function sectionRuleAtPlacement(
  */
 function clockRuleAtPlacement(
   rule: ClockRule,
-  placements: readonly Placement[],
+  placements: readonly PublicPlacement[],
   candidate: Placement,
 ): Violation[] {
   switch (rule.kind) {

@@ -4,7 +4,9 @@ import type { CardFace } from "../../src/cards/card-schema.js";
 import { SECTION_COUNT } from "../../src/clocks/clock.js";
 import {
   PlacementSchema,
+  type FaceDownPlacement,
   type Placement,
+  type PublicPlacement,
 } from "../../src/placements/placement.js";
 
 // Ces tests vérifient des types, pas des valeurs : ils échouent à la
@@ -23,6 +25,42 @@ describe("placement types", () => {
       card: { family: "instant", value: 7 },
     };
     expect(placement).toBeDefined();
+  });
+});
+
+// Vue publique d'une pose (ADR 0016). Vérifiée à la compilation, comme le
+// describe précédent.
+describe("public placement types", () => {
+  // Le serveur passe ses placements complets aux fonctions qui attendent une
+  // vue publique : sans cette compatibilité, il devrait les convertir.
+  it("accepts a full placement as a public placement", () => {
+    expectTypeOf<Placement>().toExtend<PublicPlacement>();
+  });
+
+  // Une carte cachée des autres joueurs n'a pas de valeur dans la vue.
+  it("allows a face-down card without value", () => {
+    const placement: PublicPlacement = {
+      sectionIndex: 0,
+      card: { family: "eternity" },
+      faceUp: false,
+    };
+    expect(placement.faceUp).toBe(false);
+  });
+
+  it("requires the value of a face-up card", () => {
+    // @ts-expect-error une carte visible a toujours une valeur
+    const placement: PublicPlacement = {
+      sectionIndex: 0,
+      card: { family: "instant" },
+      faceUp: true,
+    };
+    expect(placement).toBeDefined();
+  });
+
+  // Le cœur de la décision : la valeur n'est lisible qu'après avoir vérifié
+  // la face. Lire value sur une carte cachée ne compile pas.
+  it("hides the value of a face-down card", () => {
+    expectTypeOf<FaceDownPlacement["card"]>().not.toHaveProperty("value");
   });
 });
 

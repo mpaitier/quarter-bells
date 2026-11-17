@@ -1,10 +1,6 @@
-import {
-  SECTION_COUNT,
-  type Clock,
-  type ClockRule,
-  type SectionRule,
-} from "../clocks/clock.js";
+import type { Clock, ClockRule, SectionRule } from "../clocks/clock.js";
 import { clockwiseOrder } from "../clocks/clockwise-order.js";
+import { SECTION_INDEXES } from "../clocks/section.js";
 import { evaluateGeneralRules } from "../general-rules/evaluate-general-rules.js";
 import { sectionValue } from "../placements/by-section.js";
 import type { Placement } from "../placements/placement.js";
@@ -17,9 +13,6 @@ import {
   listOf,
   type Violation,
 } from "../rule-checks/violation.js";
-
-/** Index de toutes les sections, de 0 à 5. */
-const ALL_SECTIONS = Array.from({ length: SECTION_COUNT }, (_, index) => index);
 
 /** Une section telle qu'elle est révélée à la Résolution (F-JEU-12). */
 export interface SectionReveal<P extends Placement = Placement> {
@@ -153,7 +146,7 @@ function clockRuleAtResolution(
 
     // Une règle d'horloge vaut pour chaque section.
     case "maxSum":
-      return ALL_SECTIONS.flatMap((section) =>
+      return SECTION_INDEXES.flatMap((section) =>
         listOf(checkMaxSum(section, placementsOf(section), rule.params)),
       );
   }
