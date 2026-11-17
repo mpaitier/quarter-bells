@@ -125,12 +125,12 @@ Priorités (méthode MoSCoW) :
 
 ### Qualité
 
-| ID        | Exigence                                                                                              | Priorité |
-| --------- | ----------------------------------------------------------------------------------------------------- | -------- |
-| NF-QUA-01 | Chaque règle du moteur est couverte par au moins un test de réussite et un test d'échec.              | M        |
-| NF-QUA-02 | Le lint, le formatage et les tests bloquent la fusion d'une pull request.                             | M        |
-| NF-QUA-03 | Chaque décision d'architecture structurante fait l'objet d'un ADR.                                    | M        |
-| NF-QUA-04 | Le package `rules` ne dépend d'aucun autre package du dépôt ni d'aucune bibliothèque d'entrée/sortie. | M        |
+| ID        | Exigence                                                                                                                                                                      | Priorité |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| NF-QUA-01 | Chaque règle du moteur est couverte par au moins un test de réussite et un test d'échec.                                                                                      | M        |
+| NF-QUA-02 | Le lint, le formatage et les tests bloquent la fusion d'une pull request.                                                                                                     | M        |
+| NF-QUA-03 | Chaque décision d'architecture structurante fait l'objet d'un ADR.                                                                                                            | M        |
+| NF-QUA-04 | Les packages `rules` et `game` n'utilisent aucune bibliothèque d'entrée/sortie. `rules` ne dépend d'aucun autre package du dépôt, `game` ne dépend que de `rules` (ADR 0015). | M        |
 
 ### Accessibilité
 

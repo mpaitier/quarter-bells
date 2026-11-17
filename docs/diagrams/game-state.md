@@ -1,6 +1,8 @@
 # Cycle de vie d'une partie
 
-Machine à états de la partie côté serveur. Chaque état répond à la question « la partie est actuellement… ». Les transitions sont étiquetées par l'événement qui les déclenche, avec une garde entre crochets quand une condition s'applique.
+Machine à états d'une partie. Chaque état répond à la question « la partie est actuellement… ». Les transitions sont étiquetées par l'événement qui les déclenche, avec une garde entre crochets quand une condition s'applique.
+
+Le moteur `packages/game` (ADR 0015) implémente l'enchaînement des épreuves, de l'annonce à la fin du jeu. Le serveur y ajoute la mise en place de la session, la pause pour déconnexion et la sauvegarde. La section « Dans le code » indique ce qui existe déjà et sous quel nom.
 
 Les décisions après une épreuve (continuer, retenter, mettre en suspens, recommencer le chapitre, mettre fin à la progression, arrêter) sont des commandes réservées à l'hôte.
 
@@ -25,8 +27,7 @@ stateDiagram-v2
         WaitingForReady --> WaitingForReady : section de départ choisie [chapitre 3 ou plus]
     }
 
-    Discussion --> Dealing : joueur prêt [tous prêts]
-    Dealing --> Placement : cartes distribuées
+    Discussion --> Placement : joueur prêt [tous prêts]
 
     state Placement {
         [*] --> AwaitingCard
@@ -40,12 +41,12 @@ stateDiagram-v2
     Placement --> Ended : sauvegarder et arrêter [en pause]
 
     Placement --> Succeeded : dernière carte posée [conditions remplies]
-    Placement --> Failed : dernière carte posée [condition non remplie et moins de 3 bougies bonus]
-    Placement --> RunLost : dernière carte posée [condition non remplie et 3 bougies bonus]
+    Placement --> Failed : dernière carte posée [condition non remplie et bougies bonus sous le maximum]
+    Placement --> RunLost : dernière carte posée [condition non remplie et maximum de bougies bonus atteint]
 
     Succeeded --> Announcing : continuer [horloge suivante dans le chapitre]
-    Succeeded --> ChapterCompleted : [4e horloge du chapitre réussie]
-    Succeeded --> Completed : [dernière horloge du jeu réussie]
+    Succeeded --> ChapterCompleted : continuer [dernière horloge du chapitre, un chapitre suit]
+    Succeeded --> Completed : continuer [dernière horloge du dernier chapitre]
 
     state ChapterCompleted {
         [*] --> WaitingForReadyNext
@@ -72,29 +73,44 @@ stateDiagram-v2
 
 ## Effets attachés aux transitions
 
-| Transition                    | Effets                                                                                                                                             |
-| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Vers `ChapterSelection`       | Calcul du chapitre maximum autorisé : le plus petit des chapitres maximum atteints par les joueurs présents.                                       |
-| Vers `Announcing`             | Calcul des bougies disponibles. Statuts « prêt » remis à zéro. Section de départ fixée par l'horloge jusqu'au chapitre 2.                          |
-| `section de départ choisie`   | Section de départ enregistrée dans l'épreuve. Statuts « prêt » remis à zéro.                                                                       |
-| Vers `Dealing`                | Mélange avec une graine, distribution selon le nombre de joueurs. Chaque joueur reçoit sa main, et la famille des cartes des autres.               |
-| Vers `Placement`              | Le tour passe au premier joueur de l'ordre de passage.                                                                                             |
-| `carte posée`                 | Validation des contraintes de pose, décompte de la bougie si face visible, passage au joueur suivant.                                              |
-| Vers `ReserveTaken`           | En partie à 2, chaque joueur reçoit la valeur de sa réserve.                                                                                       |
-| Vers `Paused`                 | Message à tous indiquant le joueur absent.                                                                                                         |
-| Vers `Succeeded`              | Bougies bonus remises à zéro. Hors sauvegarde, rien d'autre ne change ; sinon, progression sauvegardée et chapitre maximum des joueurs mis à jour. |
-| Vers `Failed`                 | Une bougie bonus gagnée. Nombre d'échecs de l'horloge augmenté (hors sauvegarde, seulement pour l'horloge où la progression est figée).            |
-| Vers `RunLost`                | Nombre d'échecs de l'horloge augmenté. L'hôte choisit la suite.                                                                                    |
-| `retenter l'horloge`          | Depuis `RunLost` : bougies bonus remises à zéro, la partie passe hors sauvegarde.                                                                  |
-| `recommencer le chapitre`     | Retour à la première horloge du chapitre où la progression est figée, bougies bonus remises à zéro, fin du mode hors sauvegarde.                   |
-| `mettre fin à la progression` | Progression du groupe supprimée.                                                                                                                   |
-| `continuer` [hors sauvegarde] | Le groupe a été prévenu que la suite ne sera pas sauvegardée (voir le protocole).                                                                  |
-| `mettre en suspens`           | Horloge ajoutée aux horloges en suspens, bougies bonus remises à zéro, progression sauvegardée sauf hors sauvegarde.                               |
-| Vers `Ended`                  | Progression sauvegardée, sauf hors sauvegarde.                                                                                                     |
+| Transition                    | Effets                                                                                                                                                                                                                                                                                 |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Vers `ChapterSelection`       | Calcul du chapitre maximum autorisé : le plus petit des chapitres maximum atteints par les joueurs présents.                                                                                                                                                                           |
+| Vers `Announcing`             | Calcul des bougies disponibles. Statuts « prêt » remis à zéro. Section de départ fixée par l'horloge jusqu'au chapitre 2.                                                                                                                                                              |
+| `section de départ choisie`   | Section de départ enregistrée dans l'épreuve. Statuts « prêt » remis à zéro.                                                                                                                                                                                                           |
+| Vers `Placement`              | Mélange avec la graine de l'épreuve, dérivée de celle de la partie et du nombre d'épreuves déjà jouées (ADR 0015). Distribution selon le nombre de joueurs : chaque joueur reçoit sa main, et la famille des cartes des autres. Le tour passe au premier joueur de l'ordre de passage. |
+| `carte posée`                 | Validation des contraintes de pose, décompte de la bougie si face visible, passage au joueur suivant.                                                                                                                                                                                  |
+| Vers `ReserveTaken`           | En partie à 2, chaque joueur reçoit la valeur de sa réserve.                                                                                                                                                                                                                           |
+| Vers `Paused`                 | Message à tous indiquant le joueur absent.                                                                                                                                                                                                                                             |
+| Vers `Succeeded`              | Bougies bonus remises à zéro. Hors sauvegarde, rien d'autre ne change ; sinon, progression sauvegardée et chapitre maximum des joueurs mis à jour.                                                                                                                                     |
+| Vers `Failed`                 | Une bougie bonus gagnée. Nombre d'échecs de l'horloge augmenté (hors sauvegarde, seulement pour l'horloge où la progression est figée).                                                                                                                                                |
+| Vers `RunLost`                | Nombre d'échecs de l'horloge augmenté. L'hôte choisit la suite.                                                                                                                                                                                                                        |
+| `retenter l'horloge`          | Depuis `RunLost` : bougies bonus remises à zéro, la partie passe hors sauvegarde.                                                                                                                                                                                                      |
+| `recommencer le chapitre`     | Retour à la première horloge du chapitre où la progression est figée, bougies bonus remises à zéro, fin du mode hors sauvegarde.                                                                                                                                                       |
+| `mettre fin à la progression` | Progression du groupe supprimée.                                                                                                                                                                                                                                                       |
+| `continuer` [hors sauvegarde] | Le groupe a été prévenu que la suite ne sera pas sauvegardée (voir le protocole).                                                                                                                                                                                                      |
+| `mettre en suspens`           | Horloge ajoutée aux horloges en suspens, bougies bonus remises à zéro, progression sauvegardée sauf hors sauvegarde.                                                                                                                                                                   |
+| Vers `Ended`                  | Progression sauvegardée, sauf hors sauvegarde.                                                                                                                                                                                                                                         |
 
 ## Ce que ce diagramme ne montre pas
 
 - **Les commandes refusées.** Une commande invalide dans l'état courant (poser une carte pendant la Discussion, une décision d'hôte envoyée par un autre joueur) est rejetée sans changer l'état.
 - **La présence des joueurs.** Les vérifications d'inactivité sont gérées au niveau de la salle (voir [le cycle de vie d'une salle](lobby-state.md)).
-- **La Résolution.** Côté serveur, elle est instantanée : la dernière carte posée déclenche l'évaluation et le passage direct à `Succeeded`, `Failed` ou `RunLost`. La révélation section par section n'est qu'une animation du client.
+- **La distribution et la Résolution.** Elles sont instantanées. Quand le dernier joueur se déclare prêt, les cartes sont distribuées dans la même commande et la partie passe directement à `Placement`. La dernière carte posée déclenche l'évaluation et le passage direct à `Succeeded`, `Failed` ou `RunLost`. La distribution et la révélation section par section ne sont que des animations du client.
 - **Les déconnexions hors du tour du joueur.** Un joueur déconnecté pendant la Discussion ou pendant le tour d'un autre ne met pas la partie en pause. Elle ne s'arrête que quand son tour arrive.
+
+## Dans le code
+
+Correspondance avec la `phase` d'une partie dans `packages/game`, et ce qui reste à faire.
+
+| État du diagramme                | Dans `packages/game`                                                                                                                           |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `SessionSetup`                   | Absent : le serveur (J3) ou l'adaptateur local (J2) fournit la configuration à `createGame`.                                                   |
+| `Announcing`                     | `announcing`. L'hôte y met fin avec `endAnnouncement`.                                                                                         |
+| `Discussion`                     | `discussion`, avec `setReady`. Le choix de la section de départ (F-JEU-17) n'existe pas encore : la section par défaut de l'horloge est jouée. |
+| `Placement`                      | `placement`, avec `placeCard` transmis au reducer d'épreuve. La réserve à 2 joueurs est gérée par `packages/rules`, la pause par le serveur.   |
+| `Succeeded`, `Failed`, `RunLost` | `succeeded`, `failed`, `runLost`, avec l'épreuve résolue. Les bougies bonus se lisent dans `bonusCandlesAfter`.                                |
+| `ChapterCompleted`               | `chapterCompleted`, avec `setReady`.                                                                                                           |
+| `Completed`, `Ended`             | `completed`, `ended`.                                                                                                                          |
+
+Décisions de l'hôte disponibles : `continue`, `retry` (après `Failed` ou `RunLost`), `restartChapter` (après `RunLost`) et `stop`. Restent à faire au J4 : la mise en suspens (F-JEU-15), le mode hors sauvegarde (F-JEU-23) et donc « recommencer le chapitre » depuis `Succeeded` ou `Failed`, ainsi que « mettre fin à la progression ». Sans progression sauvegardée, `stop` en tient lieu après une run perdue et mène à `ended`.
