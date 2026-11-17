@@ -133,6 +133,7 @@ describe("public API", () => {
     "computeBaseCandles",
     "isSectionIndex",
     "requireAt",
+    "requireFind",
     "SECTION_INDEXES",
     "isKnownBoundViolation",
     // Outils de calcul sur la pose et le cadran.

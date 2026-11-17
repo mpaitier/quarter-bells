@@ -1,9 +1,7 @@
+import { requireFind } from "../arrays/require-find.js";
 import type { CardId } from "../cards/card.js";
-import { SECTION_INDEXES, isSectionIndex } from "../clocks/section.js";
-import {
-  evaluatePlacement,
-  isKnownBoundViolation,
-} from "../evaluation/evaluate-placement.js";
+import { isSectionIndex } from "../clocks/section.js";
+import { listPlacementOptions } from "../evaluation/list-placement-options.js";
 import type { Violation } from "../rule-checks/violation.js";
 import { availableCandles } from "./candles.js";
 import { isPlacementComplete, resolveTrial } from "./resolve-trial.js";
@@ -105,20 +103,26 @@ function placeCard(trial: Trial, action: PlaceCardAction): TrialResult {
     return reject({ reason: "noCandleLeft" });
   }
 
+  // Même fonction que le client pour signaler les sections interdites : la
+  // règle des bornes connues (ADR 0011) n'est écrite qu'à un seul endroit.
+  // La carte est dans la main et la section existe : l'option existe.
+  const option = requireFind(
+    listPlacementOptions(trial.clock, trial.placements, seat.hand),
+    (candidate) =>
+      candidate.cardId === card.id &&
+      candidate.sectionIndex === action.sectionIndex,
+    "the option of the chosen card and section",
+  );
+  if (!option.permitted) {
+    return reject({ reason: "ruleViolation", violations: option.violations });
+  }
+
   const placement: TrialPlacement = {
     sectionIndex: action.sectionIndex,
     card,
     faceUp: action.faceUp,
     player: action.player,
   };
-  const violations = evaluatePlacement(
-    trial.clock,
-    trial.placements,
-    placement,
-  );
-  if (violations.length > 0 && !isForcedPlacement(trial, seat, violations)) {
-    return reject({ reason: "ruleViolation", violations });
-  }
 
   // La dernière pose déclenche la Résolution, dans la même action : il n'y a
   // pas d'état intermédiaire « toutes les cartes posées, pas encore résolue ».
@@ -127,46 +131,6 @@ function placeCard(trial: Trial, action: PlaceCardAction): TrialResult {
     accepted: true,
     trial: isPlacementComplete(next) ? resolveTrial(next) : next,
   };
-}
-
-/**
- * Une pose refusée seulement par des bornes hautes connues est acceptée quand
- * le joueur n'a aucune pose entièrement permise (ADR 0011). Sans cette
- * exception, l'épreuve resterait bloquée : le joueur ne pourrait rien poser,
- * et l'épreuve ne serait jamais résolue. La borne franchie fera échouer
- * l'épreuve à la Résolution.
- *
- * Les contraintes de pose (firstPlacements) ne sont jamais franchies.
- */
-function isForcedPlacement(
-  trial: PlacingTrial,
-  seat: Seat,
-  violations: readonly Violation[],
-): boolean {
-  // Clause de garde : une contrainte de pose suffit à refuser.
-  if (!violations.every(isKnownBoundViolation)) {
-    return false;
-  }
-  return !hasFullyPermittedPlacement(trial, seat);
-}
-
-/**
- * Le joueur peut poser au moins une carte de sa main quelque part sans
- * aucune violation. Seules les poses face cachée sont essayées : la face ne
- * change pas l'évaluation (la valeur de sa propre carte reste connue du
- * joueur), et une pose face cachée ne dépense pas de bougie.
- */
-function hasFullyPermittedPlacement(trial: PlacingTrial, seat: Seat): boolean {
-  return seat.hand.some((card) =>
-    SECTION_INDEXES.some(
-      (sectionIndex) =>
-        evaluatePlacement(trial.clock, trial.placements, {
-          sectionIndex,
-          card,
-          faceUp: false,
-        }).length === 0,
-    ),
-  );
 }
 
 /** Nouvelle épreuve, après une pose acceptée. */

@@ -6,6 +6,7 @@ import {
   type PlaceCardAction,
   type TrialResult,
 } from "../../src/trial/apply-trial-action.js";
+import { listPlacementOptions } from "../../src/evaluation/list-placement-options.js";
 import { createTrial, type TrialSetup } from "../../src/trial/create-trial.js";
 import { availableCandles } from "../../src/trial/candles.js";
 import {
@@ -372,6 +373,32 @@ describe("applyTrialAction / placeCard", () => {
           },
         );
       });
+    });
+
+    // L'épreuve et l'écran de pose doivent dire la même chose : chaque
+    // option listée est acceptée par l'épreuve si et seulement si elle est
+    // permise. Vérifié avec et sans l'exception des bornes connues.
+    it.each([
+      ["a placement is fully permitted", []],
+      ["nothing is fully permitted", thirdPlacementOnSection1],
+    ])("agrees with listPlacementOptions when %s", (_, rules) => {
+      const trial = afterTwentyOne(rules);
+      const seat = currentSeat(trial);
+      const options = listPlacementOptions(
+        trial.clock,
+        trial.placements,
+        seat.hand,
+      );
+      for (const option of options) {
+        const result = applyTrialAction(trial, {
+          type: "placeCard",
+          player: seat.player,
+          cardId: option.cardId,
+          sectionIndex: option.sectionIndex,
+          faceUp: false,
+        });
+        expect(result.accepted).toBe(option.permitted);
+      }
     });
   });
 
