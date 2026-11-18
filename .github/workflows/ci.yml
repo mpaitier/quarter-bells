@@ -62,11 +62,44 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
-      # Navigateurs de NF-CMP-01 et leurs dépendances système (--with-deps).
-      # La version des navigateurs suit celle de @playwright/test.
-      - name: Installer les navigateurs Playwright
-        run: pnpm --filter web exec playwright install --with-deps chromium firefox webkit
+  # Tests de bout en bout, en parallèle des vérifications. Le job tourne
+  # dans l'image officielle de Playwright : Chromium, Firefox, WebKit et leurs
+  # dépendances système y sont déjà. Les installer à chaque exécution
+  # (playwright install --with-deps) télécharge près de 190 paquets apt et
+  # dépassait le délai du job quand le miroir Ubuntu ralentissait.
+  e2e:
+    name: Tests de bout en bout
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    container:
+      # La version de l'image suit exactement celle de @playwright/test dans
+      # apps/web/package.json : à mettre à jour ensemble. En cas d'écart,
+      # Playwright échoue en indiquant l'image attendue.
+      image: mcr.microsoft.com/playwright:v1.65.0-noble
+      # Utilisateur non root, comme le recommande la documentation de
+      # Playwright : le HOME monté par GitHub appartient à l'utilisateur 1001,
+      # et Firefox refuse de démarrer en root dans un HOME qui n'est pas le sien.
+      options: --user 1001
 
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v7
+
+      - name: Installer pnpm
+        uses: pnpm/action-setup@v6
+
+      # L'image embarque son propre Node.js : on garde celui de .nvmrc,
+      # comme le reste de la CI.
+      - name: Installer Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Installer les dépendances
+        run: pnpm install --frozen-lockfile
+
+      # Navigateurs de NF-CMP-01, fournis par l'image.
       - name: Tests de bout en bout
         run: pnpm test:e2e
 
