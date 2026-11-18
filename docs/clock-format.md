@@ -116,6 +116,8 @@ packages/rules/clocks/
 - **Pose imposée et valeur** : une section qui impose une pose (`firstPlacements`) ne porte ni `maxSum` ni `sumInRange`. Imposer où va une carte tout en limitant ce qu'elle peut valoir ferait dépendre la réussite de la donne plutôt que des choix des joueurs : c'est de la fausse difficulté. Le nombre et la famille des cartes restent combinables avec une pose imposée. `parseClock` refuse une horloge qui ne respecte pas cette règle.
 - **Réussite possible** : chaque horloge a une pose gagnante connue dans `packages/rules/test/clock-solutions/`, au même chemin, rejouée par `test/clocks/clock-solutions.test.ts` (voir la [stratégie de tests](testing.md)).
 
+Le paquet expose ces horloges dans `GAME_CLOCKS`, que le serveur et le client web importent tels quels. Elles ne repassent pas par `parseClock` au chargement : les tests les valident déjà, et le client web n'a pas à embarquer TypeBox. Les fichiers y sont listés un par un (`src/clocks/game-clocks.ts`) : une nouvelle horloge s'ajoute aussi à cette liste, et `test/clocks/game-clocks-export.test.ts` échoue si elle est oubliée.
+
 `test/clocks/game-clocks.test.ts` vérifie ces conventions sur toutes les horloges du dossier. Les horloges de `test/fixtures/clocks/` ne servent qu'aux tests du moteur : leur uid commence par `fixture-` pour ne jamais être confondu avec celui d'une horloge du jeu.
 
 Un chapitre arrive complet, en une seule PR : le test vérifie que chaque chapitre présent a ses quatre positions, de 0 à 3.
