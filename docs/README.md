@@ -51,6 +51,7 @@ Point d'entrée de la documentation. À ouvrir en premier en revenant sur le pro
 | [0014](adr/0014-bibliotheque-de-traduction.md)                 | Bibliothèque de traduction du client web   | Accepté                    |
 | [0015](adr/0015-enchainer-les-epreuves-dans-un-paquet-game.md) | Enchaîner les épreuves dans un paquet game | Accepté                    |
 | [0016](adr/0016-evaluer-une-pose-depuis-la-vue-d-un-joueur.md) | Évaluer une pose depuis la vue d'un joueur | Accepté                    |
+| [0017](adr/0017-brancher-l-ecran-sur-une-passerelle-de-jeu.md) | Brancher l'écran sur une passerelle de jeu | Accepté                    |
 
 Nouveau ADR : partir de [template.md](adr/template.md).
 
