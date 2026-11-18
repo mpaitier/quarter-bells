@@ -6,12 +6,30 @@ Ce client ne décide jamais du résultat d'une action : il peut prévisualiser u
 
 ## Dépendances autorisées
 
-- `packages/rules`
 - `packages/protocol`
+- `packages/rules`, pour ses fonctions pures appelées sur la vue (poses permises, bougies disponibles), jamais pour lire l'état complet d'une épreuve
+- `packages/game`, uniquement dans l'adaptateur local `src/gateway/local/`
 
 Aucune dépendance vers `apps/server` ni `apps/mobile`.
 
 Un paquet s'importe uniquement par son API publique, `@quarter-bells/<paquet>`, qui correspond à son `index.ts`. ESLint refuse les sous-chemins (`@quarter-bells/rules/src/...`), les chemins relatifs vers un autre dossier du monorepo et les imports des autres applications.
+
+## Passerelle de jeu
+
+L'écran ne parle à la partie que par le port `GameGateway` (`src/gateway/game-gateway.ts`, [ADR 0017](../../docs/adr/0017-brancher-l-ecran-sur-une-passerelle-de-jeu.md)) : il envoie des commandes et reçoit la vue de son joueur.
+
+- Au J2, `createLocalGameSession(setup)` fait tourner la partie dans le navigateur. `gatewayFor(joueur)` donne la passerelle de chaque joueur.
+- Au J3, un adaptateur WebSocket implémentera le même port.
+
+Le composant racine choisit l'adaptateur et le passe à `GameGatewayProvider`. En dessous, les composants n'utilisent que les hooks de `src/gateway/use-game-gateway.ts` :
+
+| Hook                             | Rôle                                              |
+| -------------------------------- | ------------------------------------------------- |
+| `usePlayerView()`                | la vue du joueur, `undefined` avant la première   |
+| `useSendCommand()`               | envoie une commande ; la réponse arrive plus tard |
+| `useCommandRejected(onRejected)` | appelé à chaque refus, pour guider le joueur      |
+
+Une commande ne reçoit jamais de réponse pendant `send`, même en local.
 
 ## Stack
 

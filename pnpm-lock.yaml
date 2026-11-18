@@ -199,6 +199,12 @@ importers:
 
   apps/web:
     dependencies:
+      '@quarter-bells/game':
+        specifier: workspace:*
+        version: link:../../packages/game
+      '@quarter-bells/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
       '@quarter-bells/rules':
         specifier: workspace:*
         version: link:../../packages/rules
