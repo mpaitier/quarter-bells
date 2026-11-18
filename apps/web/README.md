@@ -20,6 +20,8 @@ Un paquet s'importe uniquement par son API publique, `@quarter-bells/<paquet>`, 
 
 La géométrie (angles, positions des icônes et des cartes) est dans `src/clock/clock-geometry.ts`, en fonctions pures testées. Le repère est un viewBox de 120 × 120 unités.
 
+En attendant l'écran de jeu, l'atelier (`src/workbench/`) affiche n'importe quelle horloge du jeu, avec une section de départ au choix et des cartes d'exemple : c'est là que se fait la vérification visuelle des 4 horloges du chapitre 1.
+
 ### Assets à dessiner
 
 Les icônes, le cadran et l'aiguille actuels sont provisoires. Les dessins à la main les remplaceront dans `RuleIcon`, `FamilyGlyph` et `ClockFace`, avec une `<image>` à la même place et à la même taille. Les PNG ont un fond transparent et sont dessinés à 16 px par unité du viewBox. Ça couvre le double de la taille d'affichage sur un écran de 1080 px de haut, où l'horloge occupe 75 % de la hauteur.

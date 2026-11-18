@@ -24,5 +24,9 @@
   "rule.ascendingOrder.label": "↗",
   "rule.ascendingOrder.description": "Les sections vont en ordre croissant, à partir de la section de départ",
   "rule.noMaxSum.label": "24+",
-  "rule.noMaxSum.description": "Pas de plafond de 24 : une section peut valoir plus de 24"
+  "rule.noMaxSum.description": "Pas de plafond de 24 : une section peut valoir plus de 24",
+  "workbench.clock": "Horloge",
+  "workbench.clockOption": "Chapitre {chapter}, horloge {position}",
+  "workbench.startSection": "Section de départ",
+  "workbench.sampleCards": "Afficher des cartes d'exemple"
 }
