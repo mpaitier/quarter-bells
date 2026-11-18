@@ -199,6 +199,12 @@ importers:
 
   apps/web:
     dependencies:
+      '@quarter-bells/game':
+        specifier: workspace:*
+        version: link:../../packages/game
+      '@quarter-bells/protocol':
+        specifier: workspace:*
+        version: link:../../packages/protocol
       '@quarter-bells/rules':
         specifier: workspace:*
         version: link:../../packages/rules
@@ -267,6 +273,25 @@ importers:
       '@types/node':
         specifier: ^24.19.2
         version: 24.19.2
+
+  packages/protocol:
+    dependencies:
+      '@quarter-bells/game':
+        specifier: workspace:*
+        version: link:../game
+      '@quarter-bells/rules':
+        specifier: workspace:*
+        version: link:../rules
+    devDependencies:
+      '@fast-check/vitest':
+        specifier: ^0.5.0
+        version: 0.5.0(vitest@5.0.4)
+      '@types/node':
+        specifier: ^24.19.2
+        version: 24.19.2
+      fast-check:
+        specifier: ^4.10.2
+        version: 4.10.2
 
   packages/rules:
     dependencies:

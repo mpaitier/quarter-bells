@@ -1,0 +1,23 @@
+{
+  "name": "@quarter-bells/protocol",
+  "private": true,
+  "description": "Contrat entre l'écran de jeu et la partie : commandes d'un joueur et vue de la partie qu'il a le droit de connaître.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p . && tsc -p test"
+  },
+  "dependencies": {
+    "@quarter-bells/game": "workspace:*",
+    "@quarter-bells/rules": "workspace:*"
+  },
+  "devDependencies": {
+    "@fast-check/vitest": "^0.5.0",
+    "@types/node": "^24.19.2",
+    "fast-check": "^4.10.2"
+  }
+}

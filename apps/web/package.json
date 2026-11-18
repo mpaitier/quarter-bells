@@ -12,6 +12,8 @@
     "test:e2e": "playwright test -c e2e"
   },
   "dependencies": {
+    "@quarter-bells/game": "workspace:*",
+    "@quarter-bells/protocol": "workspace:*",
     "@quarter-bells/rules": "workspace:*",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

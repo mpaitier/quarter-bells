@@ -25,10 +25,10 @@ export default defineConfig({
       reporter: ["text", "html", "lcov"],
       // Seuils de docs/testing.md, par paquet. apps/web n'en a pas : sa
       // couverture est mesurée pour être visible, sans bloquer.
-      // packages/protocol (90 %) sera ajouté à sa création.
       thresholds: {
         "packages/rules/src/**": { lines: 95 },
         "packages/game/src/**": { lines: 95 },
+        "packages/protocol/src/**": { lines: 90 },
       },
     },
   },
