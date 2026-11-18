@@ -14,6 +14,25 @@ Aucune dépendance vers `apps/server` ni `apps/mobile`.
 
 Un paquet s'importe uniquement par son API publique, `@quarter-bells/<paquet>`, qui correspond à son `index.ts`. ESLint refuse les sous-chemins (`@quarter-bells/rules/src/...`), les chemins relatifs vers un autre dossier du monorepo et les imports des autres applications.
 
+## Horloge
+
+`src/clock/clock-face.tsx` dessine une horloge à partir de sa définition, de la section de départ et des cartes posées (issue #35). Le composant ne reçoit que des données : il ne connaît ni la passerelle ni le moteur. Tout est dans un seul SVG (ADR 0012). Chaque section est un groupe nommé d'après son heure (« Section de 2 h »), et chaque icône de règle porte sa phrase complète en nom accessible et en texte au survol.
+
+La géométrie (angles, positions des icônes et des cartes) est dans `src/clock/clock-geometry.ts`, en fonctions pures testées. Le repère est un viewBox de 120 × 120 unités.
+
+### Assets à dessiner
+
+Les icônes, le cadran et l'aiguille actuels sont provisoires. Les dessins à la main les remplaceront dans `RuleIcon`, `FamilyGlyph` et `ClockFace`, avec une `<image>` à la même place et à la même taille. Les PNG ont un fond transparent et sont dessinés à 16 px par unité du viewBox. Ça couvre le double de la taille d'affichage sur un écran de 1080 px de haut, où l'horloge occupe 75 % de la hauteur.
+
+| Asset              | Taille dans le viewBox                              | Toile du PNG              |
+| ------------------ | --------------------------------------------------- | ------------------------- |
+| Cadran             | cercle de 68 unités de diamètre, centré             | 1088 × 1088 px            |
+| Aiguille           | 27 unités du centre à la pointe, dessinée vers 12 h | 64 × 432 px, pivot en bas |
+| Icône de règle     | 10 × 6,5 unités                                     | 160 × 104 px              |
+| Symbole de famille | 3,2 à 4 unités de côté                              | 64 × 64 px                |
+
+Le cadran doit respecter la géométrie du code : section 0 centrée sur 12 h, séparations à ±30° autour de chaque centre, soit à 11 h, 1 h, 3 h, 5 h, 7 h et 9 h.
+
 ## Passerelle de jeu
 
 L'écran ne parle à la partie que par le port `GameGateway` (`src/gateway/game-gateway.ts`, [ADR 0017](../../docs/adr/0017-brancher-l-ecran-sur-une-passerelle-de-jeu.md)) : il envoie des commandes et reçoit la vue de son joueur.
