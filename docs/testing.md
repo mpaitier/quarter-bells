@@ -121,7 +121,7 @@ Propriétés à vérifier :
 - une épreuve jouée jusqu'au bout, avec des poses choisies au hasard parmi celles que le moteur accepte, se termine toujours par une réussite ou un échec : le joueur dont c'est le tour a toujours au moins une pose permise ;
 - la vue d'un joueur ne contient jamais la valeur d'une carte face cachée posée par un autre.
 
-Les propriétés du moteur sont dans les fichiers de test de chaque module (distribution, Résolution), et celles du déroulement d'une épreuve dans `test/trial/trial-properties.test.ts`. La propriété sur la vue d'un joueur viendra avec `packages/protocol` (J3).
+Les propriétés du moteur sont dans les fichiers de test de chaque module (distribution, Résolution), et celles du déroulement d'une épreuve dans `test/trial/trial-properties.test.ts`. La propriété sur la vue d'un joueur est dans `packages/protocol/test/player-view-properties.test.ts` : changer toutes les valeurs cachées dans l'état complet ne change pas la vue ([ADR 0017](adr/0017-brancher-l-ecran-sur-une-passerelle-de-jeu.md)).
 
 ### Tests du format des horloges
 

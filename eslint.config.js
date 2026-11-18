@@ -9,8 +9,10 @@ const PURE_RULES_MESSAGE =
   "packages/rules est un paquet pur (NF-QUA-04) : aucun import hors du paquet.";
 const PURE_GAME_MESSAGE =
   "packages/game est un paquet pur (NF-QUA-04) : imports relatifs et API publique de @quarter-bells/rules uniquement (ADR 0015).";
+const PURE_PROTOCOL_MESSAGE =
+  "packages/protocol est un paquet pur (NF-QUA-04) : imports relatifs et API publique de @quarter-bells/rules et @quarter-bells/game uniquement (ADR 0017).";
 const DETERMINISM_MESSAGE =
-  "Les paquets purs (rules, game) ne lisent ni l'heure système ni un hasard non maîtrisé : injecter une horloge ou une graine.";
+  "Les paquets purs (rules, game, protocol) ne lisent ni l'heure système ni un hasard non maîtrisé : injecter une horloge ou une graine.";
 const PUBLIC_API_MESSAGE =
   "apps/web n'importe que l'API publique d'un paquet (son index.ts) : @quarter-bells/<paquet>, sans sous-chemin.";
 const HARDCODED_TEXT_MESSAGE =
@@ -87,9 +89,36 @@ export default defineConfig([
     },
   },
 
+  // packages/protocol, code de production : imports relatifs, et rules et
+  // game par leur API publique.
+  {
+    files: ["packages/protocol/src/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              regex: "^(?!@quarter-bells/(rules|game)$)[^.]",
+              message: PURE_PROTOCOL_MESSAGE,
+            },
+            {
+              regex: "(^|/)(rules|game)/src/",
+              message: PURE_PROTOCOL_MESSAGE,
+            },
+          ],
+        },
+      ],
+    },
+  },
+
   // Paquets purs, code de production : ni heure système ni hasard sans graine.
   {
-    files: ["packages/rules/src/**/*.ts", "packages/game/src/**/*.ts"],
+    files: [
+      "packages/rules/src/**/*.ts",
+      "packages/game/src/**/*.ts",
+      "packages/protocol/src/**/*.ts",
+    ],
     ignores: ["**/*.test.ts"],
     rules: {
       "no-restricted-properties": [
