@@ -70,6 +70,6 @@ Avant le premier lancement, installer les navigateurs une fois par machine, puis
 pnpm --filter web exec playwright install chromium firefox webkit
 ```
 
-Ils ne font pas partie de `pnpm check`, trop lents pour une vérification avant chaque commit. La CI les lance à chaque PR, après les autres vérifications.
+Ils ne font pas partie de `pnpm check`, trop lents pour une vérification avant chaque commit. La CI les lance à chaque PR, dans un job séparé qui tourne en parallèle des autres vérifications, dans l'image officielle `mcr.microsoft.com/playwright`, qui contient déjà les navigateurs et leurs dépendances système. Le numéro de version de l'image doit rester identique à celui de `@playwright/test` : mettre à jour le paquet oblige à changer l'image dans `.github/workflows/ci.yml`, sinon le job échoue en indiquant l'image attendue.
 
 Quand un test échoue en CI, le rapport HTML est publié comme artefact `playwright-report` du workflow. Après une nouvelle tentative, il contient une trace (DOM, réseau, console) à ouvrir avec `pnpm --filter web exec playwright show-trace <fichier>`.
