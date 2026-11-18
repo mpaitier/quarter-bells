@@ -29,7 +29,7 @@ Le composant racine choisit l'adaptateur et le passe à `GameGatewayProvider`. E
 | `useSendCommand()`               | envoie une commande ; la réponse arrive plus tard |
 | `useCommandRejected(onRejected)` | appelé à chaque refus, pour guider le joueur      |
 
-Une commande ne reçoit jamais de réponse pendant `send`, même en local.
+Une commande ne reçoit jamais de réponse pendant `send`, même en local. ESLint refuse `@quarter-bells/game` hors de `src/gateway/local/` et les types de l'état complet d'une épreuve (`Trial`, `Seat`...) dans tout le client.
 
 ## Stack
 
