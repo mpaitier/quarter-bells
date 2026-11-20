@@ -1,0 +1,92 @@
+/* Horloge (issue #35). Les tailles des textes et des traits sont en unités
+   du viewBox : elles suivent la taille de l'horloge à l'écran. */
+
+.clock-face {
+  display: block;
+  /* En paysage, la hauteur est la dimension limitante : l'horloge occupe au
+     plus la hauteur visible, moins la place de l'en-tête et des mains. */
+  width: min(100%, 75vh);
+  height: auto;
+  aspect-ratio: 1;
+  /* Une pile de cartes très haute peut dépasser du carré : on la laisse
+     visible plutôt que de la couper. */
+  overflow: visible;
+}
+
+.clock-face__dial circle {
+  fill: color-mix(in srgb, var(--color-creme) 92%, transparent);
+  stroke: var(--color-laiton);
+  stroke-width: 1.2;
+}
+
+.clock-face__dial line {
+  stroke: var(--color-laiton);
+  stroke-width: 0.6;
+}
+
+.clock-face__needle line {
+  stroke: var(--color-bleu-nuit);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+.clock-face__needle circle {
+  fill: var(--color-laiton);
+}
+
+/* Icônes provisoires des règles, en attendant les dessins. */
+.rule-icon__frame {
+  fill: var(--color-ardoise);
+  stroke: var(--color-bleu-nuit);
+  stroke-width: 0.4;
+}
+
+.rule-icon__label {
+  fill: var(--color-creme);
+  font-size: 3.4px;
+  font-weight: 600;
+  text-anchor: middle;
+}
+
+.family-glyph path {
+  stroke: var(--color-bleu-nuit);
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+
+/* Les familles ont chacune leur couleur, mais c'est le symbole qui les
+   distingue (NF-ACC-01) : la couleur n'est qu'un repère en plus. */
+.family-glyph--instant path {
+  fill: #e0b23a;
+}
+
+.family-glyph--eternity path {
+  stroke: #3f7fbf;
+}
+
+.placed-card__body {
+  fill: var(--color-creme);
+  stroke: var(--color-bleu-nuit);
+  stroke-width: 0.4;
+}
+
+.placed-card--own-face-down .placed-card__body {
+  stroke-dasharray: 1 0.6;
+}
+
+.placed-card--hidden .placed-card__body {
+  fill: var(--color-ardoise);
+}
+
+.placed-card__value {
+  fill: var(--color-bleu-nuit);
+  font-size: 3.6px;
+  font-weight: 700;
+}
+
+/* Sur le fond ardoise des icônes de règle et du dos des cartes, le bleu
+   manque de contraste : on l'éclaircit. */
+.rule-icon .family-glyph--eternity path,
+.placed-card--hidden .family-glyph--eternity path {
+  stroke: #a9d4ff;
+}

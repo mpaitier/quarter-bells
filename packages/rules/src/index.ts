@@ -33,6 +33,7 @@ export { MAX_SEED, createSeededRng, type Rng } from "./random/rng.js";
 
 // Horloges : chargement et types. Les schémas TypeBox restent internes.
 export { parseClock } from "./clocks/parse-clock.js";
+export { GAME_CLOCKS } from "./clocks/game-clocks.js";
 export {
   SECTION_COUNT,
   type Clock,
